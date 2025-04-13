@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/ui/login_screen.dart';
+
 
 void main() {
-  runApp(const MainApp());
+  runApp(const TrazAi());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class TrazAi extends StatelessWidget {
+  const TrazAi({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+    return MaterialApp(
+      routes: {
+        "login": (context) => const LoginScreen(),
+      },
+      initialRoute: "login",
     );
   }
 }
