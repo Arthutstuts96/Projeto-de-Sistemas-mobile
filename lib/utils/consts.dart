@@ -1,0 +1,1 @@
+enum UserTypes {client, worker}

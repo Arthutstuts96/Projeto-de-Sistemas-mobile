@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_de_sistemas/screens/register_client.dart';
+import 'package:projeto_de_sistemas/screens/choose_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -7,7 +7,7 @@ class SplashScreen extends StatelessWidget {
   /* 
     Tela placeholder, implementar ela depois
   */
-  @override
+  @override 
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -20,7 +20,7 @@ class SplashScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RegisterClient()),
+                  MaterialPageRoute(builder: (context) => ChooseScreen()),
                 );
               },
               child: Text("Entrar na aplicação"),

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_de_sistemas/screens/components/register/form_input.dart';
 
 class RegisterForm extends StatelessWidget {
   const RegisterForm({super.key, required this.fields, required this.title});
-  final List<FormInput> fields;
+  final List<Widget> fields;
   final String title;
 
   @override

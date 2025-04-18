@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RegisterTopStyle extends StatelessWidget {
-  RegisterTopStyle({super.key, required this.circleText, required this.circleColor});
+  const RegisterTopStyle({super.key, required this.circleText, required this.circleColor});
   final String circleText;
   final Color circleColor;
 
