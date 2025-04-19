@@ -29,7 +29,7 @@ class RegisterTopStyle extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Color(0xFF000000),
-              fontSize: 48,
+              fontSize: 40,
               fontWeight: FontWeight.bold,
             ),
           ),

@@ -14,7 +14,7 @@ class RegisterClient extends StatefulWidget {
   State<RegisterClient> createState() => _RegisterClientState();
 }
 
-class _RegisterClientState extends State<RegisterClient> {
+class _RegisterClientState extends State<RegisterClient> with SingleTickerProviderStateMixin {
   int index = 1;
   List<PlatformFile> files = [
     PlatformFile(name: "", size: 0),
@@ -47,16 +47,41 @@ class _RegisterClientState extends State<RegisterClient> {
     'cnh': TextEditingController(),
   };
 
+  late AnimationController _controller;
+  late Animation<Offset> _offsetAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    _offsetAnimation = Tween<Offset>(
+      begin: const Offset(-1.0, 0.0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+
+    // Inicia a animação assim que o widget for exibido
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose(); // Limpa o controller quando o widget for destruído
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: <Widget>[
           RegisterTopStyle(
-            circleText:
-                widget.userType == UserTypes.client
-                    ? "Cadastro de cliente"
-                    : "Cadastro separador/entregador",
+            circleText: widget.userType == UserTypes.client
+                ? "Cadastro de cliente"
+                : "Cadastro separador/entregador",
             circleColor: Color(0xFF28E3BD),
           ),
           Expanded(child: getFormByIndex()),
@@ -76,6 +101,8 @@ class _RegisterClientState extends State<RegisterClient> {
                     } else {
                       index--;
                     }
+                    _controller.reset();
+                    _controller.forward(); // Reinicia a animação
                   });
                 },
                 text: "Voltar",
@@ -90,6 +117,8 @@ class _RegisterClientState extends State<RegisterClient> {
                     } else {
                       index++;
                     }
+                    _controller.reset();
+                    _controller.forward(); // Reinicia a animação
                   });
                 },
                 text: "Próximo",
@@ -105,6 +134,13 @@ class _RegisterClientState extends State<RegisterClient> {
   */
 
   Widget getFormByIndex() {
+    return SlideTransition(
+      position: _offsetAnimation,
+      child: _getFormByIndex(),
+    );
+  }
+
+  Widget _getFormByIndex() {
     switch (index) {
       case 1:
         return RegisterForm(
@@ -165,10 +201,47 @@ class _RegisterClientState extends State<RegisterClient> {
               controller: controllers['cidade']!,
               placeholder: "Palmas",
             ),
-            FormInput(
-              label: "Estado",
-              controller: controllers['estado']!,
-              placeholder: "Tocantins",
+            DropdownButtonFormField<String>(
+              value: "TO",
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                label: Text(
+                  "Estado",
+                ), // ou use `Text(label)` se quiser passar dinamicamente
+                hintText: "Selecione o estado",
+              ),
+              items: const [
+                DropdownMenuItem<String>(value: "AC", child: Text("Acre")),
+                DropdownMenuItem<String>(value: "AL", child: Text("Alagoas")),
+                DropdownMenuItem<String>(value: "AP", child: Text("Amapá")),
+                DropdownMenuItem<String>(value: "AM", child: Text("Amazonas")),
+                DropdownMenuItem<String>(value: "BA", child: Text("Bahia")),
+                DropdownMenuItem<String>(value: "CE", child: Text("Ceará")),
+                DropdownMenuItem<String>(value: "DF", child: Text("Distrito Federal")),
+                DropdownMenuItem<String>(value: "ES", child: Text("Espírito Santo")),
+                DropdownMenuItem<String>(value: "GO", child: Text("Goiânia")),
+                DropdownMenuItem<String>(value: "MA", child: Text("Maranhão")),
+                DropdownMenuItem<String>(value: "MT", child: Text("Mato Grosso")),
+                DropdownMenuItem<String>(value: "MS", child: Text("Mato Grosso do Sul")),
+                DropdownMenuItem<String>(value: "MG",child: Text("Minas Gerais")),
+                DropdownMenuItem<String>(value: "PA",child: Text("Pará")),
+                DropdownMenuItem<String>(value: "PB",child: Text("Paraíba")),
+                DropdownMenuItem<String>(value: "PR",child: Text("Paraná")),
+                DropdownMenuItem<String>(value: "PE",child: Text("Pernambuco")),
+                DropdownMenuItem<String>(value: "PI",child: Text("Piauí")),
+                DropdownMenuItem<String>(value: "RJ",child: Text("Rio de Janeiro")),
+                DropdownMenuItem<String>(value: "RN",child: Text("Rio Grande do Norte")),
+                DropdownMenuItem<String>(value: "RS",child: Text("Rio Grande do Sul")),
+                DropdownMenuItem<String>(value: "RO",child: Text("Rondônia")),
+                DropdownMenuItem<String>(value: "RR",child: Text("Roraima")),
+                DropdownMenuItem<String>(value: "SC",child: Text("Santa Catarina")),
+                DropdownMenuItem<String>(value: "SP",child: Text("São Paulo")),
+                DropdownMenuItem<String>(value: "SE",child: Text("Sergipe")),
+                DropdownMenuItem<String>(value: "TO", child: Text("Tocantins")),
+              ],
+              onChanged: (value) {
+                controllers['estado']?.text = value ?? "";
+              },
             ),
           ],
         );
@@ -186,11 +259,13 @@ class _RegisterClientState extends State<RegisterClient> {
               label: "Senha",
               controller: controllers['senha']!,
               placeholder: "*********",
+              isPassword: true,
             ),
             FormInput(
               label: "Confirmar senha",
               controller: controllers['confirmarSenha']!,
               placeholder: "Confirme sua senha",
+              isPassword: true,
             ),
           ],
         );
@@ -324,7 +399,7 @@ class _RegisterClientState extends State<RegisterClient> {
             text: "Cadastro concluído",
             color: Colors.green,
           ),
-          Text("${files.map((file) => file.name)}"),
+          Text("Arquivos: ${files.map((file) => file.name)}"),
           ...mapFormData(),
         ],
       ),
