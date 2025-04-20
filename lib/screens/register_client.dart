@@ -4,6 +4,7 @@ import 'package:projeto_de_sistemas/screens/components/register/button.dart';
 import 'package:projeto_de_sistemas/screens/components/register/form_input.dart';
 import 'package:projeto_de_sistemas/screens/components/register/register_form.dart';
 import 'package:projeto_de_sistemas/screens/components/register/register_top_style.dart';
+import 'package:projeto_de_sistemas/screens/form_data_debug.dart';
 import 'package:projeto_de_sistemas/utils/consts.dart';
 
 class RegisterClient extends StatefulWidget {
@@ -14,7 +15,8 @@ class RegisterClient extends StatefulWidget {
   State<RegisterClient> createState() => _RegisterClientState();
 }
 
-class _RegisterClientState extends State<RegisterClient> with SingleTickerProviderStateMixin {
+class _RegisterClientState extends State<RegisterClient>
+    with SingleTickerProviderStateMixin {
   int index = 1;
   List<PlatformFile> files = [
     PlatformFile(name: "", size: 0),
@@ -79,10 +81,10 @@ class _RegisterClientState extends State<RegisterClient> with SingleTickerProvid
       body: Column(
         children: <Widget>[
           RegisterTopStyle(
-            circleText: widget.userType == UserTypes.client
-                ? "Cadastro de cliente"
-                : "Cadastro separador/entregador",
-            circleColor: Color(0xFF28E3BD),
+            text:
+                widget.userType == UserTypes.client
+                    ? "Cadastro de cliente"
+                    : "Cadastro separador/entregador",
           ),
           Expanded(child: getFormByIndex()),
         ],
@@ -155,6 +157,7 @@ class _RegisterClientState extends State<RegisterClient> with SingleTickerProvid
               label: "CPF",
               controller: controllers['cpf']!,
               placeholder: "Seu CPF",
+              type: TextInputType.number,
             ),
             FormInput(
               label: "Data de nascimento",
@@ -185,6 +188,7 @@ class _RegisterClientState extends State<RegisterClient> with SingleTickerProvid
               label: "CEP",
               controller: controllers['cep']!,
               placeholder: "00000-000",
+              type: TextInputType.number,
             ),
             FormInput(
               label: "Rua",
@@ -217,26 +221,56 @@ class _RegisterClientState extends State<RegisterClient> with SingleTickerProvid
                 DropdownMenuItem<String>(value: "AM", child: Text("Amazonas")),
                 DropdownMenuItem<String>(value: "BA", child: Text("Bahia")),
                 DropdownMenuItem<String>(value: "CE", child: Text("Ceará")),
-                DropdownMenuItem<String>(value: "DF", child: Text("Distrito Federal")),
-                DropdownMenuItem<String>(value: "ES", child: Text("Espírito Santo")),
+                DropdownMenuItem<String>(
+                  value: "DF",
+                  child: Text("Distrito Federal"),
+                ),
+                DropdownMenuItem<String>(
+                  value: "ES",
+                  child: Text("Espírito Santo"),
+                ),
                 DropdownMenuItem<String>(value: "GO", child: Text("Goiânia")),
                 DropdownMenuItem<String>(value: "MA", child: Text("Maranhão")),
-                DropdownMenuItem<String>(value: "MT", child: Text("Mato Grosso")),
-                DropdownMenuItem<String>(value: "MS", child: Text("Mato Grosso do Sul")),
-                DropdownMenuItem<String>(value: "MG",child: Text("Minas Gerais")),
-                DropdownMenuItem<String>(value: "PA",child: Text("Pará")),
-                DropdownMenuItem<String>(value: "PB",child: Text("Paraíba")),
-                DropdownMenuItem<String>(value: "PR",child: Text("Paraná")),
-                DropdownMenuItem<String>(value: "PE",child: Text("Pernambuco")),
-                DropdownMenuItem<String>(value: "PI",child: Text("Piauí")),
-                DropdownMenuItem<String>(value: "RJ",child: Text("Rio de Janeiro")),
-                DropdownMenuItem<String>(value: "RN",child: Text("Rio Grande do Norte")),
-                DropdownMenuItem<String>(value: "RS",child: Text("Rio Grande do Sul")),
-                DropdownMenuItem<String>(value: "RO",child: Text("Rondônia")),
-                DropdownMenuItem<String>(value: "RR",child: Text("Roraima")),
-                DropdownMenuItem<String>(value: "SC",child: Text("Santa Catarina")),
-                DropdownMenuItem<String>(value: "SP",child: Text("São Paulo")),
-                DropdownMenuItem<String>(value: "SE",child: Text("Sergipe")),
+                DropdownMenuItem<String>(
+                  value: "MT",
+                  child: Text("Mato Grosso"),
+                ),
+                DropdownMenuItem<String>(
+                  value: "MS",
+                  child: Text("Mato Grosso do Sul"),
+                ),
+                DropdownMenuItem<String>(
+                  value: "MG",
+                  child: Text("Minas Gerais"),
+                ),
+                DropdownMenuItem<String>(value: "PA", child: Text("Pará")),
+                DropdownMenuItem<String>(value: "PB", child: Text("Paraíba")),
+                DropdownMenuItem<String>(value: "PR", child: Text("Paraná")),
+                DropdownMenuItem<String>(
+                  value: "PE",
+                  child: Text("Pernambuco"),
+                ),
+                DropdownMenuItem<String>(value: "PI", child: Text("Piauí")),
+                DropdownMenuItem<String>(
+                  value: "RJ",
+                  child: Text("Rio de Janeiro"),
+                ),
+                DropdownMenuItem<String>(
+                  value: "RN",
+                  child: Text("Rio Grande do Norte"),
+                ),
+                DropdownMenuItem<String>(
+                  value: "RS",
+                  child: Text("Rio Grande do Sul"),
+                ),
+                DropdownMenuItem<String>(value: "RO", child: Text("Rondônia")),
+                DropdownMenuItem<String>(value: "RR", child: Text("Roraima")),
+                DropdownMenuItem<String>(
+                  value: "SC",
+                  child: Text("Santa Catarina"),
+                ),
+                DropdownMenuItem<String>(value: "SP", child: Text("São Paulo")),
+                DropdownMenuItem<String>(value: "SE", child: Text("Sergipe")),
                 DropdownMenuItem<String>(value: "TO", child: Text("Tocantins")),
               ],
               onChanged: (value) {
@@ -329,6 +363,7 @@ class _RegisterClientState extends State<RegisterClient> with SingleTickerProvid
                 label: "CNH",
                 controller: controllers['cnh']!,
                 placeholder: "98765432100",
+                type: TextInputType.number,
               ),
             ],
           );
@@ -393,24 +428,40 @@ class _RegisterClientState extends State<RegisterClient> with SingleTickerProvid
 
     return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        spacing: 36,
         children: [
+          Icon(Icons.verified_outlined, size: 150, color: Colors.green,),
           Button(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FormDataDebug(formData: mapFormData()),
+                ),
+              );
+            },
             text: "Cadastro concluído",
             color: Colors.green,
           ),
-          Text("Arquivos: ${files.map((file) => file.name)}"),
-          ...mapFormData(),
         ],
       ),
     );
   }
+
+  /*
+    Útil somente para debugging
+  */
 
   List<Text> mapFormData() {
     List<Text> list =
         controllers.entries.map((entry) {
           return Text("${entry.key}: ${entry.value.text}");
         }).toList();
+
+    list.add(Text("Arquivos:"));
+    list.addAll(files.map((file) => Text(file.name)));
     return list;
   }
 }
