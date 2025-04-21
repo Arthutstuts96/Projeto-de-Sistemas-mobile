@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_de_sistemas/screens/register_client.dart';
+import 'package:projeto_de_sistemas/screens/register_user.dart';
 import 'package:projeto_de_sistemas/utils/consts.dart';
 
 class ChooseScreen extends StatelessWidget {
@@ -18,7 +18,7 @@ class ChooseScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RegisterClient(userType: UserTypes.client,)),
+                  MaterialPageRoute(builder: (context) => RegisterUser(userType: UserTypes.client,)),
                 );
               },
               child: Text("Cliente"),
@@ -27,7 +27,7 @@ class ChooseScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RegisterClient(userType: UserTypes.worker,)),
+                  MaterialPageRoute(builder: (context) => RegisterUser(userType: UserTypes.worker,)),
                 );
               },
               child: Text("Entregador"),

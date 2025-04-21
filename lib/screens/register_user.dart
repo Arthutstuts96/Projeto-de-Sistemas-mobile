@@ -6,16 +6,17 @@ import 'package:projeto_de_sistemas/screens/components/register/register_form.da
 import 'package:projeto_de_sistemas/screens/components/register/register_top_style.dart';
 import 'package:projeto_de_sistemas/screens/form_data_debug.dart';
 import 'package:projeto_de_sistemas/utils/consts.dart';
+import 'package:projeto_de_sistemas/utils/functions/validation_functions.dart';
 
-class RegisterClient extends StatefulWidget {
-  const RegisterClient({super.key, required this.userType});
+class RegisterUser extends StatefulWidget {
+  const RegisterUser({super.key, required this.userType});
   final UserTypes userType;
 
   @override
-  State<RegisterClient> createState() => _RegisterClientState();
+  State<RegisterUser> createState() => _RegisterUserState();
 }
 
-class _RegisterClientState extends State<RegisterClient>
+class _RegisterUserState extends State<RegisterUser>
     with SingleTickerProviderStateMixin {
   int index = 1;
   List<PlatformFile> files = [
@@ -52,6 +53,8 @@ class _RegisterClientState extends State<RegisterClient>
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
 
+  final _validationKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -78,16 +81,19 @@ class _RegisterClientState extends State<RegisterClient>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          RegisterTopStyle(
-            text:
-                widget.userType == UserTypes.client
-                    ? "Cadastro de cliente"
-                    : "Cadastro separador/entregador",
-          ),
-          Expanded(child: getFormByIndex()),
-        ],
+      body: Form(
+        key: _validationKey,
+        child: Column(
+          children: <Widget>[
+            RegisterTopStyle(
+              text:
+                  widget.userType == UserTypes.client
+                      ? "Cadastro de cliente"
+                      : "Cadastro separador/entregador",
+            ),
+            Expanded(child: getFormByIndex()),
+          ],
+        ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 48),
@@ -112,16 +118,36 @@ class _RegisterClientState extends State<RegisterClient>
               ),
             if (index <= 6)
               Button(
+                // onPressed: () {
+                //   setState(() {
+                //     if (widget.userType == UserTypes.client && index == 3) {
+                //       index = 7;
+                //     } else {
+                //       index++;
+                //     }
+                //     _controller.reset();
+                //     _controller.forward(); // Reinicia a animação
+                //   });
+                // },
+                /* Só avança se estiver validado */
                 onPressed: () {
-                  setState(() {
-                    if (widget.userType == UserTypes.client && index == 3) {
-                      index = 7;
-                    } else {
-                      index++;
-                    }
-                    _controller.reset();
-                    _controller.forward(); // Reinicia a animação
-                  });
+                  if (_validationKey.currentState!.validate()) {
+                    setState(() {
+                      if (widget.userType == UserTypes.client && index == 3) {
+                        index = 7;
+                      } else {
+                        index++;
+                      }
+                      _controller.reset();
+                      _controller.forward(); // Reinicia a animação
+                    });
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Preencha todos os campos!'),
+                      ),
+                    );
+                  }
                 },
                 text: "Próximo",
               ),
@@ -149,9 +175,10 @@ class _RegisterClientState extends State<RegisterClient>
           title: "Dados pessoais",
           fields: [
             FormInput(
-              label: "Nome",
+              label: "Nome Completo",
               controller: controllers['nome']!,
               placeholder: "Seu nome",
+              validator: (value) => validateName(value),
             ),
             FormInput(
               label: "CPF",
@@ -432,15 +459,22 @@ class _RegisterClientState extends State<RegisterClient>
         crossAxisAlignment: CrossAxisAlignment.center,
         spacing: 36,
         children: [
-          Icon(Icons.verified_outlined, size: 150, color: Colors.green,),
+          Icon(Icons.verified_outlined, size: 150, color: Colors.green),
           Button(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => FormDataDebug(formData: mapFormData()),
-                ),
-              );
+              if (_validationKey.currentState!.validate() == false) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Preencha todos os campos!')),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => FormDataDebug(formData: mapFormData()),
+                  ),
+                );
+              }
             },
             text: "Cadastro concluído",
             color: Colors.green,
