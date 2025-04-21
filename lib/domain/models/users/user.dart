@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class User {
   String email;
   String firstName;
@@ -11,7 +13,6 @@ class User {
   bool isStaff;
   DateTime lastLogin;
   DateTime dateJoined;
-
   User({
     required this.email,
     required this.firstName,
@@ -20,49 +21,120 @@ class User {
     required this.cpf,
     required this.phone,
     required this.password,
-    this.isSuperuser = false,
-    this.isActive = true,
-    this.isStaff = false,
+    required this.isSuperuser,
+    required this.isActive,
+    required this.isStaff,
     required this.lastLogin,
     required this.dateJoined,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  
+
+  User copyWith({
+    String? email,
+    String? firstName,
+    String? lastName,
+    String? completeName,
+    String? cpf,
+    String? phone,
+    String? password,
+    bool? isSuperuser,
+    bool? isActive,
+    bool? isStaff,
+    DateTime? lastLogin,
+    DateTime? dateJoined,
+  }) {
     return User(
-      email: json['email'],
-      firstName: json['first_name'],
-      lastName: json['last_name'],
-      completeName: json['completeName'],
-      cpf: json['cpf'],
-      phone: json['phone'],
-      password: json['password'],
-      isSuperuser: json['is_superuser'] ?? false,
-      isActive: json['is_active'] ?? true,
-      isStaff: json['is_staff'] ?? false,
-      lastLogin: DateTime.parse(json['last_login']),
-      dateJoined: DateTime.parse(json['date_joined']),
+      email: email ?? this.email,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      completeName: completeName ?? this.completeName,
+      cpf: cpf ?? this.cpf,
+      phone: phone ?? this.phone,
+      password: password ?? this.password,
+      isSuperuser: isSuperuser ?? this.isSuperuser,
+      isActive: isActive ?? this.isActive,
+      isStaff: isStaff ?? this.isStaff,
+      lastLogin: lastLogin ?? this.lastLogin,
+      dateJoined: dateJoined ?? this.dateJoined,
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
       'email': email,
-      'first_name': firstName,
-      'last_name': lastName,
+      'firstName': firstName,
+      'lastName': lastName,
       'completeName': completeName,
       'cpf': cpf,
       'phone': phone,
       'password': password,
-      'is_superuser': isSuperuser,
-      'is_active': isActive,
-      'is_staff': isStaff,
-      'last_login': lastLogin.toIso8601String(),
-      'date_joined': dateJoined.toIso8601String(),
+      'isSuperuser': isSuperuser,
+      'isActive': isActive,
+      'isStaff': isStaff,
+      'lastLogin': lastLogin.millisecondsSinceEpoch,
+      'dateJoined': dateJoined.millisecondsSinceEpoch,
     };
   }
 
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      email: map['email'] as String,
+      firstName: map['firstName'] as String,
+      lastName: map['lastName'] as String,
+      completeName: map['completeName'] as String,
+      cpf: map['cpf'] as String,
+      phone: map['phone'] as String,
+      password: map['password'] as String,
+      isSuperuser: map['isSuperuser'] as bool,
+      isActive: map['isActive'] as bool,
+      isStaff: map['isStaff'] as bool,
+      lastLogin: DateTime.fromMillisecondsSinceEpoch(map['lastLogin'] as int),
+      dateJoined: DateTime.fromMillisecondsSinceEpoch(map['dateJoined'] as int),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory User.fromJson(String source) => User.fromMap(json.decode(source) as Map<String, dynamic>);
+
   @override
   String toString() {
-    return 'User(email: $email, name: $completeName)';
+    return 'User(email: $email, firstName: $firstName, lastName: $lastName, completeName: $completeName, cpf: $cpf, phone: $phone, password: $password, isSuperuser: $isSuperuser, isActive: $isActive, isStaff: $isStaff, lastLogin: $lastLogin, dateJoined: $dateJoined)';
+  }
+
+  @override
+  bool operator ==(covariant User other) {
+    if (identical(this, other)) return true;
+  
+    return 
+      other.email == email &&
+      other.firstName == firstName &&
+      other.lastName == lastName &&
+      other.completeName == completeName &&
+      other.cpf == cpf &&
+      other.phone == phone &&
+      other.password == password &&
+      other.isSuperuser == isSuperuser &&
+      other.isActive == isActive &&
+      other.isStaff == isStaff &&
+      other.lastLogin == lastLogin &&
+      other.dateJoined == dateJoined;
+  }
+
+  @override
+  int get hashCode {
+    return email.hashCode ^
+      firstName.hashCode ^
+      lastName.hashCode ^
+      completeName.hashCode ^
+      cpf.hashCode ^
+      phone.hashCode ^
+      password.hashCode ^
+      isSuperuser.hashCode ^
+      isActive.hashCode ^
+      isStaff.hashCode ^
+      lastLogin.hashCode ^
+      dateJoined.hashCode;
   }
 }

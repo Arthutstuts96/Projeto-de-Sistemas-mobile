@@ -1,5 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/controllers/register-controller.dart';
+import 'package:projeto_de_sistemas/domain/models/users/user.dart';
 import 'package:projeto_de_sistemas/screens/components/register/button.dart';
 import 'package:projeto_de_sistemas/screens/components/register/form_input.dart';
 import 'package:projeto_de_sistemas/screens/components/register/register_form.dart';
@@ -26,19 +28,19 @@ class _RegisterUserState extends State<RegisterUser>
   ];
 
   final Map<String, TextEditingController> controllers = {
-    'nome': TextEditingController(),
+    'completeName': TextEditingController(),
     'cpf': TextEditingController(),
     'nascimento': TextEditingController(),
-    'telefone': TextEditingController(),
+    'phone': TextEditingController(),
     'email': TextEditingController(),
     'cep': TextEditingController(),
-    'rua': TextEditingController(),
-    'bairro': TextEditingController(),
-    'cidade': TextEditingController(),
-    'estado': TextEditingController(),
+    'street': TextEditingController(),
+    'neighbourhood': TextEditingController(),
+    'city': TextEditingController(),
+    'state': TextEditingController(),
     'usuario': TextEditingController(),
-    'senha': TextEditingController(),
-    'confirmarSenha': TextEditingController(),
+    'password': TextEditingController(),
+    'confirmPassword': TextEditingController(),
     'titular': TextEditingController(),
     'cpfTitular': TextEditingController(),
     'banco': TextEditingController(),
@@ -54,6 +56,8 @@ class _RegisterUserState extends State<RegisterUser>
   late Animation<Offset> _offsetAnimation;
 
   final _validationKey = GlobalKey<FormState>();
+
+  final RegisterController registerController = RegisterController();
 
   @override
   void initState() {
@@ -192,7 +196,7 @@ class _RegisterUserState extends State<RegisterUser>
           fields: [
             FormInput(
               label: "Nome Completo",
-              controller: controllers['nome']!,
+              controller: controllers['completeName']!,
               placeholder: "Seu nome",
               validator: (value) => validateName(value),
             ),
@@ -225,7 +229,7 @@ class _RegisterUserState extends State<RegisterUser>
             ),
             FormInput(
               label: "Telefone",
-              controller: controllers['telefone']!,
+              controller: controllers['phone']!,
               placeholder: "00 00000-0000",
               type: TextInputType.phone,
               validator: (value) => validatePhone(value),
@@ -253,17 +257,17 @@ class _RegisterUserState extends State<RegisterUser>
             ),
             FormInput(
               label: "Rua",
-              controller: controllers['rua']!,
+              controller: controllers['street']!,
               placeholder: "Nome da rua",
             ),
             FormInput(
               label: "Bairro",
-              controller: controllers['bairro']!,
+              controller: controllers['neighbourhood']!,
               placeholder: "Bairro",
             ),
             FormInput(
               label: "Cidade",
-              controller: controllers['cidade']!,
+              controller: controllers['city']!,
               placeholder: "Palmas",
             ),
             DropdownButtonFormField<String>(
@@ -275,7 +279,7 @@ class _RegisterUserState extends State<RegisterUser>
               ),
               items: selectEstadoItens,
               onChanged: (value) {
-                controllers['estado']?.text = value ?? "";
+                controllers['state']?.text = value ?? "";
               },
             ),
           ],
@@ -292,14 +296,14 @@ class _RegisterUserState extends State<RegisterUser>
             ),
             FormInput(
               label: "Senha",
-              controller: controllers['senha']!,
+              controller: controllers['password']!,
               placeholder: "*********",
               isPassword: true,
               validator: (value) => validatePassword(value),
             ),
             FormInput(
               label: "Confirmar senha",
-              controller: controllers['confirmarSenha']!,
+              controller: controllers['confirmPassword']!,
               placeholder: "Confirme sua senha",
               validator:
                   (value) => validateConfirmPassword(
@@ -446,10 +450,11 @@ class _RegisterUserState extends State<RegisterUser>
           Icon(Icons.verified_outlined, size: 150, color: Colors.green),
           Button(
             onPressed: () {
+              registerController.saveUser(user: mapFormDataToUser());
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => FormDataDebug(formData: mapFormData()),
+                  builder: (context) => FormDataDebug(user: mapFormDataToUser()),
                 ),
               );
             },
@@ -461,18 +466,22 @@ class _RegisterUserState extends State<RegisterUser>
     );
   }
 
-  /*
-    Útil somente para debugging
-  */
+  User mapFormDataToUser() {
+    User user = User(
+      completeName: controllers["completeName"]!.text,
+      dateJoined: DateTime.now(),
+      email: controllers["email"]!.text,
+      firstName: controllers["completeName"]!.text.split(" ")[0],
+      lastName: controllers["completeName"]!.text,
+      cpf: controllers["cpf"]!.text,
+      phone: controllers["phone"]!.text,
+      password: controllers["password"]!.text,
+      isSuperuser: false,
+      isActive: true,
+      isStaff: false,
+      lastLogin: DateTime.now(),
+    );
 
-  List<Text> mapFormData() {
-    List<Text> list =
-        controllers.entries.map((entry) {
-          return Text("${entry.key}: ${entry.value.text}");
-        }).toList();
-
-    list.add(Text("Arquivos:"));
-    list.addAll(files.map((file) => Text(file.name)));
-    return list;
+    return user;
   }
 }
