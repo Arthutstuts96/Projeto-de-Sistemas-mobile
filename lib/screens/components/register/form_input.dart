@@ -8,7 +8,6 @@ class FormInput extends StatelessWidget {
     this.type = TextInputType.text,
     required this.controller,
     this.isPassword = false,
-    this.errorMessage = "Por favor, preencha corretamente o campo",
     this.validator,
   });
 
@@ -17,7 +16,6 @@ class FormInput extends StatelessWidget {
   final TextInputType type;
   final TextEditingController controller;
   final bool isPassword;
-  final String errorMessage;
   final String? Function(String?)? validator; // Aqui mudamos para uma função
 
   @override
@@ -31,11 +29,11 @@ class FormInput extends StatelessWidget {
           return validator!(value);
         } else {
           if (value == null || value.isEmpty) {
-            return errorMessage;
+            return "Por favor, preencha o campo";
           }
           return null;
         }
-      },
+      },     
       decoration: InputDecoration(
         border: OutlineInputBorder(),
         label: Text(label),

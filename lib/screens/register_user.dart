@@ -118,6 +118,7 @@ class _RegisterUserState extends State<RegisterUser>
               ),
             if (index <= 6)
               Button(
+                /* Avança sem validação (SOMENTE PARA DEBUGGING) */
                 // onPressed: () {
                 //   setState(() {
                 //     if (widget.userType == UserTypes.client && index == 3) {
@@ -131,6 +132,21 @@ class _RegisterUserState extends State<RegisterUser>
                 // },
                 /* Só avança se estiver validado */
                 onPressed: () {
+                  if (index == 6) {
+                    if (files.any(
+                          (file) => file.size == 0 || file.name.isEmpty,
+                        ) &&
+                        widget.userType == UserTypes.worker) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Selecione os documentos necessários para o cadastro',
+                          ),
+                        ),
+                      );
+                      return;
+                    }
+                  }
                   if (_validationKey.currentState!.validate()) {
                     setState(() {
                       if (widget.userType == UserTypes.client && index == 3) {
@@ -185,24 +201,41 @@ class _RegisterUserState extends State<RegisterUser>
               controller: controllers['cpf']!,
               placeholder: "Seu CPF",
               type: TextInputType.number,
+              validator: (value) => validateCpf(value),
             ),
-            FormInput(
-              label: "Data de nascimento",
-              controller: controllers['nascimento']!,
-              placeholder: "01/01/2000",
-              type: TextInputType.datetime,
+            TextFormField(
+              controller: controllers['nascimento'],
+              readOnly: true,
+              onTap: () async {
+                final pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime.now(),
+                );
+                if (pickedDate != null) {
+                  controllers['nascimento']!.text = formatDate(pickedDate);
+                }
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                label: Text("Data de nascimento"),
+                hintText: "01/01/1999",
+              ),
             ),
             FormInput(
               label: "Telefone",
               controller: controllers['telefone']!,
               placeholder: "00 00000-0000",
               type: TextInputType.phone,
+              validator: (value) => validatePhone(value),
             ),
             FormInput(
               label: "Email",
               controller: controllers['email']!,
               placeholder: "seuemail@email.com",
               type: TextInputType.emailAddress,
+              validator: (value) => validateEmail(value),
             ),
           ],
         );
@@ -216,6 +249,7 @@ class _RegisterUserState extends State<RegisterUser>
               controller: controllers['cep']!,
               placeholder: "00000-000",
               type: TextInputType.number,
+              validator: (value) => validateCep(value),
             ),
             FormInput(
               label: "Rua",
@@ -236,70 +270,10 @@ class _RegisterUserState extends State<RegisterUser>
               value: "TO",
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                label: Text(
-                  "Estado",
-                ), // ou use `Text(label)` se quiser passar dinamicamente
+                label: Text("Estado"),
                 hintText: "Selecione o estado",
               ),
-              items: const [
-                DropdownMenuItem<String>(value: "AC", child: Text("Acre")),
-                DropdownMenuItem<String>(value: "AL", child: Text("Alagoas")),
-                DropdownMenuItem<String>(value: "AP", child: Text("Amapá")),
-                DropdownMenuItem<String>(value: "AM", child: Text("Amazonas")),
-                DropdownMenuItem<String>(value: "BA", child: Text("Bahia")),
-                DropdownMenuItem<String>(value: "CE", child: Text("Ceará")),
-                DropdownMenuItem<String>(
-                  value: "DF",
-                  child: Text("Distrito Federal"),
-                ),
-                DropdownMenuItem<String>(
-                  value: "ES",
-                  child: Text("Espírito Santo"),
-                ),
-                DropdownMenuItem<String>(value: "GO", child: Text("Goiânia")),
-                DropdownMenuItem<String>(value: "MA", child: Text("Maranhão")),
-                DropdownMenuItem<String>(
-                  value: "MT",
-                  child: Text("Mato Grosso"),
-                ),
-                DropdownMenuItem<String>(
-                  value: "MS",
-                  child: Text("Mato Grosso do Sul"),
-                ),
-                DropdownMenuItem<String>(
-                  value: "MG",
-                  child: Text("Minas Gerais"),
-                ),
-                DropdownMenuItem<String>(value: "PA", child: Text("Pará")),
-                DropdownMenuItem<String>(value: "PB", child: Text("Paraíba")),
-                DropdownMenuItem<String>(value: "PR", child: Text("Paraná")),
-                DropdownMenuItem<String>(
-                  value: "PE",
-                  child: Text("Pernambuco"),
-                ),
-                DropdownMenuItem<String>(value: "PI", child: Text("Piauí")),
-                DropdownMenuItem<String>(
-                  value: "RJ",
-                  child: Text("Rio de Janeiro"),
-                ),
-                DropdownMenuItem<String>(
-                  value: "RN",
-                  child: Text("Rio Grande do Norte"),
-                ),
-                DropdownMenuItem<String>(
-                  value: "RS",
-                  child: Text("Rio Grande do Sul"),
-                ),
-                DropdownMenuItem<String>(value: "RO", child: Text("Rondônia")),
-                DropdownMenuItem<String>(value: "RR", child: Text("Roraima")),
-                DropdownMenuItem<String>(
-                  value: "SC",
-                  child: Text("Santa Catarina"),
-                ),
-                DropdownMenuItem<String>(value: "SP", child: Text("São Paulo")),
-                DropdownMenuItem<String>(value: "SE", child: Text("Sergipe")),
-                DropdownMenuItem<String>(value: "TO", child: Text("Tocantins")),
-              ],
+              items: selectEstadoItens,
               onChanged: (value) {
                 controllers['estado']?.text = value ?? "";
               },
@@ -321,11 +295,17 @@ class _RegisterUserState extends State<RegisterUser>
               controller: controllers['senha']!,
               placeholder: "*********",
               isPassword: true,
+              validator: (value) => validatePassword(value),
             ),
             FormInput(
               label: "Confirmar senha",
               controller: controllers['confirmarSenha']!,
               placeholder: "Confirme sua senha",
+              validator:
+                  (value) => validateConfirmPassword(
+                    value,
+                    controllers['senha']!.text,
+                  ),
               isPassword: true,
             ),
           ],
@@ -345,6 +325,7 @@ class _RegisterUserState extends State<RegisterUser>
                 label: "CPF do titular",
                 controller: controllers['cpfTitular']!,
                 placeholder: "123.456.789-00",
+                validator: (value) => validateCpf(value),
               ),
               FormInput(
                 label: "Banco",
@@ -360,6 +341,7 @@ class _RegisterUserState extends State<RegisterUser>
                 label: "Conta",
                 controller: controllers['conta']!,
                 placeholder: "56789-0",
+                validator: (value) => validateAccount(value),
               ),
               FormInput(
                 label: "Chave Pix",
@@ -385,12 +367,14 @@ class _RegisterUserState extends State<RegisterUser>
                 label: "Placa",
                 controller: controllers['placa']!,
                 placeholder: "AAA-1234",
+                validator: (value) => validateCarPlate(value),
               ),
               FormInput(
                 label: "CNH",
                 controller: controllers['cnh']!,
                 placeholder: "98765432100",
                 type: TextInputType.number,
+                validator: (value) => validateCnh(value),
               ),
             ],
           );
@@ -462,19 +446,12 @@ class _RegisterUserState extends State<RegisterUser>
           Icon(Icons.verified_outlined, size: 150, color: Colors.green),
           Button(
             onPressed: () {
-              if (_validationKey.currentState!.validate() == false) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Preencha todos os campos!')),
-                );
-              } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder:
-                        (context) => FormDataDebug(formData: mapFormData()),
-                  ),
-                );
-              }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FormDataDebug(formData: mapFormData()),
+                ),
+              );
             },
             text: "Cadastro concluído",
             color: Colors.green,
