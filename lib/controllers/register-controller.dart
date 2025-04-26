@@ -1,7 +1,10 @@
 import 'package:projeto_de_sistemas/domain/models/users/user.dart';
 import 'package:projeto_de_sistemas/domain/repository/user_repository.dart';
+import 'package:projeto_de_sistemas/services/api/register_user.dart';
 
 class RegisterController implements UserRepository {
+  final RegisterUserApi _registerUserApi = RegisterUserApi();
+
   @override
   Future<void> deleteUser({required User user}) {
     // TODO: implement deleteUser
@@ -16,7 +19,11 @@ class RegisterController implements UserRepository {
 
   @override
   Future<void> saveUser({required User user}) async {
-    //TODO: comunicação com a api services para salvar o usuário no banco
-    print("Usuário cadastrado com sucesso ${user.toString()}");
+    final bool success = await _registerUserApi.saveUser(user: user);
+    if(success){
+      print("Usuário cadastrado com sucesso");
+    } else {
+      print("Ocorreu um erro ao salvar");
+    }
   }
 }

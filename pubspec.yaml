@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   file_picker: ^10.1.2
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:
