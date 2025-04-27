@@ -3,6 +3,8 @@
 <table align="center">
     <tr>
         <td><a href="../README.md">Home</a></td>
+        <td><a href="/docs/defaults.md">Padrões</a></td>
+        <td><a href="plan.md">Planejamento</a></td>
         <td>
             <details style="position: relative;">
                 <summary>Mais</summary>
@@ -37,8 +39,8 @@
     <tr>
         <td>Arthur Lima Duarte</td>
         <td><a href="https://github.com/Arthutstuts96" target="_blank">Arthutstuts96</a></td>
-        <td><a href="https://linkedin.com/in/arthurlima" target="_blank">LinkedIn</a></td>
-        <td><a href="mailto:arthurlima@example.com">Email</a></td>
+        <td><a href="https://www.linkedin.com/in/arthur-lima-duarte-4624622a7/" target="_blank">Arthur Lima Duarte</a></td>
+        <td><a href="mailto:oarthurlima1575@gmail.com">oarthurlima1575</a></td>
     </tr>
     <tr>
         <td>Gabriel Fernandes Zamora</td>

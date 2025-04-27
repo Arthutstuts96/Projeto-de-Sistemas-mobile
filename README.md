@@ -1,10 +1,11 @@
 <h1 align="center"> Projeto-de-Sistemas | Mobile</h1>
-        <td><a href="https://github.com/MellloJ/Projeto-de-Sistemas">As informações do projeto estão em </a></td>
+        <td>As informações principais do projeto estão <a href="https://github.com/MellloJ/Projeto-de-Sistemas">nesse repositório</a></td>
 
 <table align="center">
     <tr>
         <td>Home</td>
         <td><a href="/docs/defaults.md">Padrões</a></td>
+        <td><a href="plan.md">Planejamento</a></td>
         <td>
             <details style="position: relative;">
                 <summary>Mais</summary>
@@ -20,14 +21,16 @@
 
 ## Sobre
 
-Em Breve 
+Esse repositório diz respeito à versão mobile do Traz Aí, o aplicativo de entregas especializado para compras grandes
 
-## Objetivos
+<!-- ## Objetivos
 
 - Em
-- Breve
+- Breve -->
 
 ## Tecnologias Utilizadas
+
+###### Para fins de padronização, a parte mobile do sistema utiliza o mesmo backend da parte web, que é feito em django, favorecendo a comunicação por APIs e compatibilidade entre ambos
 
 - Linguagens Utilizadas:
 <p>
@@ -45,7 +48,7 @@ Em Breve
 
 - Banco de Dados:
 <p>
-  <a href="https://skillicons.dev"><img src="https://skillicons.dev/icons?i=mysql"/></a>
+  <a href="https://skillicons.dev"><img src="https://skillicons.dev/icons?i=postgres"/></a>
 </p>
 
 - Ferramentas:
