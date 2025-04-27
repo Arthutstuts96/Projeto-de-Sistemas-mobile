@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/screens/splash_screen.dart';
 import 'package:projeto_de_sistemas/screens/login_screen.dart';
 
 
@@ -13,9 +14,9 @@ class TrazAi extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        "login": (context) => const LoginScreen(),
+        "splash_screen": (context) => const SplashScreen(),
       },
-      initialRoute: "login",
+      initialRoute: "splash_screen",
     );
   }
 }
