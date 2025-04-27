@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/screens/components/register/button.dart';
 import 'package:projeto_de_sistemas/screens/register_user.dart';
+import 'package:projeto_de_sistemas/utils/api_configs.dart';
 import 'package:projeto_de_sistemas/utils/consts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -140,7 +141,7 @@ class ChooseScreen extends StatelessWidget {
                         TapGestureRecognizer()
                           ..onTap = () {
                             //LINK DO BACKEND
-                            launchUrl(Uri.parse('https://www.google.com'));
+                            launchUrl(Uri.parse(ipHost));
                           },
                   ),
                 ],

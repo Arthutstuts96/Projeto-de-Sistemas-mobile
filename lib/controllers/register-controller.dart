@@ -18,12 +18,9 @@ class RegisterController implements UserRepository {
   }
 
   @override
-  Future<void> saveUser({required User user}) async {
+  Future<bool> saveUser({required User user}) async {
     final bool success = await _registerUserApi.saveUser(user: user);
-    if(success){
-      print("Usuário cadastrado com sucesso");
-    } else {
-      print("Ocorreu um erro ao salvar");
-    }
+    return success;
   }
 }
+ 

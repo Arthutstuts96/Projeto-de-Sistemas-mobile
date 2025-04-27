@@ -123,52 +123,52 @@ class _RegisterUserState extends State<RegisterUser>
             if (index <= 6)
               Button(
                 /* Avança sem validação (SOMENTE PARA DEBUGGING) */
-                onPressed: () {
-                  setState(() {
-                    if (widget.userType == UserTypes.client && index == 3) {
-                      index = 7;
-                    } else {
-                      index++;
-                    }
-                    _controller.reset();
-                    _controller.forward(); // Reinicia a animação
-                  });
-                },
-                /* Só avança se estiver validado */
                 // onPressed: () {
-                //   if (index == 6) {
-                //     if (files.any(
-                //           (file) => file.size == 0 || file.name.isEmpty,
-                //         ) &&
-                //         widget.userType == UserTypes.worker) {
-                //       ScaffoldMessenger.of(context).showSnackBar(
-                //         const SnackBar(
-                //           content: Text(
-                //             'Selecione os documentos necessários para o cadastro',
-                //           ),
-                //         ),
-                //       );
-                //       return;
+                //   setState(() {
+                //     if (widget.userType == UserTypes.client && index == 3) {
+                //       index = 7;
+                //     } else {
+                //       index++;
                 //     }
-                //   }
-                //   if (_validationKey.currentState!.validate()) {
-                //     setState(() {
-                //       if (widget.userType == UserTypes.client && index == 3) {
-                //         index = 7;
-                //       } else {
-                //         index++;
-                //       }
-                //       _controller.reset();
-                //       _controller.forward(); // Reinicia a animação
-                //     });
-                //   } else {
-                //     ScaffoldMessenger.of(context).showSnackBar(
-                //       const SnackBar(
-                //         content: Text('Preencha todos os campos!'),
-                //       ),
-                //     );
-                //   }
+                //     _controller.reset();
+                //     _controller.forward(); // Reinicia a animação
+                //   });
                 // },
+                /* Só avança se estiver validado */
+                onPressed: () {
+                  if (index == 6) {
+                    if (files.any(
+                          (file) => file.size == 0 || file.name.isEmpty,
+                        ) &&
+                        widget.userType == UserTypes.worker) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Selecione os documentos necessários para o cadastro',
+                          ),
+                        ),
+                      );
+                      return;
+                    }
+                  }
+                  if (_validationKey.currentState!.validate()) {
+                    setState(() {
+                      if (widget.userType == UserTypes.client && index == 3) {
+                        index = 7;
+                      } else {
+                        index++;
+                      }
+                      _controller.reset();
+                      _controller.forward(); // Reinicia a animação
+                    });
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Preencha todos os campos!'),
+                      ),
+                    );
+                  }
+                },
                 text: "Próximo",
               ),
           ],
@@ -308,7 +308,7 @@ class _RegisterUserState extends State<RegisterUser>
               validator:
                   (value) => validateConfirmPassword(
                     value,
-                    controllers['senha']!.text,
+                    controllers['password']!.text,
                   ),
               isPassword: true,
             ),
@@ -457,14 +457,16 @@ class _RegisterUserState extends State<RegisterUser>
             ),),
           ),
           Button(
-            onPressed: () {
-              registerController.saveUser(user: mapFormDataToUser());
-              Navigator.push(
+            onPressed: () async{
+              final bool success = await registerController.saveUser(user: mapFormDataToUser());
+              if(success){
+                Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => FormDataDebug(user: mapFormDataToUser()),
                 ),
               );
+              }
             },
             text: "Concluir cadastro",
             color: Colors.green,
