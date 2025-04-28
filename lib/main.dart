@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/screens/splash_screen.dart';
+import 'package:projeto_de_sistemas/screens/login_screen.dart';
+import 'package:projeto_de_sistemas/screens/home_screen.dart';
+
 
 void main() {
-  runApp(const MainApp());
+  runApp(const TrazAi());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class TrazAi extends StatelessWidget {
+  const TrazAi({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
         "splash_screen": (context) => const SplashScreen(),
+        "login_screen": (context) =>  LoginScreen(),
+        "home_screen": (context) =>  HomeScreen(),
       },
       initialRoute: "splash_screen",
     );

@@ -1,12 +1,11 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:projeto_de_sistemas/controllers/register-controller.dart';
+import 'package:projeto_de_sistemas/controllers/register_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/users/user.dart';
 import 'package:projeto_de_sistemas/screens/components/register/button.dart';
 import 'package:projeto_de_sistemas/screens/components/register/form_input.dart';
 import 'package:projeto_de_sistemas/screens/components/register/register_form.dart';
 import 'package:projeto_de_sistemas/screens/components/register/register_top_style.dart';
-import 'package:projeto_de_sistemas/screens/form_data_debug.dart';
 import 'package:projeto_de_sistemas/utils/consts.dart';
 import 'package:projeto_de_sistemas/utils/functions/validation_functions.dart';
 
@@ -460,12 +459,7 @@ class _RegisterUserState extends State<RegisterUser>
             onPressed: () async{
               final bool success = await registerController.saveUser(user: mapFormDataToUser());
               if(success){
-                Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => FormDataDebug(user: mapFormDataToUser()),
-                ),
-              );
+                Navigator.pushReplacementNamed(context, "login_screen");
               }
             },
             text: "Concluir cadastro",

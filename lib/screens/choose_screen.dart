@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/screens/components/register/button.dart';
+import 'package:projeto_de_sistemas/screens/login_screen.dart';
 import 'package:projeto_de_sistemas/screens/register_user.dart';
 import 'package:projeto_de_sistemas/utils/api_configs.dart';
 import 'package:projeto_de_sistemas/utils/consts.dart';
@@ -117,7 +118,14 @@ class ChooseScreen extends StatelessWidget {
                   Align(
                     alignment: Alignment.topRight,
                     child: Button(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginScreen(),
+                          ),
+                        );
+                      },
                       text: "Já tenho uma conta",
                       color: Colors.orange,
                     ),
@@ -147,7 +155,7 @@ class ChooseScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 4)
+            SizedBox(height: 4),
           ],
         ),
       ),
