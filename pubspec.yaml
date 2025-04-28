@@ -13,6 +13,7 @@ dependencies:
   url_launcher: ^6.3.1
   dio: ^5.8.0+1
   shared_preferences: ^2.5.3
+  flutter_svg: ^2.0.10
 
 dev_dependencies:
   flutter_test:
@@ -29,5 +30,8 @@ flutter:
         - asset: assets/fonts/Poppins/poppins-regular.ttf
         - asset: assets/fonts/Poppins/poppins-italic.ttf
         - asset: assets/fonts/Poppins/poppins-bold.ttf
+    - family: Leckerli One
+      fonts:
+        - asset: assets/fonts/Leckerli_One/LeckerliOne-Regular.ttf
         
           weight: 700

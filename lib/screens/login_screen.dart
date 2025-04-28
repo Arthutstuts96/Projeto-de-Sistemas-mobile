@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_de_sistemas/utils/functions/login_validation.dart'; // ou seu novo arquivo
+import 'package:projeto_de_sistemas/utils/functions/login_validation.dart';
 import 'package:projeto_de_sistemas/controllers/login_controller.dart';
+import 'package:flutter/services.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -12,127 +13,218 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            Image.asset(
-              "assets/images/login_image.png",
-              fit: BoxFit.cover,
-              width: double.infinity,
-            ),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 8,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Color(0xFFC07C00),
+        statusBarIconBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 239, 159, 10),
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Image.asset(
+                  "assets/images/background.png",
+                  fit: BoxFit.cover,
                 ),
+              ),
+              Center(
                 child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Bem vindo ao Traz Aí",
-                        style: TextStyle(
-                          fontSize: 50,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: "Poppins",
-                          color: Color.fromARGB(255, 239, 159, 10),
-                        ),
-                      ),
-                      const SizedBox(height: 32),
-                      // Campo de E-mail com validação
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("E-mail"),
-                      ),
-                      TextFormField(
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: validateLoginEmail,
-                        decoration: InputDecoration(
-                          hintText: "seu@email.com",
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      const SizedBox(height: 32),
-                      // Campo de Senha com validação
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Senha"),
-                      ),
-                      TextFormField(
-                        controller: _passwordController,
-                        obscureText: true,
-                        validator: validateLoginPassword,
-                        decoration: InputDecoration(
-                          hintText: "Sua senha",
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      const SizedBox(height: 32),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                final result = await _loginController.loginUser(
-                                  email: _emailController.text.trim(),
-                                  password: _passwordController.text,
-                                );
-
-                                if (result['success']) {
-                                  // Login bem-sucedido - navegar para home
-                                  Navigator.pushReplacementNamed(
-                                    context,
-                                    'home_screen',
-                                  );
-                                } else {
-                                  // Mostrar erro
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(result['error']),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                }
-                              }
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: WidgetStatePropertyAll(
-                                const Color.fromARGB(255, 239, 159, 10),
-                              ),
-                              minimumSize: WidgetStatePropertyAll(
-                                const Size(185, 50),
-                              ),
-                            ),
-                            child: const Text(
-                              "Entrar",
-                              style: TextStyle(color: Colors.white),
-                            ),
+                  padding: const EdgeInsets.all(16),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Transform.translate(
+                          offset: const Offset(0, -45),
+                          child: Image.asset(
+                            "assets/images/logo_login.png",
+                            height: 300,
+                            width: 300,
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                        Transform.translate(
+                          offset: const Offset(0, -30),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Text(
+                                "Bem vindo",
+                                style: TextStyle(
+                                  fontSize: 50,
+                                  fontWeight: FontWeight.normal,
+                                  fontFamily: "Leckerli One",
+                                  color: Color(0xFFC07C00),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              TextFormField(
+                                controller: _emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                validator: validateLoginEmail,
+                                decoration: InputDecoration(
+                                  labelText:
+                                      "E-mail", // Colocando o texto como label
+                                  hintText: "seu@email.com",
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    borderSide: const BorderSide(
+                                      width: 3.0,
+                                      color: Color(0xFFC07C00),
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    borderSide: const BorderSide(
+                                      width: 3.0,
+                                      color: Color(0xFFC07C00),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 22),
+                              TextFormField(
+                                controller: _passwordController,
+                                obscureText: true,
+                                validator: validateLoginPassword,
+                                decoration: InputDecoration(
+                                  labelText:
+                                      "Senha", // Colocando o texto como label
+                                  hintText: "Sua senha",
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    borderSide: const BorderSide(
+                                      width: 3.0,
+                                      color: Color(0xFFC07C00),
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    borderSide: const BorderSide(
+                                      width: 3.0,
+                                      color: Color(0xFFC07C00),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 32),
+                              SizedBox(
+                                width: double.infinity,
+                                child: Column(
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        if (_formKey.currentState!.validate()) {
+                                          final result = await _loginController
+                                              .loginUser(
+                                                email:
+                                                    _emailController.text
+                                                        .trim(),
+                                                password:
+                                                    _passwordController.text,
+                                              );
+                                          if (result['success']) {
+                                            Navigator.pushReplacementNamed(
+                                              context,
+                                              'home_screen',
+                                            );
+                                          } else {
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              SnackBar(
+                                                content: Text(result['error']),
+                                                backgroundColor: Colors.red,
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      },
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            const MaterialStatePropertyAll(
+                                              Color(0xFFC07C00),
+                                            ),
+                                        minimumSize:
+                                            const MaterialStatePropertyAll(
+                                              Size(380, 50),
+                                            ),
+                                        shape: MaterialStatePropertyAll(
+                                          RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                            side: const BorderSide(
+                                              color: Color(0xFFC07C00),
+                                              width: 2,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        "Entrar",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 25,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    const Text(
+                                      "Não possui conta? Crie uma agora",
+                                      style: TextStyle(
+                                        fontFamily: "poppins",
+                                        fontWeight: FontWeight.w600,
+                                        fontStyle: FontStyle.normal,
+                                        color: Color.fromARGB(255, 100, 65, 0),
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pushNamed(
+                                          context,
+                                          'register_screen',
+                                        );
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: Color(0xFFC07C00),
+                                        minimumSize: const Size(150, 40),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                          side: const BorderSide(
+                                            color: Color(0xFFC07C00),
+                                            width: 2,
+                                          ),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        "Criar Conta",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

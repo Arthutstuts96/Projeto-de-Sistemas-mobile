@@ -8,7 +8,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Home'), backgroundColor: Colors.orange),
       body: Center(
-        child: Image.asset('assets/images/Home.png', fit: BoxFit.contain),
+        child: Image.asset('assets/images/background.png', fit: BoxFit.contain),
       ),
     );
   }
