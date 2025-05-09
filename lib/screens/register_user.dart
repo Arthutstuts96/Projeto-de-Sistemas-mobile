@@ -20,11 +20,10 @@ class RegisterUser extends StatefulWidget {
 class _RegisterUserState extends State<RegisterUser>
     with SingleTickerProviderStateMixin {
   int index = 1;
-  List<PlatformFile> files = [
-    PlatformFile(name: "", size: 0),
-    PlatformFile(name: "", size: 0),
-    PlatformFile(name: "", size: 0),
-  ];
+  List<PlatformFile> files = List.generate(
+    3,
+    (_) => PlatformFile(name: "", size: 0),
+  );
 
   final Map<String, TextEditingController> controllers = {
     'completeName': TextEditingController(),
@@ -55,7 +54,6 @@ class _RegisterUserState extends State<RegisterUser>
   late Animation<Offset> _offsetAnimation;
 
   final _validationKey = GlobalKey<FormState>();
-
   final RegisterController registerController = RegisterController();
 
   @override
@@ -65,120 +63,115 @@ class _RegisterUserState extends State<RegisterUser>
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-
     _offsetAnimation = Tween<Offset>(
       begin: const Offset(-1.0, 0.0),
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
-    // Inicia a animação assim que o widget for exibido
     _controller.forward();
   }
 
   @override
   void dispose() {
-    _controller.dispose(); // Limpa o controller quando o widget for destruído
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Form(
-        key: _validationKey,
-        child: Column(
-          children: <Widget>[
-            RegisterTopStyle(
-              text:
-                  widget.userType == UserTypes.client
-                      ? "Cadastro de cliente"
-                      : "Cadastro separador/entregador",
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              "assets/images/background.png",
+              fit: BoxFit.cover,
             ),
-            Expanded(child: getFormByIndex()),
-          ],
-        ),
+          ),
+          Form(
+            key: _validationKey,
+            child: Column(
+              children: <Widget>[
+                RegisterTopStyle(
+                  text:
+                      widget.userType == UserTypes.client
+                          ? "Cadastro de cliente"
+                          : "Cadastro separador/entregador",
+                ),
+                Expanded(child: getFormByIndex()),
+              ],
+            ),
+          ),
+        ],
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 48),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            if (index != 1)
-              Button(
-                onPressed: () {
-                  setState(() {
-                    if (widget.userType == UserTypes.client && index == 7) {
-                      index = 3;
-                    } else {
-                      index--;
-                    }
-                    _controller.reset();
-                    _controller.forward(); // Reinicia a animação
-                  });
-                },
-                text: "Voltar",
-                color: Colors.deepOrange,
-              ),
-            if (index <= 6)
-              Button(
-                /* Avança sem validação (SOMENTE PARA DEBUGGING) */
-                // onPressed: () {
-                //   setState(() {
-                //     if (widget.userType == UserTypes.client && index == 3) {
-                //       index = 7;
-                //     } else {
-                //       index++;
-                //     }
-                //     _controller.reset();
-                //     _controller.forward(); // Reinicia a animação
-                //   });
-                // },
-                /* Só avança se estiver validado */
-                onPressed: () {
-                  if (index == 6) {
-                    if (files.any(
-                          (file) => file.size == 0 || file.name.isEmpty,
-                        ) &&
-                        widget.userType == UserTypes.worker) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            'Selecione os documentos necessários para o cadastro',
-                          ),
-                        ),
-                      );
-                      return;
-                    }
-                  }
-                  if (_validationKey.currentState!.validate()) {
+      bottomNavigationBar: Container(
+        color: Color(0xFFfff8d9),
+        child: Padding(
+          
+          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 48),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (index != 1)
+                Button(
+                  onPressed: () {
                     setState(() {
-                      if (widget.userType == UserTypes.client && index == 3) {
-                        index = 7;
+                      if (widget.userType == UserTypes.client && index == 7) {
+                        index = 3;
                       } else {
-                        index++;
+                        index--;
                       }
                       _controller.reset();
-                      _controller.forward(); // Reinicia a animação
+                      _controller.forward();
                     });
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Preencha todos os campos!'),
-                      ),
-                    );
-                  }
-                },
-                text: "Próximo",
-              ),
-          ],
+                  },
+                  text: "Voltar",
+                  color: Colors.deepOrange,
+                ),
+              if (index <= 6)
+                Button(
+                  onPressed: () {
+                    if (index == 6) {
+                      if (files.any(
+                            (file) => file.size == 0 || file.name.isEmpty,
+                          ) &&
+                          widget.userType == UserTypes.worker) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Selecione os documentos necessários para o cadastro',
+                            ),
+                          ),
+                        );
+                        return;
+                      }
+                    }
+                    if (_validationKey.currentState!.validate()) {
+                      setState(() {
+                        if (widget.userType == UserTypes.client && index == 3) {
+                          index = 7;
+                        } else {
+                          index++;
+                        }
+                        _controller.reset();
+                        _controller.forward();
+                      });
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Preencha todos os campos!'),
+                        ),
+                      );
+                    }
+                  },
+                  text: "Próximo",
+                ),
+            ],
+          ),
         ),
       ),
     );
   }
-
-  /*
-     Métodos para tratar com os dados do formulário
-  */
 
   Widget getFormByIndex() {
     return SlideTransition(
@@ -220,7 +213,7 @@ class _RegisterUserState extends State<RegisterUser>
                   controllers['nascimento']!.text = formatDate(pickedDate);
                 }
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 label: Text("Data de nascimento"),
                 hintText: "01/01/1999",
@@ -271,7 +264,7 @@ class _RegisterUserState extends State<RegisterUser>
             ),
             DropdownButtonFormField<String>(
               value: "TO",
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 label: Text("Estado"),
                 hintText: "Selecione o estado",
@@ -289,7 +282,7 @@ class _RegisterUserState extends State<RegisterUser>
           icon: Icons.password,
           fields: [
             FormInput(
-              label: "Usuário(apelido)",
+              label: "Usuário (apelido)",
               controller: controllers['usuario']!,
               placeholder: "João Silva",
             ),
@@ -316,7 +309,7 @@ class _RegisterUserState extends State<RegisterUser>
       case 4:
         if (widget.userType == UserTypes.worker) {
           return RegisterForm(
-            title: "Dados de conta bancária",
+            title: "Dados bancários",
             icon: Icons.credit_card,
             fields: [
               FormInput(
@@ -382,55 +375,37 @@ class _RegisterUserState extends State<RegisterUser>
             ],
           );
         }
+        break;
       case 6:
         if (widget.userType == UserTypes.worker) {
           return RegisterForm(
             title: "Documentação",
             icon: Icons.folder,
             fields: [
-              SizedBox(height: 4),
-              Text("Foto do RG/CNH", style: TextStyle(fontSize: 16)),
+              const SizedBox(height: 4),
+              const Text("Foto do RG/CNH", style: TextStyle(fontSize: 16)),
               Button(
-                onPressed: () async {
-                  final fileList = await FilePicker.platform.pickFiles();
-                  if (fileList == null) return;
-                  final file = fileList.files.first;
-
-                  setState(() {
-                    files[0] = file;
-                  });
-                },
+                onPressed: () async => pickFile(0),
                 text: "Selecione um arquivo",
               ),
               Text(files[0].name),
-              Text("Comprovante de residência", style: TextStyle(fontSize: 16)),
+              const SizedBox(height: 12),
+              const Text(
+                "Comprovante de residência",
+                style: TextStyle(fontSize: 16),
+              ),
               Button(
-                onPressed: () async {
-                  final fileList = await FilePicker.platform.pickFiles();
-                  if (fileList == null) return;
-                  final file = fileList.files.first;
-
-                  setState(() {
-                    files[1] = file;
-                  });
-                },
+                onPressed: () async => pickFile(1),
                 text: "Selecione um arquivo",
               ),
               Text(files[1].name),
-              Text(
+              const SizedBox(height: 12),
+              const Text(
                 "Foto segurando o documento",
                 style: TextStyle(fontSize: 16),
               ),
               Button(
-                onPressed: () async {
-                  final fileList = await FilePicker.platform.pickFiles();
-                  if (fileList == null) return;
-                  final file = fileList.files.first;
-
-                  setState(() {
-                    files[2] = file;
-                  });
-                },
+                onPressed: () async => pickFile(2),
                 text: "Selecione um arquivo",
               ),
               Text(files[2].name),
@@ -443,22 +418,31 @@ class _RegisterUserState extends State<RegisterUser>
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        spacing: 36,
         children: [
-          Icon(Icons.check_circle_outline, size: 150, color: Colors.green),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Text("Está tudo pronto para terminarmos seu cadastro!", textAlign: TextAlign.center, style: TextStyle(
-              fontSize: 20,
-              color: Colors.green,
-              fontWeight: FontWeight.w500
-            ),),
+          const Icon(
+            Icons.check_circle_outline,
+            size: 150,
+            color: Colors.green,
+          ),
+          const SizedBox(height: 36),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12),
+            child: Text(
+              "Está tudo pronto para terminarmos seu cadastro!",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.green,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ),
           Button(
-            onPressed: () async{
-              final bool success = await registerController.saveUser(user: mapFormDataToUser());
-              if(success){
+            onPressed: () async {
+              final success = await registerController.saveUser(
+                user: mapFormDataToUser(),
+              );
+              if (success) {
                 Navigator.pushReplacementNamed(context, "login_screen");
               }
             },
@@ -470,8 +454,17 @@ class _RegisterUserState extends State<RegisterUser>
     );
   }
 
+  Future<void> pickFile(int indexFile) async {
+    final fileList = await FilePicker.platform.pickFiles();
+    if (fileList != null) {
+      setState(() {
+        files[indexFile] = fileList.files.first;
+      });
+    }
+  }
+
   User mapFormDataToUser() {
-    User user = User(
+    return User(
       completeName: controllers["completeName"]!.text,
       dateJoined: DateTime.now(),
       email: controllers["email"]!.text,
@@ -485,7 +478,5 @@ class _RegisterUserState extends State<RegisterUser>
       isStaff: false,
       lastLogin: DateTime.now(),
     );
-
-    return user;
   }
 }
