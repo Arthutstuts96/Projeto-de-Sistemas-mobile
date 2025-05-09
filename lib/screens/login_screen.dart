@@ -17,7 +17,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: Color(0xFFFFAA00),
+        statusBarColor: Color.fromARGB(255, 255, 152, 0),
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
@@ -130,7 +130,7 @@ class LoginScreen extends StatelessWidget {
                                         //   if (result['success']) {
                                         Navigator.pushReplacementNamed(
                                           context,
-                                          'home_screen',
+                                          'main_screen',
                                         );
                                         //     );
                                         //   } else {
