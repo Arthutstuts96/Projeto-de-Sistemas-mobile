@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/screens/register_user.dart';
+import 'package:projeto_de_sistemas/utils/consts.dart';
 import 'package:projeto_de_sistemas/utils/functions/login_validation.dart';
 import 'package:projeto_de_sistemas/controllers/login_controller.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +17,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: Color(0xFFC07C00),
+        statusBarColor: Color(0xFFFFAA00),
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
@@ -116,42 +118,43 @@ class LoginScreen extends StatelessWidget {
                                   children: [
                                     ElevatedButton(
                                       onPressed: () async {
-                                        if (_formKey.currentState!.validate()) {
-                                          final result = await _loginController
-                                              .loginUser(
-                                                email:
-                                                    _emailController.text
-                                                        .trim(),
-                                                password:
-                                                    _passwordController.text,
-                                              );
-                                          if (result['success']) {
-                                            Navigator.pushReplacementNamed(
-                                              context,
-                                              'home_screen',
-                                            );
-                                          } else {
-                                            ScaffoldMessenger.of(
-                                              context,
-                                            ).showSnackBar(
-                                              SnackBar(
-                                                content: Text(result['error']),
-                                                backgroundColor: Colors.red,
-                                              ),
-                                            );
-                                          }
-                                        }
+                                        // if (_formKey.currentState!.validate()) {
+                                        //   final result = await _loginController
+                                        //       .loginUser(
+                                        //         email:
+                                        //             _emailController.text
+                                        //                 .trim(),
+                                        //         password:
+                                        //             _passwordController.text,
+                                        //       );
+                                        //   if (result['success']) {
+                                        Navigator.pushReplacementNamed(
+                                          context,
+                                          'home_screen',
+                                        );
+                                        //     );
+                                        //   } else {
+                                        //     ScaffoldMessenger.of(
+                                        //       context,
+                                        //     ).showSnackBar(
+                                        //       SnackBar(
+                                        //         content: Text(result['error']),
+                                        //         backgroundColor: Colors.red,
+                                        //       ),
+                                        //     );
+                                        //   }
+                                        // }
                                       },
                                       style: ButtonStyle(
                                         backgroundColor:
-                                            const MaterialStatePropertyAll(
+                                            const WidgetStatePropertyAll(
                                               Color(0xFFC07C00),
                                             ),
                                         minimumSize:
-                                            const MaterialStatePropertyAll(
+                                            const WidgetStatePropertyAll(
                                               Size(380, 50),
                                             ),
-                                        shape: MaterialStatePropertyAll(
+                                        shape: WidgetStatePropertyAll(
                                           RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(
                                               12,
@@ -185,9 +188,14 @@ class LoginScreen extends StatelessWidget {
                                     const SizedBox(height: 10),
                                     ElevatedButton(
                                       onPressed: () {
-                                        Navigator.pushNamed(
+                                        Navigator.push(
                                           context,
-                                          'register_screen',
+                                          MaterialPageRoute(
+                                            builder:
+                                                (context) => RegisterUser(
+                                                  userType: UserTypes.client,
+                                                ),
+                                          ),
                                         );
                                       },
                                       style: ElevatedButton.styleFrom(

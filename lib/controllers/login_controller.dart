@@ -10,7 +10,7 @@ class LoginController {
     required String password,
   }) async {
     try {
-      // 1. Fazer requisição para a API
+      // Fazer requisição para a API
       final response = await _dio.post(
         '$ipHost/api/token/', // Rota do Django REST JWT
         data: {
@@ -24,7 +24,7 @@ class LoginController {
         ),
       );
 
-      // 2. Processar resposta
+      // Processar resposta
       if (response.statusCode == 200) {
         final tokens = response.data;
 
@@ -53,7 +53,7 @@ class LoginController {
     }
   }
 
-  // Método auxiliar para armazenar tokens
+  // Armazenar tokens e Mantem o usuário logado
   Future<void> _storeTokens(String accessToken, String refreshToken) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('access_token', accessToken);
