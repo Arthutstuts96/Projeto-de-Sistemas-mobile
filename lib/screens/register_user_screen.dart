@@ -9,15 +9,15 @@ import 'package:projeto_de_sistemas/screens/components/register/register_top_sty
 import 'package:projeto_de_sistemas/utils/consts.dart';
 import 'package:projeto_de_sistemas/utils/functions/validation_functions.dart';
 
-class RegisterUser extends StatefulWidget {
-  const RegisterUser({super.key, required this.userType});
+class RegisterUserScreen extends StatefulWidget {
+  const RegisterUserScreen({super.key, required this.userType});
   final UserTypes userType;
 
   @override
-  State<RegisterUser> createState() => _RegisterUserState();
+  State<RegisterUserScreen> createState() => _RegisterUserScreenState();
 }
 
-class _RegisterUserState extends State<RegisterUser>
+class _RegisterUserScreenState extends State<RegisterUserScreen>
     with SingleTickerProviderStateMixin {
   int index = 1;
   List<PlatformFile> files = List.generate(

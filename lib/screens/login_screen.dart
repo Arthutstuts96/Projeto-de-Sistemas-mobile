@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_de_sistemas/screens/register_user.dart';
+import 'package:projeto_de_sistemas/screens/register_user_screen.dart';
 import 'package:projeto_de_sistemas/utils/consts.dart';
 import 'package:projeto_de_sistemas/utils/functions/login_validation.dart';
 import 'package:projeto_de_sistemas/controllers/login_controller.dart';
@@ -192,7 +192,7 @@ class LoginScreen extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                             builder:
-                                                (context) => RegisterUser(
+                                                (context) => RegisterUserScreen(
                                                   userType: UserTypes.client,
                                                 ),
                                           ),
