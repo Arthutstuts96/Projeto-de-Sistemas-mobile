@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/domain/models/products/product.dart';
 import 'package:projeto_de_sistemas/screens/components/products/change_quantity_button.dart';
 
 class CartProduct extends StatelessWidget {
-  const CartProduct({super.key});
+  CartProduct({super.key, required this.product});
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -10,52 +12,60 @@ class CartProduct extends StatelessWidget {
       key: Key("Asas"),
       direction: DismissDirection.endToStart,
       background: Container(
-        width: 20,
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
         color: Colors.red,
-        child: Icon(Icons.cancel, size: 50),
+        child: const Icon(Icons.cancel, size: 30, color: Colors.white),
       ),
       child: Column(
         children: [
-          Container(
-            height: 124,
-            child: Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 12,
-                    children: [
-                      Container(width: 140, height: 100, color: Colors.amber),
-                      RichText(
-                        text: TextSpan(
-                          text: 'Caixa de ovos\n',
-                          style: TextStyle(fontSize: 16),
-                          children: const <TextSpan>[
-                            TextSpan(
-                              text: 'R\$23,48',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+          Stack(
+            children: [
+              Container(
+                height: 124,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(width: 140, height: 100, color: Colors.amber),
+                        const SizedBox(width: 12),
+                        ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: 200),
+                          child: RichText(
+                            text: TextSpan(
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                              children: [
+                                TextSpan(text: '${product.name}\n'),
+                                TextSpan(
+                                  text: 'R\$${product.unityPrice}',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 12,
+                      ],
                     ),
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: ChangeQuantityButton(),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+              Positioned(
+                bottom: 12,
+                right: 12,
+                child: ChangeQuantityButton(quantity: product.quantity),
+              ),
+            ],
           ),
-          Divider(
+          const Divider(
             height: 10,
             thickness: 2,
             indent: 20,

@@ -1,93 +1,78 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/controllers/cart_controller.dart';
+import 'package:projeto_de_sistemas/domain/models/products/cart.dart';
+import 'package:projeto_de_sistemas/screens/components/modals/bottom_modal.dart';
 import 'package:projeto_de_sistemas/screens/components/products/cart_product.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  final CartController cartController = CartController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actionsPadding: EdgeInsets.symmetric(horizontal: 4),
         backgroundColor: Color(0xFFFFAA00),
         title: Text(
           "Seu carrinho",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
         actions: <Widget>[
-          IconButton(onPressed: () {}, icon: Icon(Icons.credit_card)),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.credit_card, size: 36, color: Colors.black),
+          ),
         ],
       ),
       body: Stack(
         children: [
           ListView(
             padding: const EdgeInsets.all(8),
-            children: const <Widget>[
-              CartProduct(),
-              CartProduct(),
-              CartProduct(),
-              CartProduct(),
-              CartProduct(),
-              CartProduct(),
-              CartProduct(),
-              SizedBox(height: 100,)
-            ],
+            children: <Widget>[SizedBox(height: 100)],
           ),
-          DraggableScrollableSheet(
-            initialChildSize: 0.1, // altura inicial (10% da tela)
-            minChildSize: 0.1, // altura mínima
-            maxChildSize: 0.6, // altura máxima ao expandir
-            builder: (context, scrollController) {
-              return Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                  boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
-                ),
-                child: ListView(
-                  controller: scrollController,
-                  padding: const EdgeInsets.all(16),
-                  children: [
-                    const Center(
-                      child: Icon(Icons.drag_handle, color: Colors.grey),
-                    ),
-                    const SizedBox(height: 12),
-                    const Text(
-                      "Resumo do Pedido",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text("Subtotal: R\$ 100,00"),
-                    const Text("Entrega: R\$ 10,00"),
-                    const SizedBox(height: 10),
-                    const Text(
-                      "Total: R\$ 110,00",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 42,
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Colors.green),
-                        shadowColor: WidgetStatePropertyAll(Colors.black),
-                        elevation: WidgetStatePropertyAll(
-                          8,
-                        ), // quanto maior, mais sombra
-                        shape: WidgetStatePropertyAll(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                      ),
-                      child: const Text("Finalizar pedido", style: TextStyle(color: Colors.white),),
-                    ),
-                  ],
-                ),
+          BottomModal(
+            onSave: () async {
+              showDialog(
+                context: context,
+                barrierDismissible: false, 
+                builder:
+                    (_) => const Center(child: CircularProgressIndicator(color: Colors.orange,)),
               );
+              try {
+                final bool response = await cartController.saveCart(
+                  cart: Cart(
+                    cartItems: [],
+                    orderNumber: "1",
+                    client: 1,
+                    paymentStatus: "Pago",
+                    orderStatus: "Entregue",
+                    totalValue: 1221.32,
+                  ),
+                );
+                Navigator.pop(context); 
+
+                if (response) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Pedido salvo com sucesso!')),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Erro ao salvar pedido.')),
+                  );
+                }
+              } catch (e) {
+                Navigator.pop(context); 
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text('Erro inesperado: $e')));
+              }
             },
           ),
         ],

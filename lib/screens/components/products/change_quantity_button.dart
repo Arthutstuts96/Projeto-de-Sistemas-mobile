@@ -1,42 +1,55 @@
 import 'package:flutter/material.dart';
 
 class ChangeQuantityButton extends StatelessWidget {
-  const ChangeQuantityButton({super.key});
+  ChangeQuantityButton({super.key, required this.quantity});
+  int quantity;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Color(0xFFD9D9D9),
-      ),
-      child: Padding(
+    return Material(
+      color: Colors.transparent, 
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: const Color(0xFFD9D9D9),
+        ),
         padding: const EdgeInsets.all(4),
         child: Row(
-          spacing: 8,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            InkWell(
+            _buildCircleButton(
+              icon: Icons.add,
+              color: const Color(0xFFAEAEAE),
               onTap: () {},
-              child: Ink(
-                decoration: BoxDecoration(
-                  color: Color(0xFFB370FF),
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: Icon(Icons.add),
-              ),
             ),
-            Text("1"),
-            InkWell(
+            const SizedBox(width: 8),
+            Text("$quantity"),
+            const SizedBox(width: 8),
+            _buildCircleButton(
+              icon: Icons.remove,
+              color: const Color(0xFFAEAEAE),
               onTap: () {},
-              child: Ink(
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 96, 3, 202),
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: Icon(Icons.remove),
-              ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCircleButton({
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: color,
+      shape: const CircleBorder(),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(1),
+          child: Icon(icon, color: Colors.white),
         ),
       ),
     );
