@@ -5,16 +5,48 @@ class ProductController {
     return [
       Product(
         imagePath: 'assets/images/ovos.png',
-        title: 'Caixa de ovos',
+        name: 'Caixa de ovos',
         price: 'R\$24,90',
         market: 'No supermercado Maior',
       ),
       Product(
         imagePath: 'assets/images/carne.png',
-        title: 'Carne fresca',
+        name: 'Carne fresca',
         price: 'R\$39,90',
         market: 'No mercado da Vila',
+      ),
+      Product(
+        imagePath: 'assets/images/ovos.png',
+        name: 'Caixa de ovos',
+        price: 'R\$24,90',
+        market: 'No supermercado Maior',
+      ),
+      Product(
+        imagePath: 'assets/images/ovos.png',
+        name: 'Caixa de ovos',
+        price: 'R\$24,90',
+        market: 'No supermercado Maior',
+      ),
+      Product(
+        imagePath: 'assets/images/ovos.png',
+        name: 'Caixa de ovos',
+        price: 'R\$24,90',
+        market: 'No supermercado Maior',
+      ),
+      Product(
+        imagePath: 'assets/images/ovos.png',
+        name: 'Caixa de ovos',
+        price: 'R\$24,90',
+        market: 'No supermercado Maior',
+      ),
+      Product(
+        imagePath: 'assets/images/ovos.png',
+        name: 'Caixa de ovos',
+        price: 'R\$24,90',
+        market: 'No supermercado Maior',
       ),
     ];
   }
 }
+
+

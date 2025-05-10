@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/screens/register_user.dart';
 import 'package:projeto_de_sistemas/utils/consts.dart';
 import 'package:projeto_de_sistemas/utils/functions/login_validation.dart';
-import 'package:projeto_de_sistemas/controllers/login_controller.dart';
 import 'package:flutter/services.dart';
+import 'package:projeto_de_sistemas/services/api/login_user.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});

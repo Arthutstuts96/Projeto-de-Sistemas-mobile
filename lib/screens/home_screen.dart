@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/products_controller.dart';
-import 'package:projeto_de_sistemas/domain/models/products/product.dart';
-
+// import 'package:projeto_de_sistemas/domain/models/products/product.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -131,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-Expanded(
+            Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,15 +158,15 @@ Expanded(
                             const NeverScrollableScrollPhysics(), // <- evita conflito com o SingleChildScrollView
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
-                        children: productController.getMockProducts().map((product) {
-                          return ProductCard(
-                            imagePath: product.imagePath,
-                            title: product.title,
-                            price: product.price,
-                            market: product.market,
-                          );
-                        }).toList(),
-
+                        children:
+                            productController.getMockProducts().map((product) {
+                              return ProductCard(
+                                imagePath: product.imagePath,
+                                name: product.name,
+                                price: product.price,
+                                market: product.market,
+                              );
+                            }).toList(),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -175,7 +174,6 @@ Expanded(
                 ),
               ),
             ),
-
           ],
         ),
       ),
@@ -214,12 +212,7 @@ class CategoryButton extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              imagePath,
-              height: 40,
-              width: 40,
-              fit: BoxFit.contain,
-            ),
+            Image.asset(imagePath, height: 40, width: 40, fit: BoxFit.contain),
             const SizedBox(height: 4),
             Text(
               label,
@@ -240,14 +233,14 @@ class CategoryButton extends StatelessWidget {
 // Componente para os cards de produtos
 class ProductCard extends StatelessWidget {
   final String imagePath;
-  final String title;
+  final String name;
   final String price;
   final String market;
 
   const ProductCard({
     super.key,
     required this.imagePath,
-    required this.title,
+    required this.name,
     required this.price,
     required this.market,
   });
@@ -274,7 +267,7 @@ class ProductCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              title,
+              name,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
