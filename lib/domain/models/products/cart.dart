@@ -9,6 +9,7 @@ class Cart {
   String paymentStatus;
   String orderStatus;
   double totalValue;
+
   Cart({
     required this.cartItems,
     required this.orderNumber,
@@ -49,18 +50,25 @@ class Cart {
 
   factory Cart.fromMap(Map<String, dynamic> map) {
     return Cart(
-      cartItems: List<Product>.from((map['cartItems'] as List<int>).map<Product>((x) => Product.fromMap(x as Map<String,dynamic>),),),
+      cartItems: List<Product>.from(
+        (map['cartItems'] as List<dynamic>).map<Product>(
+          (x) => Product.fromMap(x as Map<String, dynamic>),
+        ),
+      ),
       orderNumber: map['orderNumber'] as String,
-      client: map['client'] as int,
+      client: map['client'] is int ? map['client'] : int.parse(map['client'].toString()),
       paymentStatus: map['paymentStatus'] as String,
       orderStatus: map['orderStatus'] as String,
-      totalValue: map['totalValue'] as double,
+      totalValue: (map['totalValue'] is int)
+          ? (map['totalValue'] as int).toDouble()
+          : map['totalValue'] as double,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Cart.fromJson(String source) => Cart.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Cart.fromJson(String source) =>
+      Cart.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
@@ -70,23 +78,22 @@ class Cart {
   @override
   bool operator ==(covariant Cart other) {
     if (identical(this, other)) return true;
-  
-    return 
-      listEquals(other.cartItems, cartItems) &&
-      other.orderNumber == orderNumber &&
-      other.client == client &&
-      other.paymentStatus == paymentStatus &&
-      other.orderStatus == orderStatus &&
-      other.totalValue == totalValue;
+
+    return listEquals(other.cartItems, cartItems) &&
+        other.orderNumber == orderNumber &&
+        other.client == client &&
+        other.paymentStatus == paymentStatus &&
+        other.orderStatus == orderStatus &&
+        other.totalValue == totalValue;
   }
 
   @override
   int get hashCode {
     return cartItems.hashCode ^
-      orderNumber.hashCode ^
-      client.hashCode ^
-      paymentStatus.hashCode ^
-      orderStatus.hashCode ^
-      totalValue.hashCode;
+        orderNumber.hashCode ^
+        client.hashCode ^
+        paymentStatus.hashCode ^
+        orderStatus.hashCode ^
+        totalValue.hashCode;
   }
 }

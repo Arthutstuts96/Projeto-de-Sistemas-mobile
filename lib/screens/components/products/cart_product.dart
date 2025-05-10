@@ -3,13 +3,17 @@ import 'package:projeto_de_sistemas/domain/models/products/product.dart';
 import 'package:projeto_de_sistemas/screens/components/products/change_quantity_button.dart';
 
 class CartProduct extends StatelessWidget {
-  CartProduct({super.key, required this.product});
+  CartProduct({super.key, required this.product, required this.onDismiss});
   final Product product;
+  final VoidCallback onDismiss;
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
       key: Key("Asas"),
+       onDismissed: (direction) {
+        onDismiss();
+       },
       direction: DismissDirection.endToStart,
       background: Container(
         alignment: Alignment.centerRight,

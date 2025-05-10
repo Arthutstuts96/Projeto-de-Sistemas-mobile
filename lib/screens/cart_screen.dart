@@ -17,6 +17,13 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await cartController.clearCart();
+          print("Carrinho limpo");
+        },
+        child: Text("Limpar"),
+      ),
       appBar: AppBar(
         actionsPadding: EdgeInsets.symmetric(horizontal: 8),
         backgroundColor: Color(0xFFFFAA00),
@@ -37,13 +44,10 @@ class _CartScreenState extends State<CartScreen> {
       ),
       body: Stack(
         children: [
-          ListView(
-            padding: const EdgeInsets.all(8),
-            children: <Widget>[
-              getCartItens(),
-              SizedBox(height: 100),
-            ],
-          ),
+          // Row(
+          // padding: const EdgeInsets.all(8),
+          getCartItens(), SizedBox(height: 100),
+          // ),
           BottomModal(
             onSave: () async {
               showDialog(
@@ -90,25 +94,70 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   Widget getCartItens() {
-    //Widget padrão para se o carrinho estiver vazio
-    return Padding(
-      padding: const EdgeInsets.all(56),
-      child: Column(
-        children: [
-          Opacity(
-            opacity: 0.5,
-            child: Image.asset("assets/images/no_itens_in_bag.png", width: 250),
-          ),
-          Text(
-            "Não tem itens no carrinho. Adicione alguma coisa para vê-la aqui!",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              color: const Color.fromARGB(255, 151, 151, 151),
-            ),
-          ),
-        ],
-      ),
+    return FutureBuilder<Cart?>(
+      future: cartController.getCart(),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+          case ConnectionState.none:
+            return const Center(child: CircularProgressIndicator());
+
+          case ConnectionState.active:
+            return const Center(child: CircularProgressIndicator());
+
+          case ConnectionState.done:
+            if (snapshot.hasError ||
+                !snapshot.hasData ||
+                snapshot.data == null ||
+                snapshot.data!.cartItems.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.all(56),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Opacity(
+                      opacity: 0.5,
+                      child: Image.asset(
+                        "assets/images/no_itens_in_bag.png",
+                        width: 250,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      "Não tem itens no carrinho. Adicione alguma coisa para vê-la aqui!",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color.fromARGB(255, 151, 151, 151),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            final cart = snapshot.data!;
+            return RefreshIndicator(
+              onRefresh: () async {
+                await cartController.getCart();
+              },
+              child: ListView.builder(
+                padding: const EdgeInsets.all(8),
+                itemCount: cart.cartItems.length,
+                itemBuilder: (context, index) {
+                  final product = cart.cartItems[index];
+                  return CartProduct(
+                    product: product,
+                    onDismiss: () {
+                      cartController.removeItemFromCart(product: product);
+                      print("Item removido com sucesso");
+                    },
+                  );
+                },
+              ),
+            );
+        }
+      },
     );
   }
 }
