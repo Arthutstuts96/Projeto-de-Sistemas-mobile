@@ -18,11 +18,15 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actionsPadding: EdgeInsets.symmetric(horizontal: 4),
+        actionsPadding: EdgeInsets.symmetric(horizontal: 8),
         backgroundColor: Color(0xFFFFAA00),
         title: Text(
           "Seu carrinho",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontSize: 28,
+          ),
         ),
         actions: <Widget>[
           IconButton(
@@ -35,15 +39,20 @@ class _CartScreenState extends State<CartScreen> {
         children: [
           ListView(
             padding: const EdgeInsets.all(8),
-            children: <Widget>[SizedBox(height: 100)],
+            children: <Widget>[
+              getCartItens(),
+              SizedBox(height: 100),
+            ],
           ),
           BottomModal(
             onSave: () async {
               showDialog(
                 context: context,
-                barrierDismissible: false, 
+                barrierDismissible: false,
                 builder:
-                    (_) => const Center(child: CircularProgressIndicator(color: Colors.orange,)),
+                    (_) => const Center(
+                      child: CircularProgressIndicator(color: Colors.orange),
+                    ),
               );
               try {
                 final bool response = await cartController.saveCart(
@@ -56,7 +65,7 @@ class _CartScreenState extends State<CartScreen> {
                     totalValue: 1221.32,
                   ),
                 );
-                Navigator.pop(context); 
+                Navigator.pop(context);
 
                 if (response) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -68,12 +77,35 @@ class _CartScreenState extends State<CartScreen> {
                   );
                 }
               } catch (e) {
-                Navigator.pop(context); 
+                Navigator.pop(context);
                 ScaffoldMessenger.of(
                   context,
                 ).showSnackBar(SnackBar(content: Text('Erro inesperado: $e')));
               }
             },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget getCartItens() {
+    //Widget padrão para se o carrinho estiver vazio
+    return Padding(
+      padding: const EdgeInsets.all(56),
+      child: Column(
+        children: [
+          Opacity(
+            opacity: 0.5,
+            child: Image.asset("assets/images/no_itens_in_bag.png", width: 250),
+          ),
+          Text(
+            "Não tem itens no carrinho. Adicione alguma coisa para vê-la aqui!",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+              color: const Color.fromARGB(255, 151, 151, 151),
+            ),
           ),
         ],
       ),
