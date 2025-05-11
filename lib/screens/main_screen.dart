@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/screens/home_screen.dart';
+import 'package:projeto_de_sistemas/screens/perfil_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -13,10 +14,10 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _screens = const [
     HomeScreen(),
+    PerfilScreen(),
     // ComprarScreen(),
     // BolsaScreen(),
     // PedidoScreen(),
-    // PerfilScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -38,6 +39,7 @@ class _MainScreenState extends State<MainScreen> {
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Perfil"),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
             label: "Comprar",
@@ -50,7 +52,6 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.receipt_long),
             label: "Pedido",
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Perfil"),
         ],
       ),
     );
