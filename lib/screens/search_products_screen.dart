@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/domain/models/products/product.dart';
 import 'package:projeto_de_sistemas/screens/components/products/product_card.dart';
 import 'package:projeto_de_sistemas/screens/components/register/button.dart';
-import 'package:projeto_de_sistemas/utils/temp.dart';
+import 'package:projeto_de_sistemas/services/api/products.dart';
 
 class SearchProductsScreen extends StatefulWidget {
   SearchProductsScreen({super.key});
@@ -12,19 +12,30 @@ class SearchProductsScreen extends StatefulWidget {
 }
 
 class _SearchProductsScreenState extends State<SearchProductsScreen> {
+  List<Product> _allProducts = [];
   List<Product> _filteredProducts = [];
   String _activeFilter = "name";
 
   @override
   void initState() {
     super.initState();
-    _filteredProducts = mockProducts;
+    getProducts();
+  }
+
+  void getProducts() async {
+    final products = await ProductControllerApi().fetchProducts();
+
+    if (!mounted) return;
+    setState(() {
+      _allProducts = products;
+      _filteredProducts = products;
+    });
   }
 
   void _filterProducts(String query) {
     setState(() {
       _filteredProducts =
-          mockProducts.where((product) {
+          _allProducts.where((product) {
             final value = _getProductPropertyValue(product, _activeFilter);
             return value.toLowerCase().contains(query.toLowerCase());
           }).toList();
@@ -46,7 +57,6 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
     }
   }
 
-  // @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,7 +163,11 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
                 },
               );
             },
-            icon: Icon(Icons.filter_alt_outlined, size: 35),
+            icon: Icon(
+              Icons.filter_alt_outlined,
+              size: 35,
+              color: Colors.black,
+            ),
           ),
         ],
         bottom: PreferredSize(
@@ -194,36 +208,67 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
                     "Resultados",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  Row(
-                    spacing: 4,
-                    children: <ElevatedButton>[
-                      ElevatedButton(onPressed: () {}, child: Text("Item")),
-                      ElevatedButton(onPressed: () {}, child: Text("Mercado")),
-                    ],
-                  ),
+                  // Row(
+                  //   spacing: 4,
+                  //   children: <ElevatedButton>[
+                  //     ElevatedButton(onPressed: () {}, child: Text("Item")),
+                  //     ElevatedButton(onPressed: () {}, child: Text("Mercado")),
+                  //   ],
+                  // ),
                 ],
               ),
             ),
             const SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: GridView.count(
-                crossAxisCount: 2,
-                childAspectRatio: 0.72,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                children:
-                    _filteredProducts.map((product) {
-                      return ProductCard(product: product);
-                    }).toList(),
-              ),
-            ),
+            renderProducts(),
             const SizedBox(height: 20),
           ],
         ),
       ),
     );
+  }
+
+  Widget renderProducts() {
+    if (_filteredProducts.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(56),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Opacity(
+              opacity: 0.5,
+              child: Image.asset(
+                "assets/images/no_itens_in_bag.png",
+                width: 250,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              "Nenhum item foi encontrado para sua pesquisa.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                color: Color.fromARGB(255, 151, 151, 151),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: GridView.count(
+          crossAxisCount: 2,
+          childAspectRatio: 0.72,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          children:
+              _filteredProducts.map((product) {
+                return ProductCard(product: product);
+              }).toList(),
+        ),
+      );
+    }
   }
 }

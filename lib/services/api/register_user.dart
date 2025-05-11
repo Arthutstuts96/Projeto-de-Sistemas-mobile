@@ -7,7 +7,6 @@ class RegisterUserApi {
 
   Future<bool> saveUser({required User user}) async {
     try {
-      print("Começando requisição...");
       final response = await dio.post(
         '$ipHost/api/signup/', 
         data: {
@@ -23,17 +22,11 @@ class RegisterUserApi {
         ),
       );
       if (response.statusCode == 201) {
-        print("Usuário criado com sucesso: ${response.data}");
         return true;
       } else {
-        print("Falha ao criar usuário: Status ${response.statusCode}, Resposta: ${response.data}");
         return false;
       }
     } catch (e) {
-      print("Erro ao salvar usuário: $e");
-      if (e is DioException) {
-        print("Detalhes do erro: ${e.response?.data}");
-      }
       return false;
     }
   }

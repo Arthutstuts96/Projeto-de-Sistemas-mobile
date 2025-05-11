@@ -69,12 +69,12 @@ class _MainScreenState extends State<MainScreen> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: "Comprar",
+            icon: Icon(Icons.shopping_bag),
+            label: "Pesquisar",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag),
-            label: "Bolsa",
+            icon: Icon(Icons.shopping_cart),
+            label: "Carrinho",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt_long),

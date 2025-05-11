@@ -26,8 +26,8 @@ class ProductControllerApi {
       );
 
       if (response.statusCode == 200) {
-        List data = response.data;
-        return data.map((json) => Product.fromJson(json)).toList();
+        final List<dynamic> data = response.data;
+        return data.map<Product>((json) => Product.fromJson(json)).toList();
       } else {
         throw Exception('Erro ao buscar produtos: ${response.statusCode}');
       }

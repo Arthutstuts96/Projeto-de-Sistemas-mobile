@@ -14,10 +14,28 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   final CartController cartController = CartController();
   Future<Cart?> _cart = CartController().getCart();
+  double fullPrice = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    refreshCart(); 
+  }
 
   Future<void> refreshCart() async {
+    final newCart = await cartController.getCart();
+
+    double newFullPrice = 0.0;
+
+    if (newCart != null) {
+      for (var item in newCart.cartItems) {
+        newFullPrice += item.unityPrice;
+      }
+    }
+
     setState(() {
-      _cart = cartController.getCart();
+      _cart = Future.value(newCart); 
+      fullPrice = newFullPrice; 
     });
   }
 
@@ -44,9 +62,10 @@ class _CartScreenState extends State<CartScreen> {
       ),
       body: Stack(
         children: [
-          getCartItens(),
+          renderCartItens(),
           SizedBox(height: 100),
           BottomModal(
+            fullPrice: fullPrice,
             onSave: () async {
               showDialog(
                 context: context,
@@ -70,9 +89,13 @@ class _CartScreenState extends State<CartScreen> {
                 Future.delayed(Duration(seconds: 2), () {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Pedido salvo com sucesso!'), backgroundColor: Colors.lightGreen,),
+                    const SnackBar(
+                      content: Text('Pedido salvo com sucesso!'),
+                      backgroundColor: Colors.lightGreen,
+                    ),
                   );
                   cartController.clearCart();
+                  refreshCart();
                 });
               } catch (e) {
                 Navigator.pop(context);
@@ -87,7 +110,7 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  Widget getCartItens() {
+  Widget renderCartItens() {
     return FutureBuilder<Cart?>(
       future: _cart,
       builder: (context, snapshot) {

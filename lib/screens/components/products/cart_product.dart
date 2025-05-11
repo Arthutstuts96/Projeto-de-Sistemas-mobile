@@ -40,8 +40,8 @@ class CartProduct extends StatelessWidget {
                           decoration: BoxDecoration(
                             border: Border()
                           ),
-                          child: Image.asset(
-                            "assets/images/no_itens_in_bag.png",
+                          child: Image.network(
+                            product.imageUrl,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -76,7 +76,7 @@ class CartProduct extends StatelessWidget {
               Positioned(
                 bottom: 12,
                 right: 12,
-                child: ChangeQuantityButton(quantity: product.quantity),
+                child: ChangeQuantityButton(quantity: 1),
               ),
             ],
           ),

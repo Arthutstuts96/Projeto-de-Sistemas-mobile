@@ -29,14 +29,8 @@ class CartSession {
 
       // Salva o carrinho atualizado
       await prefs.setString(_cartKey, jsonEncode(cart.toJson()));
-
-      // Imprime o conteúdo do armazenamento da sessão
-      final String? cartJson = prefs.getString(_cartKey);
-      print('Armazenamento da sessão: $cartJson');
-
       return true;
     } catch (e) {
-      print('Erro ao adicionar item ao carrinho: $e');
       return false;
     }
   }
@@ -70,7 +64,6 @@ class CartSession {
       // Recupera o carrinho atual
       Cart? cart = await getCart();
       if (cart == null || cart.cartItems.isEmpty) {
-        print('Erro: Carrinho vazio.');
         return false;
       }
 
@@ -78,7 +71,6 @@ class CartSession {
       final initialLength = cart.cartItems.length;
       cart.cartItems.removeWhere((item) => item.barCode == product.barCode);
       if (cart.cartItems.length == initialLength) {
-        print('Erro: Produto não encontrado no carrinho.');
         return false;
       }
 
@@ -87,14 +79,8 @@ class CartSession {
 
       // Salva o carrinho atualizado
       await prefs.setString(_cartKey, jsonEncode(cart.toJson()));
-
-      // Imprime o conteúdo do armazenamento da sessão
-      final String? cartJson = prefs.getString(_cartKey);
-      print('Armazenamento da sessão após remoção: $cartJson');
-
       return true;
     } catch (e) {
-      print('Erro ao remover item do carrinho: $e');
       return false;
     }
   }

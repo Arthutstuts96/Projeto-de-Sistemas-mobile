@@ -20,8 +20,8 @@ class ProductCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-            child: Image.asset(
-              "assets/images/no_itens_in_bag.png",
+            child: Image.network(
+              product.imageUrl,
               height: 100,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -37,14 +37,14 @@ class ProductCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
-              product.unityPrice.toString(),
+              "R\$${product.unityPrice.toString()}",
               style: const TextStyle(color: Colors.green),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
-              product.market,
+              product.brand,
               style: const TextStyle(fontSize: 12, color: Colors.black54),
             ),
           ),

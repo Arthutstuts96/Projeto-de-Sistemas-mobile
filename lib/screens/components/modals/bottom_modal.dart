@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class BottomModal extends StatelessWidget {
-  const BottomModal({super.key, required this.onSave});
+  BottomModal({super.key, required this.onSave, required this.fullPrice});
   final VoidCallback onSave;
+  final double fullPrice;
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +28,11 @@ class BottomModal extends StatelessWidget {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              const Text("Subtotal: R\$100,00"),
+              Text("Subtotal: R\$${fullPrice.toStringAsFixed(2)}"),
               const Text("Entrega: R\$10,00"),
               const SizedBox(height: 10),
-              const Text(
-                "Total: R\$110,00",
+              Text(
+                "Total: R\$${(fullPrice+10).toStringAsFixed(2)}",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 42),
               ),
               ElevatedButton(
