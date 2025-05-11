@@ -17,47 +17,59 @@ class CategoryButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 12),
       child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        clipBehavior: Clip.none,
+        width: 80,
+        height: 100,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
-              offset: const Offset(0, 4), // Sombra apenas na parte inferior
+              offset: const Offset(0, 6), // Sombra apenas na parte inferior
               blurRadius: 6,
-              spreadRadius: 2,
+              spreadRadius: 0,
             ),
-          ],
+         ],
         ),
         child: ElevatedButton(
           onPressed: () {
             Navigator.pushNamed(context, route);
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white, // Fundo branco do botão
+            backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
-              side: const BorderSide(color: Color(0xFF3C3C3C), width: 1),
             ),
-            elevation: 0, // Desativa a sombra padrão do ElevatedButton
+            elevation: 5, // Desativa a sombra padrão do ElevatedButton
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
                 imagePath,
-                height: 40,
-                width: 40,
+                height: 30,
+                width: 30,
                 fit: BoxFit.contain,
               ),
-              const SizedBox(height: 4),
-              Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF3C3C3C),
+              const SizedBox(height: 6),
+
+              SizedBox(
+                width: double.infinity,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    label,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF3C3C3C),
+                    ),
+                    textAlign: TextAlign.center,
+                      softWrap: true,
+                    maxLines: 2,
+                  ),
                 ),
-                textAlign: TextAlign.center,
               ),
             ],
           ),
