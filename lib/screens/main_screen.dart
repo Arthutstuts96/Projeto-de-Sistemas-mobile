@@ -15,6 +15,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = const [
     HomeScreen(),
     PerfilScreen(),
+    // DeliveryHomeScreen(),
     // ComprarScreen(),
     // BolsaScreen(),
     // PedidoScreen(),
@@ -29,7 +30,9 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(index: _selectedIndex, children: _screens),
+      body: SafeArea(
+        child: IndexedStack(index: _selectedIndex, children: _screens),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color(0xFFFFAA00),
         selectedItemColor: const Color(0xFF3C3C3C),
@@ -40,18 +43,22 @@ class _MainScreenState extends State<MainScreen> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Perfil"),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: "Comprar",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag),
-            label: "Bolsa",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.receipt_long),
-            label: "Pedido",
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.motorcycle),
+          //   label: "Entrega",
+          //),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.shopping_cart),
+          //   label: "Comprar",
+          // ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.shopping_bag),
+          //   label: "Bolsa",
+          // ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.receipt_long),
+          //   label: "Pedido",
+          // ),
         ],
       ),
     );

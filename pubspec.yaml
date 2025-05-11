@@ -24,6 +24,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/images/GPS.png
+    - assets/images/delivery.png
   fonts:
     - family: Poppins
       fonts:

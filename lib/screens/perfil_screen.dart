@@ -31,7 +31,7 @@ class PerfilScreen extends StatelessWidget {
   }
 
   void _logout(BuildContext context) {
-    // TODO: limpar token/sessão se necessário
+
     Navigator.of(context).pushReplacementNamed('login_screen');
   }
 
@@ -56,9 +56,25 @@ class PerfilScreen extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 20), // Espaço entre os botões
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.pushNamed(context, 'delivery_screen');
+              },
+              icon: const Icon(Icons.delivery_dining),
+              label: const Text('Ir para Delivery Home'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
+              ),
+            ),
           ],
         ),
-      )
+      ),
     );
   }
 }
