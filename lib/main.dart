@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/screens/splash_screen.dart';
 import 'package:projeto_de_sistemas/screens/login_screen.dart';
 import 'package:projeto_de_sistemas/screens/home_screen.dart';
+import 'package:projeto_de_sistemas/screens/main_screen.dart';
+import 'package:projeto_de_sistemas/screens/perfil_screen.dart';
 
 
 void main() {
@@ -14,10 +16,13 @@ class TrazAi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       routes: {
         "splash_screen": (context) => const SplashScreen(),
         "login_screen": (context) =>  LoginScreen(),
         "home_screen": (context) =>  HomeScreen(),
+        "main_screen": (context) =>  MainScreen(),
+        "perfil_screen": (context) =>   PerfilScreen(),
       },
       initialRoute: "splash_screen",
     );
