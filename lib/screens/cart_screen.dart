@@ -13,17 +13,17 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   final CartController cartController = CartController();
+  Future<Cart?> _cart = CartController().getCart();
+
+  Future<void> refreshCart() async {
+    setState(() {
+      _cart = cartController.getCart();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await cartController.clearCart();
-          print("Carrinho limpo");
-        },
-        child: Text("Limpar"),
-      ),
       appBar: AppBar(
         actionsPadding: EdgeInsets.symmetric(horizontal: 8),
         backgroundColor: Color(0xFFFFAA00),
@@ -44,10 +44,8 @@ class _CartScreenState extends State<CartScreen> {
       ),
       body: Stack(
         children: [
-          // Row(
-          // padding: const EdgeInsets.all(8),
-          getCartItens(), SizedBox(height: 100),
-          // ),
+          getCartItens(),
+          SizedBox(height: 100),
           BottomModal(
             onSave: () async {
               showDialog(
@@ -95,16 +93,14 @@ class _CartScreenState extends State<CartScreen> {
 
   Widget getCartItens() {
     return FutureBuilder<Cart?>(
-      future: cartController.getCart(),
+      future: _cart,
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
           case ConnectionState.none:
             return const Center(child: CircularProgressIndicator());
-
           case ConnectionState.active:
             return const Center(child: CircularProgressIndicator());
-
           case ConnectionState.done:
             if (snapshot.hasError ||
                 !snapshot.hasData ||
@@ -138,9 +134,7 @@ class _CartScreenState extends State<CartScreen> {
 
             final cart = snapshot.data!;
             return RefreshIndicator(
-              onRefresh: () async {
-                await cartController.getCart();
-              },
+              onRefresh: refreshCart,
               child: ListView.builder(
                 padding: const EdgeInsets.all(8),
                 itemCount: cart.cartItems.length,
@@ -150,7 +144,6 @@ class _CartScreenState extends State<CartScreen> {
                     product: product,
                     onDismiss: () {
                       cartController.removeItemFromCart(product: product);
-                      print("Item removido com sucesso");
                     },
                   );
                 },

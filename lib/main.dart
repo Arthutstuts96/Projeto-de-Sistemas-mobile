@@ -5,7 +5,6 @@ import 'package:projeto_de_sistemas/screens/splash_screen.dart';
 import 'package:projeto_de_sistemas/screens/login_screen.dart';
 import 'package:projeto_de_sistemas/screens/home_screen.dart';
 
-
 void main() {
   runApp(const TrazAi());
 }
@@ -23,7 +22,7 @@ class TrazAi extends StatelessWidget {
         "cart": (context) =>  CartScreen(),
         "search_products": (context) =>  SearchProductsScreen(),
       },
-      initialRoute: "splash_screen",
+      initialRoute: "search_products",
     );
   }
 }
