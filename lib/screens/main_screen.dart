@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/screens/cart_screen.dart';
 import 'package:projeto_de_sistemas/screens/home_screen.dart';
 import 'package:projeto_de_sistemas/screens/perfil_screen.dart';
+import 'package:projeto_de_sistemas/screens/search_products_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -11,25 +13,52 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
+  late PageController _pageController;
 
-  final List<Widget> _screens = const [
+  final List<Widget> _screens = [
     HomeScreen(),
+    SearchProductsScreen(),
+    CartScreen(),
+    Placeholder(), //Tela de detalhes do pedido
     PerfilScreen(),
-    // ComprarScreen(),
-    // BolsaScreen(),
-    // PedidoScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: _selectedIndex);
+  }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(index: _selectedIndex, children: _screens),
+      body: PageView(
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(), // remove o swipe manual
+        children: _screens,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color(0xFFFFAA00),
         selectedItemColor: const Color(0xFF3C3C3C),
@@ -39,19 +68,19 @@ class _MainScreenState extends State<MainScreen> {
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Perfil"),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: "Comprar",
-          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_bag),
-            label: "Bolsa",
+            label: "Pesquisar",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: "Carrinho",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt_long),
             label: "Pedido",
           ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Perfil"),
         ],
       ),
     );

@@ -7,8 +7,8 @@ class RegisterUserApi {
 
   Future<bool> saveUser({required User user}) async {
     try {
-      final response = await Dio().post(
-        '$ipHost/signup/',
+      final response = await dio.post(
+        '$ipHost/api/signup/', 
         data: {
           'first_name': user.firstName,
           'last_name': user.lastName,
@@ -18,13 +18,10 @@ class RegisterUserApi {
           'email': user.email,
         },
         options: Options(
-          contentType:
-              Headers
-                  .formUrlEncodedContentType, 
+          contentType: Headers.jsonContentType,
         ),
       );
-
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         return true;
       } else {
         return false;
