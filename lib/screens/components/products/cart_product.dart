@@ -11,9 +11,9 @@ class CartProduct extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dismissible(
       key: Key("Asas"),
-       onDismissed: (direction) {
+      onDismissed: (direction) {
         onDismiss();
-       },
+      },
       direction: DismissDirection.endToStart,
       background: Container(
         alignment: Alignment.centerRight,
@@ -34,7 +34,18 @@ class CartProduct extends StatelessWidget {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(width: 140, height: 100, color: Colors.amber),
+                        Container(
+                          height: 100,
+                          width: 140.0,
+                          decoration: BoxDecoration(
+                            border: Border()
+                          ),
+                          child: Image.asset(
+                            "assets/images/no_itens_in_bag.png",
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        // Container(width: 140, height: 100, color: Colors.amber),
                         const SizedBox(width: 12),
                         ConstrainedBox(
                           constraints: BoxConstraints(maxWidth: 200),

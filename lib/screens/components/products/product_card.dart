@@ -64,6 +64,7 @@ class ProductCard extends StatelessWidget {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Item salvo com sucesso no carrinho!'),
+                          backgroundColor: Colors.lightGreen,
                         ),
                       );
                     }

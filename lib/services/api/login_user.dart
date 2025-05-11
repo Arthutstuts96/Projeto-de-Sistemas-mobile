@@ -39,6 +39,7 @@ class LoginController {
       String errorMessage = 'Erro na conexão(Dio)';
       if (e.response?.statusCode == 401) {
         errorMessage = 'Email ou senha incorretos';
+        print("Ocorreu um erro: $e");
       } else if (e.type == DioExceptionType.connectionTimeout) {
         errorMessage = 'Tempo de conexão esgotado';
       }

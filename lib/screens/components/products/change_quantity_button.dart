@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 
-class ChangeQuantityButton extends StatelessWidget {
+// ignore: must_be_immutable
+class ChangeQuantityButton extends StatefulWidget {
   ChangeQuantityButton({super.key, required this.quantity});
   int quantity;
 
+  @override
+  State<ChangeQuantityButton> createState() => _ChangeQuantityButtonState();
+}
+
+class _ChangeQuantityButtonState extends State<ChangeQuantityButton> {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -20,15 +26,25 @@ class ChangeQuantityButton extends StatelessWidget {
             _buildCircleButton(
               icon: Icons.add,
               color: const Color(0xFFAEAEAE),
-              onTap: () {},
+              onTap: () {
+                setState(() {
+                  widget.quantity++;
+                });
+              },
             ),
             const SizedBox(width: 8),
-            Text("$quantity"),
+            Text("${widget.quantity}"),
             const SizedBox(width: 8),
             _buildCircleButton(
               icon: Icons.remove,
               color: const Color(0xFFAEAEAE),
-              onTap: () {},
+              onTap: () {
+                setState(() {
+                  if(widget.quantity > 1){
+                    widget.quantity--;
+                  }
+                });
+              },
             ),
           ],
         ),

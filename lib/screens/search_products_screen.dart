@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/domain/models/products/product.dart';
-import 'package:projeto_de_sistemas/screens/cart_screen.dart';
 import 'package:projeto_de_sistemas/screens/components/products/product_card.dart';
+import 'package:projeto_de_sistemas/screens/components/register/button.dart';
 import 'package:projeto_de_sistemas/utils/temp.dart';
 
 class SearchProductsScreen extends StatefulWidget {
@@ -13,17 +13,37 @@ class SearchProductsScreen extends StatefulWidget {
 
 class _SearchProductsScreenState extends State<SearchProductsScreen> {
   List<Product> _filteredProducts = [];
+  String _activeFilter = "name";
 
   @override
   void initState() {
     super.initState();
-    _filteredProducts = mockProducts; 
+    _filteredProducts = mockProducts;
   }
 
   void _filterProducts(String query) {
     setState(() {
-      _filteredProducts = mockProducts.where((product) =>product.name.toLowerCase().contains(query.toLowerCase())).toList();
+      _filteredProducts =
+          mockProducts.where((product) {
+            final value = _getProductPropertyValue(product, _activeFilter);
+            return value.toLowerCase().contains(query.toLowerCase());
+          }).toList();
     });
+  }
+
+  String _getProductPropertyValue(Product product, String property) {
+    switch (property) {
+      case 'name':
+        return product.name;
+      case 'brand':
+        return product.description;
+      case 'category':
+        return product.category;
+      case 'market':
+        return product.market;
+      default:
+        return '';
+    }
   }
 
   // @override
@@ -32,13 +52,105 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFFFFAA00),
-        title: Text("Procurar por item/mercado"),
+        title: Text(
+          "Procurar por item/mercado",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontSize: 24,
+          ),
+        ),
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CartScreen()),
+              showDialog<void>(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  String tempFilter = _activeFilter;
+                  return StatefulBuilder(
+                    builder: (
+                      BuildContext context,
+                      void Function(void Function()) setModalState,
+                    ) {
+                      return AlertDialog(
+                        title: const Text('Escolha como filtrar:'),
+                        content: SingleChildScrollView(
+                          child: ListBody(
+                            children: <Widget>[
+                              ListTile(
+                                title: const Text('Por nome'),
+                                leading: Radio<String>(
+                                  value: "name",
+                                  groupValue: tempFilter,
+                                  onChanged: (value) {
+                                    setModalState(() {
+                                      tempFilter = value!;
+                                    });
+                                  },
+                                ),
+                              ),
+                              ListTile(
+                                title: const Text('Por categoria'),
+                                leading: Radio<String>(
+                                  value: "category",
+                                  groupValue: tempFilter,
+                                  onChanged: (value) {
+                                    setModalState(() {
+                                      tempFilter = value!;
+                                    });
+                                  },
+                                ),
+                              ),
+                              ListTile(
+                                title: const Text('Por marca'),
+                                leading: Radio<String>(
+                                  value: "brand",
+                                  groupValue: tempFilter,
+                                  onChanged: (value) {
+                                    setModalState(() {
+                                      tempFilter = value!;
+                                    });
+                                  },
+                                ),
+                              ),
+                              ListTile(
+                                title: const Text('Por mercado'),
+                                leading: Radio<String>(
+                                  value: "market",
+                                  groupValue: tempFilter,
+                                  onChanged: (value) {
+                                    setModalState(() {
+                                      tempFilter = value!;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        actions: <Widget>[
+                          Button(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            text: "Cancelar",
+                            color: Colors.deepOrange,
+                          ),
+                          Button(
+                            onPressed: () {
+                              setState(() {
+                                _activeFilter = tempFilter;
+                              });
+                              Navigator.of(context).pop();
+                            },
+                            text: "Salvar",
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
               );
             },
             icon: Icon(Icons.filter_alt_outlined, size: 35),
@@ -50,7 +162,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: TextFormField(
               onChanged: (value) {
-                _filterProducts(value);             
+                _filterProducts(value);
               },
               decoration: InputDecoration(
                 filled: true,

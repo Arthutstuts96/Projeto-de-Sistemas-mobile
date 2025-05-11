@@ -32,7 +32,7 @@ class _CartScreenState extends State<CartScreen> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black,
-            fontSize: 28,
+            fontSize: 24,
           ),
         ),
         actions: <Widget>[
@@ -52,32 +52,28 @@ class _CartScreenState extends State<CartScreen> {
                 context: context,
                 barrierDismissible: false,
                 builder:
-                    (_) => const Center(
+                    (c) => const Center(
                       child: CircularProgressIndicator(color: Colors.orange),
                     ),
               );
               try {
-                final bool response = await cartController.saveCart(
-                  cart: Cart(
-                    cartItems: [],
-                    orderNumber: "1",
-                    client: 1,
-                    paymentStatus: "Pago",
-                    orderStatus: "Entregue",
-                    totalValue: 1221.32,
-                  ),
-                );
-                Navigator.pop(context);
-
-                if (response) {
+                // final bool response = await cartController.saveCart(
+                //   cart: Cart(
+                //     cartItems: [],
+                //     orderNumber: "1",
+                //     client: 1,
+                //     paymentStatus: "Pago",
+                //     orderStatus: "Entregue",
+                //     totalValue: 1221.32,
+                //   ),
+                // );
+                Future.delayed(Duration(seconds: 2), () {
+                  Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Pedido salvo com sucesso!')),
+                    const SnackBar(content: Text('Pedido salvo com sucesso!'), backgroundColor: Colors.lightGreen,),
                   );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Erro ao salvar pedido.')),
-                  );
-                }
+                  cartController.clearCart();
+                });
               } catch (e) {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(
