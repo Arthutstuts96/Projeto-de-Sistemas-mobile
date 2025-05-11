@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/screens/cart_screen.dart';
+import 'package:projeto_de_sistemas/screens/search_products_screen.dart';
 import 'package:projeto_de_sistemas/screens/splash_screen.dart';
 import 'package:projeto_de_sistemas/screens/login_screen.dart';
 import 'package:projeto_de_sistemas/screens/home_screen.dart';
@@ -25,6 +27,8 @@ class TrazAi extends StatelessWidget {
         "main_screen": (context) =>  MainScreen(),
         "perfil_screen": (context) =>   PerfilScreen(),
         "delivery_screen": (context) =>  const DeliveryHomeScreen(),
+        "cart": (context) =>  CartScreen(),
+        "search_products": (context) =>  SearchProductsScreen(),
       },
       initialRoute: "splash_screen",
     );
