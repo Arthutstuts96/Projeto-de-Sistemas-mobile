@@ -118,32 +118,31 @@ class LoginScreen extends StatelessWidget {
                                   children: [
                                     ElevatedButton(
                                       onPressed: () async {
-                                        //// if (_formKey.currentState!.validate()) {
-                                        //   final result = await _loginController
-                                        //       .loginUser(
-                                        //         email:
-                                        //             _emailController.text
-                                        //                 .trim(),
-                                        //         password:
-                                        //             _passwordController.text,
-                                        //       );
-                                        //   if (result['success']) {
-                                        Navigator.pushReplacementNamed(
-                                          context,
-                                          'main_screen',
-                                        );
-                                        //     );
-                                        //   } else {
-                                        //     ScaffoldMessenger.of(
-                                        //       context,
-                                        //     ).showSnackBar(
-                                        //       SnackBar(
-                                        //         content: Text(result['error']),
-                                        //         backgroundColor: Colors.red,
-                                        //       ),
-                                        //     );
-                                        //   }
-                                        // }
+                                        if (_formKey.currentState!.validate()) {
+                                          final result = await _loginController
+                                              .loginUser(
+                                                email:
+                                                    _emailController.text
+                                                        .trim(),
+                                                password:
+                                                    _passwordController.text,
+                                              );
+                                          if (result['success']) {
+                                            Navigator.pushReplacementNamed(
+                                              context,
+                                              'main_screen',
+                                            );
+                                          } else {
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              SnackBar(
+                                                content: Text(result['error']),
+                                                backgroundColor: Colors.red,
+                                              ),
+                                            );
+                                          }
+                                        }
                                       },
                                       style: ButtonStyle(
                                         backgroundColor:

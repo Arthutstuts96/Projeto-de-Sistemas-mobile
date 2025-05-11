@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:projeto_de_sistemas/domain/models/products/product.dart';
 import 'package:projeto_de_sistemas/utils/api_configs.dart';
 
-class ProductController {
+class ProductControllerApi {
   final Dio _dio = Dio();
 
   Future<List<Product>> fetchProducts() async {
@@ -16,7 +16,7 @@ class ProductController {
       }
 
       final response = await _dio.get(
-        '$ipHost/api/products/',
+        '$ipHost/produtos/api/produtos/',
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',
