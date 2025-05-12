@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:projeto_de_sistemas/utils/api_configs.dart';
 
-class LoginController {
+class LoginUserApi {
   final Dio _dio = Dio();
 
   Future<Map<String, dynamic>> loginUser({

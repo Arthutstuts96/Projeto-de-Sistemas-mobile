@@ -5,3 +5,11 @@ abstract class UserRepository {
     Future<void> saveUser({required User user});
     Future<void> deleteUser({required User user});
 }
+
+abstract class LoginRepository {
+  Future<Map<String, dynamic>> loginUser({
+    required String email,
+    required String password,
+  });
+  Future<void> logout();
+}

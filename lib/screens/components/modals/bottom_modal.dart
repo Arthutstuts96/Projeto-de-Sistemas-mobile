@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BottomModal extends StatelessWidget {
-  BottomModal({super.key, required this.onSave, required this.fullPrice});
+  const BottomModal({super.key, required this.onSave, required this.fullPrice});
   final VoidCallback onSave;
   final double fullPrice;
 
