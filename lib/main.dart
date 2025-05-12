@@ -6,6 +6,8 @@ import 'package:projeto_de_sistemas/screens/login_screen.dart';
 import 'package:projeto_de_sistemas/screens/home_screen.dart';
 import 'package:projeto_de_sistemas/screens/main_screen.dart';
 import 'package:projeto_de_sistemas/screens/perfil_screen.dart';
+import 'package:projeto_de_sistemas/screens/deliveryhome_screen.dart';
+
 
 void main() {
   runApp(const TrazAi());
@@ -24,6 +26,7 @@ class TrazAi extends StatelessWidget {
         "home_screen": (context) =>  HomeScreen(),
         "main_screen": (context) =>  MainScreen(),
         "perfil_screen": (context) =>   PerfilScreen(),
+        "delivery_screen": (context) =>  const DeliveryHomeScreen(),
         "cart": (context) =>  CartScreen(),
         "search_products": (context) =>  SearchProductsScreen(),
       },
