@@ -1,53 +1,30 @@
-// import '/domain/models/products/product.dart';
+import 'package:projeto_de_sistemas/domain/models/products/product.dart';
+import 'package:projeto_de_sistemas/domain/repository/product_repository.dart';
+import 'package:projeto_de_sistemas/services/api/products_home.dart';
 
-// class ProductController {
-//   List<Product> getMockProducts() {
-//     return [
-//       Product(
-//         imagePath: 'assets/images/ovos.png',
-//         name: 'Caixa de ovos',
-//         price: 'R\$24,90',
-//         market: 'No supermercado Maior',
-//       ),
-//       Product(
-//         imagePath: 'assets/images/carne.png',
-//         name: 'Carne fresca',
-//         price: 'R\$39,90',
-//         market: 'No mercado da Vila',
-//       ),
-//       Product(
-//         imagePath: 'assets/images/ovos.png',
-//         name: 'Caixa de ovos',
-//         price: 'R\$24,90',
-//         market: 'No supermercado Maior',
-//       ),
-//       Product(
-//         imagePath: 'assets/images/ovos.png',
-//         name: 'Caixa de ovos',
-//         price: 'R\$24,90',
-//         market: 'No supermercado Maior',
-//       ),
-//       Product(
-//         imagePath: 'assets/images/ovos.png',
-//         name: 'Caixa de ovos',
-//         price: 'R\$24,90',
-//         market: 'No supermercado Maior',
-//       ),
-//       Product(
-//         imagePath: 'assets/images/ovos.png',
-//         name: 'Caixa de ovos',
-//         price: 'R\$24,90',
-//         market: 'No supermercado Maior',
-//       ),
-//       Product(
-//         imagePath: 'assets/images/ovos.png',
-//         name: 'Caixa de ovos',
-//         price: 'R\$24,90',
-//         market: 'No supermercado Maior',
-//       ),
-//     ];
-//   }
-  
-// }
+class ProductController implements ProductRepository {
+  final ProductControllerApi _productApi = ProductControllerApi();
 
+  @override
+  Future<List<Product>> fetchProducts() async {
+    return await _productApi.fetchProducts();
+  }
 
+  @override
+  Future<List<Product>> getAllProducts() {
+    // TODO: implement getAllProducts
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Product> getProductById() {
+    // TODO: implement getProductById
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Product>> getProductsByCategory() {
+    // TODO: implement getProductsByCategory
+    throw UnimplementedError();
+  }
+}

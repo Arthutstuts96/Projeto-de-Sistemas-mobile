@@ -3,7 +3,7 @@ import 'package:projeto_de_sistemas/domain/models/products/product.dart';
 import 'package:projeto_de_sistemas/screens/components/products/change_quantity_button.dart';
 
 class CartProduct extends StatelessWidget {
-  CartProduct({super.key, required this.product, required this.onDismiss});
+  const CartProduct({super.key, required this.product, required this.onDismiss});
   final Product product;
   final VoidCallback onDismiss;
 

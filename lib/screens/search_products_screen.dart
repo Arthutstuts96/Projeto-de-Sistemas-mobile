@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/domain/models/products/product.dart';
 import 'package:projeto_de_sistemas/screens/components/products/product_card.dart';
 import 'package:projeto_de_sistemas/screens/components/register/button.dart';
-import 'package:projeto_de_sistemas/services/api/products.dart';
+import 'package:projeto_de_sistemas/services/api/products_home.dart';
 
 class SearchProductsScreen extends StatefulWidget {
-  SearchProductsScreen({super.key});
+  const SearchProductsScreen({super.key});
 
   @override
   State<SearchProductsScreen> createState() => _SearchProductsScreenState();

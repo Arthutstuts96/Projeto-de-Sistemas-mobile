@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/controllers/login_controller.dart'; // Ajustado para o caminho correto
 
 class PerfilScreen extends StatelessWidget {
-  const PerfilScreen({Key? key}) : super(key: key);
+  PerfilScreen({Key? key}) : super(key: key);
+
+  // Instância do LoginController
+  final LoginController _loginController = LoginController();
+
+  void _logout(BuildContext context) async {
+    await _loginController.logout();
+    Navigator.of(context).pushReplacementNamed('login_screen');
+  }
 
   void _confirmLogout(BuildContext context) {
     showDialog(
@@ -28,11 +37,6 @@ class PerfilScreen extends StatelessWidget {
             ],
           ),
     );
-  }
-
-  void _logout(BuildContext context) {
-
-    Navigator.of(context).pushReplacementNamed('login_screen');
   }
 
   @override
