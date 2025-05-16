@@ -1,6 +1,7 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/screens/cart_screen.dart';
+import 'package:projeto_de_sistemas/screens/finish_order_screen.dart';
 import 'package:projeto_de_sistemas/screens/order_screen.dart';
 import 'package:projeto_de_sistemas/screens/search_products_screen.dart';
 import 'package:projeto_de_sistemas/screens/splash_screen.dart';
@@ -35,8 +36,9 @@ class TrazAi extends StatelessWidget {
         "cart": (context) =>  CartScreen(),
         "search_products": (context) =>  SearchProductsScreen(),
         "order_screen": (context) =>  OrderScreen(),
+        "finish_order_screen": (context) =>  FinishOrderScreen(),
       },
-      initialRoute: "order_screen",
+      initialRoute: "main_screen",
     );
   }
 }

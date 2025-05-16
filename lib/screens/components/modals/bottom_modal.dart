@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BottomModal extends StatelessWidget {
-  const BottomModal({super.key, required this.onSave, required this.fullPrice});
-  final VoidCallback onSave;
+  const BottomModal({super.key, required this.onPressed, required this.fullPrice});
+  final VoidCallback onPressed;
   final double fullPrice;
 
   @override
@@ -36,7 +36,7 @@ class BottomModal extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 42),
               ),
               ElevatedButton(
-                onPressed: onSave,
+                onPressed: onPressed,
                 style: ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(Colors.green),
                   shadowColor: WidgetStatePropertyAll(Colors.black),

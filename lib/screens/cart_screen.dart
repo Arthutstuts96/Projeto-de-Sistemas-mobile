@@ -3,6 +3,7 @@ import 'package:projeto_de_sistemas/controllers/cart_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/products/cart.dart';
 import 'package:projeto_de_sistemas/screens/components/modals/bottom_modal.dart';
 import 'package:projeto_de_sistemas/screens/components/products/cart_product.dart';
+import 'package:projeto_de_sistemas/screens/finish_order_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -19,7 +20,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
-    refreshCart(); 
+    refreshCart();
   }
 
   Future<void> refreshCart() async {
@@ -34,8 +35,8 @@ class _CartScreenState extends State<CartScreen> {
     }
 
     setState(() {
-      _cart = Future.value(newCart); 
-      fullPrice = newFullPrice; 
+      _cart = Future.value(newCart);
+      fullPrice = newFullPrice;
     });
   }
 
@@ -66,43 +67,8 @@ class _CartScreenState extends State<CartScreen> {
           SizedBox(height: 100),
           BottomModal(
             fullPrice: fullPrice,
-            onSave: () async {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder:
-                    (c) => const Center(
-                      child: CircularProgressIndicator(color: Colors.orange),
-                    ),
-              );
-              try {
-                // final bool response = await cartController.saveCart(
-                //   cart: Cart(
-                //     cartItems: [],
-                //     orderNumber: "1",
-                //     client: 1,
-                //     paymentStatus: "Pago",
-                //     orderStatus: "Entregue",
-                //     totalValue: 1221.32,
-                //   ),
-                // );
-                Future.delayed(Duration(seconds: 2), () {
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Pedido salvo com sucesso!'),
-                      backgroundColor: Colors.lightGreen,
-                    ),
-                  );
-                  cartController.clearCart();
-                  refreshCart();
-                });
-              } catch (e) {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text('Erro inesperado: $e')));
-              }
+            onPressed: () {
+              Navigator.push(context, _createRoute(FinishOrderScreen()));
             },
           ),
         ],
@@ -174,4 +140,19 @@ class _CartScreenState extends State<CartScreen> {
       },
     );
   }
+}
+
+Route _createRoute(Widget page) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(position: animation.drive(tween), child: child);
+    },
+  );
 }
