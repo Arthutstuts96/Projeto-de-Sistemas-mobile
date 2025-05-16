@@ -4,7 +4,7 @@ class Button extends StatefulWidget {
   const Button({super.key, required this.onPressed, required this.text, this.color = Colors.blue});
   final Function onPressed;
   final String text;
-  final MaterialColor color;
+  final Color color;
 
   @override
   State<Button> createState() => _ButtonState();

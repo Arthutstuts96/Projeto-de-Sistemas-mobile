@@ -127,26 +127,28 @@ class _CartScreenState extends State<CartScreen> {
                 snapshot.data!.cartItems.isEmpty) {
               return Padding(
                 padding: const EdgeInsets.all(56),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Opacity(
-                      opacity: 0.5,
-                      child: Image.asset(
-                        "assets/images/no_itens_in_bag.png",
-                        width: 250,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Opacity(
+                        opacity: 0.5,
+                        child: Image.asset(
+                          "assets/images/no_itens_in_bag.png",
+                          width: 250,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      "Não tem itens no carrinho. Adicione alguma coisa para vê-la aqui!",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Color.fromARGB(255, 151, 151, 151),
+                      // const SizedBox(height: 20),
+                      const Text(
+                        "Não tem itens no carrinho. Adicione alguma coisa para vê-la aqui!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color.fromARGB(255, 151, 151, 151),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             }

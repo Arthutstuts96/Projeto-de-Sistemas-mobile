@@ -15,6 +15,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
   List<Product> _allProducts = [];
   List<Product> _filteredProducts = [];
   String _activeFilter = "name";
+  double _currentSliderValue = 1.0;
 
   @override
   void initState() {
@@ -136,6 +137,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
                                   },
                                 ),
                               ),
+                              
                             ],
                           ),
                         ),
@@ -145,7 +147,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
                               Navigator.of(context).pop();
                             },
                             text: "Cancelar",
-                            color: Colors.deepOrange,
+                            color: Colors.grey,
                           ),
                           Button(
                             onPressed: () {
@@ -272,3 +274,13 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
     }
   }
 }
+
+// Slider(
+//   value: _currentSliderValue,
+//   max: 200,
+//   onChanged: (double value) {
+//     setState(() {
+//       _currentSliderValue = value;
+//     });
+//   },
+// ),
