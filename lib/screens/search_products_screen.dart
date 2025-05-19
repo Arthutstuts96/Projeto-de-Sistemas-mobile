@@ -15,7 +15,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
   List<Product> _allProducts = [];
   List<Product> _filteredProducts = [];
   String _activeFilter = "name";
-  double _currentSliderValue = 1.0;
+  // double _currentSliderValue = 1.0;
 
   @override
   void initState() {

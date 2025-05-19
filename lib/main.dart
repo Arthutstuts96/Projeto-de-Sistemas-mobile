@@ -25,6 +25,10 @@ class TrazAi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        fontFamily: 'Poppins',
+        useMaterial3: true,
+      ),
       debugShowCheckedModeBanner: false,
       routes: {
         "splash_screen": (context) => const SplashScreen(),
@@ -38,7 +42,7 @@ class TrazAi extends StatelessWidget {
         "order_screen": (context) =>  OrderScreen(),
         "finish_order_screen": (context) =>  FinishOrderScreen(),
       },
-      initialRoute: "main_screen",
+      initialRoute: "finish_order_screen",
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:projeto_de_sistemas/screens/components/register/button.dart';
 import 'package:projeto_de_sistemas/screens/login_screen.dart';
 import 'package:projeto_de_sistemas/screens/register_user_screen.dart';
 import 'package:projeto_de_sistemas/utils/api_configs.dart';
@@ -13,128 +12,109 @@ class ChooseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFfff8d9),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 44,
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 24,
-                children: [
-                  Text(
-                    "Vamos começar do começo",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 52,
-                      fontWeight: FontWeight.w800,
+      body: Column(
+        children: [
+          Image.asset("assets/images/choose_screen_background.jpg"),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+            child: Text(
+              "Vamos começar do começo",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 36,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) =>
+                              RegisterUserScreen(userType: UserTypes.client),
                     ),
+                  );
+                },
+                child: Ink(
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  Text(
-                    "Com qual dessas categorias você se enquadra?",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) =>
-                                      RegisterUserScreen(userType: UserTypes.client),
-                            ),
-                          );
-                        },
-                        child: Ink(
-                          width: 170,
-                          height: 170,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFBFBFBF),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.person, size: 88),
-                              Text(
-                                "Quero pedir minhas compras",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) =>
-                                      RegisterUserScreen(userType: UserTypes.worker),
-                            ),
-                          );
-                        },
-                        child: Ink(
-                          width: 170,
-                          height: 170,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFBFBFBF),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.motorcycle, size: 88),
-                              Text(
-                                "Quero trabalhar com entregas/separador",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                      Text(
+                        "Quero ser cliente",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ],
                   ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Button(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LoginScreen(),
-                          ),
-                        );
-                      },
-                      text: "Já tenho uma conta",
-                      color: Colors.orange,
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) =>
+                              RegisterUserScreen(userType: UserTypes.worker),
                     ),
+                  );
+                },
+                child: Ink(
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.redAccent,
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                ],
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Quero ser entregador",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 12, right: 12),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                  );
+                },
+                child: const Text(
+                  "Já tenho uma conta",
+                  style: TextStyle(
+                    color: Color(0xFFFFAA00),
+                    fontSize: 16, 
+                  ),
+                ),
               ),
             ),
-            RichText(
+          ),
+          const Spacer(),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
                 children: [
@@ -156,9 +136,8 @@ class ChooseScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 4),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
