@@ -118,7 +118,7 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
                   });
                 }
               },
-              text: "Próximo ${order.valorTotal}",
+              text: "Próximo",
             ),
           ],
         ),

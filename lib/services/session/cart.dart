@@ -82,4 +82,37 @@ class CartSession {
       return false;
     }
   }
+
+  Future<bool> editItemInCart(Product updatedProduct) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      Cart? cart = await getCart();
+
+      if (cart == null || cart.cartItems.isEmpty) {
+        return false;
+      }
+
+      bool found = false;
+
+      for (int i = 0; i < cart.cartItems.length; i++) {
+        final item = cart.cartItems[i];
+        if (item.id == updatedProduct.id) {
+          cart.itensPrice -= item.unityPrice * item.quantityToBuy;
+          cart.itensPrice +=
+              updatedProduct.unityPrice * updatedProduct.quantityToBuy;
+
+          cart.cartItems[i] = updatedProduct;
+          found = true;
+          break;
+        }
+      }
+      // Não achou
+      if (!found) return false;
+
+      await prefs.setString(_cartKey, jsonEncode(cart.toJson()));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

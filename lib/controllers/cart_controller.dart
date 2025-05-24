@@ -33,4 +33,10 @@ class CartController implements CartRepository {
   Future<bool> removeItemFromCart({required Product product}) async {
     return await _cartSession.removeItemFromCart(product);
   }
+
+  @override
+  Future<bool> editItemFromCart({required Product product}) async{
+    final bool success = await _cartSession.editItemInCart(product);
+    return success;
+  }
 }

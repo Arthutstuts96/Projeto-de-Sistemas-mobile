@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/controllers/order_controller.dart';
 import 'package:projeto_de_sistemas/screens/components/register/button.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order.dart';
 
@@ -13,18 +14,26 @@ class FinishOrderScreenFour extends StatefulWidget {
 
 class _FinishOrderScreenFourState extends State<FinishOrderScreenFour> {
   final TextEditingController _controller = TextEditingController();
+  final OrderController _orderController = OrderController();
 
-  void sendOrder() {
+  void sendOrder() async {
     widget.order.descricao = _controller.text;
     widget.order.criadoEm = DateTime.now();
     widget.order.statusPagamento = "pendente";
     widget.order.statusPedido = "ativo";
 
-    //TODO: Mandar ordem
-    print(widget.order);
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Pedido enviado!')));
+    final orderSent = await _orderController.saveOrder(order: widget.order);
+    if (orderSent.toString().startsWith("2")) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Pedido enviado!'), backgroundColor: Colors.green,));
+      //TODO: tela de sucesso
+      // Navigator.pushReplacementNamed(context, "main_screen");
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Um erro inesperado aconteceu. Por favor, tente novamente mais tarde'), backgroundColor: Colors.redAccent,));
+    }
   }
 
   @override

@@ -113,7 +113,7 @@ class ChooseScreen extends StatelessWidget {
           ),
           const Spacer(),
           Padding(
-            padding: const EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.only(bottom: 24),
             child: RichText(
               textAlign: TextAlign.center,
               text: TextSpan(

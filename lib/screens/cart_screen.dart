@@ -30,7 +30,7 @@ class _CartScreenState extends State<CartScreen> {
 
     if (newCart != null) {
       for (var item in newCart.cartItems) {
-        newFullPrice += item.unityPrice;
+        newFullPrice += item.unityPrice * item.quantityToBuy;
       }
     }
 

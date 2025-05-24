@@ -75,7 +75,7 @@ class CartProduct extends StatelessWidget {
               Positioned(
                 bottom: 12,
                 right: 12,
-                child: ChangeQuantityButton(quantity: product.quantityToBuy),
+                child: ChangeQuantityButton(product: product),
               ),
             ],
           ),

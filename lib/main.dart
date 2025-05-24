@@ -13,7 +13,7 @@ import 'package:projeto_de_sistemas/screens/deliveryhome_screen.dart';
 
 void main() {
   runApp(DevicePreview(
-      enabled: true,
+      enabled: false,
       tools: [...DevicePreview.defaultTools],
       builder: (context) => const TrazAi(),
     ),);

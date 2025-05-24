@@ -6,6 +6,8 @@ class Order extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // return Column(children: [CardMarket(), CardMarket()]);
-    return Placeholder();
+    return Center(
+      child: Text("Você não tem nenhum pedido ativo no momento"),
+    );
   }
 }

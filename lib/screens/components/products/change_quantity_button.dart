@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/domain/models/products/product.dart';
+import 'package:projeto_de_sistemas/services/session/cart.dart';
 
 // ignore: must_be_immutable
 class ChangeQuantityButton extends StatefulWidget {
-  ChangeQuantityButton({super.key, required this.quantity});
-  int quantity;
+  const ChangeQuantityButton({super.key, required this.product});
+  final Product product;
 
   @override
   State<ChangeQuantityButton> createState() => _ChangeQuantityButtonState();
 }
 
 class _ChangeQuantityButtonState extends State<ChangeQuantityButton> {
+  void changeProductQuantity() async {
+    final updatedProduct = widget.product.copyWith(
+      quantityToBuy: widget.product.quantityToBuy,
+    );
+    await CartSession().editItemInCart(updatedProduct);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent, 
+      color: Colors.transparent,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
@@ -28,20 +37,22 @@ class _ChangeQuantityButtonState extends State<ChangeQuantityButton> {
               color: const Color(0xFFAEAEAE),
               onTap: () {
                 setState(() {
-                  widget.quantity++;
+                  widget.product.quantityToBuy++;
+                  changeProductQuantity();
                 });
               },
             ),
             const SizedBox(width: 8),
-            Text("${widget.quantity}"),
+            Text("${widget.product.quantityToBuy}"),
             const SizedBox(width: 8),
             _buildCircleButton(
               icon: Icons.remove,
               color: const Color(0xFFAEAEAE),
               onTap: () {
                 setState(() {
-                  if(widget.quantity > 1){
-                    widget.quantity--;
+                  if (widget.product.quantityToBuy > 1) {
+                    widget.product.quantityToBuy--;
+                    changeProductQuantity();
                   }
                 });
               },
