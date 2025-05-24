@@ -5,35 +5,27 @@ import 'package:projeto_de_sistemas/domain/models/products/product.dart';
 class Cart {
   List<Product> cartItems;
   String orderNumber;
+  double itensPrice;
   int client;
-  String paymentStatus;
-  String orderStatus;
-  double totalValue;
 
   Cart({
     required this.cartItems,
     required this.orderNumber,
+    required this.itensPrice,
     required this.client,
-    required this.paymentStatus,
-    required this.orderStatus,
-    required this.totalValue,
   });
 
   Cart copyWith({
     List<Product>? cartItems,
     String? orderNumber,
+    double? itensPrice,
     int? client,
-    String? paymentStatus,
-    String? orderStatus,
-    double? totalValue,
   }) {
     return Cart(
       cartItems: cartItems ?? this.cartItems,
       orderNumber: orderNumber ?? this.orderNumber,
+      itensPrice: itensPrice ?? this.itensPrice,
       client: client ?? this.client,
-      paymentStatus: paymentStatus ?? this.paymentStatus,
-      orderStatus: orderStatus ?? this.orderStatus,
-      totalValue: totalValue ?? this.totalValue,
     );
   }
 
@@ -41,27 +33,27 @@ class Cart {
     return <String, dynamic>{
       'cartItems': cartItems.map((x) => x.toMap()).toList(),
       'orderNumber': orderNumber,
+      'itensPrice': itensPrice,
       'client': client,
-      'paymentStatus': paymentStatus,
-      'orderStatus': orderStatus,
-      'totalValue': totalValue,
     };
   }
 
   factory Cart.fromMap(Map<String, dynamic> map) {
     return Cart(
       cartItems: List<Product>.from(
-        (map['cartItems'] as List<dynamic>).map<Product>(
+        (map['cartItems'] as List).map<Product>(
           (x) => Product.fromMap(x as Map<String, dynamic>),
         ),
       ),
       orderNumber: map['orderNumber'] as String,
-      client: map['client'] is int ? map['client'] : int.parse(map['client'].toString()),
-      paymentStatus: map['paymentStatus'] as String,
-      orderStatus: map['orderStatus'] as String,
-      totalValue: (map['totalValue'] is int)
-          ? (map['totalValue'] as int).toDouble()
-          : map['totalValue'] as double,
+      itensPrice:
+          map['itensPrice'] == null
+              ? 0.0
+              : map['itensPrice'] is int
+              ? (map['itensPrice'] as int).toDouble()
+              : map['itensPrice'] as double,
+
+      client: map['client'] as int,
     );
   }
 
@@ -72,7 +64,7 @@ class Cart {
 
   @override
   String toString() {
-    return 'Cart(cartItems: $cartItems, orderNumber: $orderNumber, client: $client, paymentStatus: $paymentStatus, orderStatus: $orderStatus, totalValue: $totalValue)';
+    return 'Cart(cartItems: $cartItems, orderNumber: $orderNumber, itensPrice: $itensPrice, client: $client)';
   }
 
   @override
@@ -81,19 +73,15 @@ class Cart {
 
     return listEquals(other.cartItems, cartItems) &&
         other.orderNumber == orderNumber &&
-        other.client == client &&
-        other.paymentStatus == paymentStatus &&
-        other.orderStatus == orderStatus &&
-        other.totalValue == totalValue;
+        other.itensPrice == itensPrice &&
+        other.client == client;
   }
 
   @override
   int get hashCode {
     return cartItems.hashCode ^
         orderNumber.hashCode ^
-        client.hashCode ^
-        paymentStatus.hashCode ^
-        orderStatus.hashCode ^
-        totalValue.hashCode;
+        itensPrice.hashCode ^
+        client.hashCode;
   }
 }

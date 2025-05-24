@@ -1,15 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/screens/components/register/button.dart';
+import 'package:projeto_de_sistemas/domain/models/order/order.dart';
 
 // ignore: must_be_immutable
 class FinishOrderScreenFour extends StatefulWidget {
-  FinishOrderScreenFour({super.key});
+  FinishOrderScreenFour({super.key, required this.order});
+  Order order;
 
   @override
   State<FinishOrderScreenFour> createState() => _FinishOrderScreenFourState();
 }
 
 class _FinishOrderScreenFourState extends State<FinishOrderScreenFour> {
+  final TextEditingController _controller = TextEditingController();
+
+  void sendOrder() {
+    widget.order.descricao = _controller.text;
+    widget.order.criadoEm = DateTime.now();
+    widget.order.statusPagamento = "pendente";
+    widget.order.statusPedido = "ativo";
+
+    //TODO: Mandar ordem
+    print(widget.order);
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Pedido enviado!')));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -21,8 +38,9 @@ class _FinishOrderScreenFourState extends State<FinishOrderScreenFour> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         Container(
-          height: 200, 
+          height: 200,
           child: TextFormField(
+            controller: _controller,
             maxLines: null,
             expands: true,
             textAlignVertical: TextAlignVertical.top,
@@ -37,9 +55,7 @@ class _FinishOrderScreenFourState extends State<FinishOrderScreenFour> {
           alignment: Alignment.centerRight,
           child: Button(
             onPressed: () {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(const SnackBar(content: Text('Pedido enviado!')));
+              sendOrder();
             },
             text: "Enviar pedido",
             color: Color(0xFFFFAA00),

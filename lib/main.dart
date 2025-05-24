@@ -42,7 +42,7 @@ class TrazAi extends StatelessWidget {
         "order_screen": (context) =>  OrderScreen(),
         "finish_order_screen": (context) =>  FinishOrderScreen(),
       },
-      initialRoute: "finish_order_screen",
+      initialRoute: "splash_screen",
     );
   }
 }

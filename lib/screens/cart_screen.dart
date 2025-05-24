@@ -68,7 +68,13 @@ class _CartScreenState extends State<CartScreen> {
           BottomModal(
             fullPrice: fullPrice,
             onPressed: () {
-              Navigator.push(context, _createRoute(FinishOrderScreen()));
+              if (fullPrice != 0) {
+                Navigator.push(context, _createRoute(FinishOrderScreen()));
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Não tem nenhum item no carrinho!'), backgroundColor: Colors.redAccent,),
+                );
+              }
             },
           ),
         ],

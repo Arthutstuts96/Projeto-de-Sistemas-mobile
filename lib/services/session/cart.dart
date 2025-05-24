@@ -16,16 +16,14 @@ class CartSession {
           Cart(
             cartItems: [],
             orderNumber: 'ORDER_${DateTime.now().millisecondsSinceEpoch}',
+            itensPrice: 0.0,
             client: 0, // Valor padrão, ajuste conforme necessário
-            paymentStatus: 'PENDING',
-            orderStatus: 'OPEN',
-            totalValue: 0.0,
           );
 
       // Adiciona o novo produto
       cart.cartItems.add(product);
       // Atualiza o valor total
-      cart.totalValue += product.unityPrice * product.quantity;
+      cart.itensPrice += product.unityPrice * product.quantityToBuy;
 
       // Salva o carrinho atualizado
       await prefs.setString(_cartKey, jsonEncode(cart.toJson()));
@@ -75,7 +73,7 @@ class CartSession {
       }
 
       // Atualiza o valor total
-      cart.totalValue -= product.unityPrice * product.quantity;
+      cart.itensPrice -= product.unityPrice * product.quantityToBuy;
 
       // Salva o carrinho atualizado
       await prefs.setString(_cartKey, jsonEncode(cart.toJson()));

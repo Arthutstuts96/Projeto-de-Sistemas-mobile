@@ -9,7 +9,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> { 
-  int duration = 1;
+  int duration = 2;
 
   @override
   void initState() {

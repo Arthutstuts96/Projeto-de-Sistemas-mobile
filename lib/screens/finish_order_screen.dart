@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/controllers/cart_controller.dart';
+import 'package:projeto_de_sistemas/domain/models/order/order.dart';
+import 'package:projeto_de_sistemas/domain/models/order/order_item.dart';
+import 'package:projeto_de_sistemas/domain/models/products/cart.dart';
 import 'package:projeto_de_sistemas/screens/components/register/button.dart';
 import 'package:projeto_de_sistemas/screens/finish-order-screens/finish_order_screen_four.dart';
 import 'package:projeto_de_sistemas/screens/finish-order-screens/finish_order_screen_one.dart';
@@ -14,8 +18,44 @@ class FinishOrderScreen extends StatefulWidget {
 }
 
 class _FinishOrderScreenState extends State<FinishOrderScreen> {
+  final CartController _cartController = CartController();
+  late Cart cart;
   final String _selected = "Pedir agora";
+  double itensValorTotal = 0.0;
   int index = 1;
+  Order order = Order(
+    numeroPedido: '',
+    statusPagamento: '',
+    statusPedido: '',
+    valorTotal: 0.0,
+    criadoEm: DateTime.now(),
+    itens: [],
+    dadosEntrega: [],
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    getCart();
+  }
+
+  void getCart() async {
+    cart = (await _cartController.getCart())!;
+
+    order.numeroPedido = cart.orderNumber;
+    order.itens = cart.cartItems.map(
+      (item) => OrderItem(
+        disponibilidade: true,
+        precoUnitario: item.unityPrice,
+        quantidade: item.quantityToBuy,
+        produtoId: item.id,
+      )
+    ).toList();
+    for (var item in order.itens) {
+      itensValorTotal += item.precoUnitario * item.quantidade;
+    }
+    order.valorTotal = itensValorTotal + 19.90;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +76,7 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
             unselectedSize: 20,
             totalSteps: 4,
             currentStep: index,
-            size: 32,
+            size: 28,
             selectedColor: Color(0xFFFFAA00),
             unselectedColor: Colors.grey,
             customStep: (index, color, _) {
@@ -78,7 +118,7 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
                   });
                 }
               },
-              text: "Próximo",
+              text: "Próximo ${order.valorTotal}",
             ),
           ],
         ),
@@ -89,15 +129,19 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
   Widget getScreenByIndex() {
     switch (index) {
       case 1:
-        return FinishOrderScreenOne(selected: _selected);
+        return FinishOrderScreenOne(selected: _selected, order: order);
       case 2:
-        return FinishOrderScreenTwo();
+        return FinishOrderScreenTwo(
+          order: order,
+          deliverPrice: _selected == "Pedir agora" ? 19.90 : 12.90,
+          itensPrice: itensValorTotal,
+        );
       case 3:
-        return FinishOrderScreenThree();
+        return FinishOrderScreenThree(order: order, cart: cart);
       case 4:
-        return FinishOrderScreenFour();
+        return FinishOrderScreenFour(order: order);
     }
-    return Center(child: Text('Boa'));
+    return Center(child: Text('Parece que não há nada para fazer aqui...'));
   }
 }
 // cartController.clearCart();

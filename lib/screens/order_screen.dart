@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_de_sistemas/screens/components/market/card_market.dart';
 import 'package:projeto_de_sistemas/screens/order-screens/order.dart';
 import 'package:projeto_de_sistemas/screens/order-screens/order_history.dart';
 

@@ -45,7 +45,6 @@ class CartProduct extends StatelessWidget {
                             fit: BoxFit.cover,
                           ),
                         ),
-                        // Container(width: 140, height: 100, color: Colors.amber),
                         const SizedBox(width: 12),
                         ConstrainedBox(
                           constraints: BoxConstraints(maxWidth: 200),
@@ -76,7 +75,7 @@ class CartProduct extends StatelessWidget {
               Positioned(
                 bottom: 12,
                 right: 12,
-                child: ChangeQuantityButton(quantity: 1),
+                child: ChangeQuantityButton(quantity: product.quantityToBuy),
               ),
             ],
           ),

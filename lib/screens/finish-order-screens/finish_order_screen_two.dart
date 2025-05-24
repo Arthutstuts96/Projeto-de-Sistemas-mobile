@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/domain/models/order/order.dart';
 
 // ignore: must_be_immutable
 class FinishOrderScreenTwo extends StatefulWidget {
-  FinishOrderScreenTwo({super.key});
+  FinishOrderScreenTwo({super.key, required this.order, this.deliverPrice = 0, this.itensPrice = 0});
+  Order order;
+  final double itensPrice;
+  final double deliverPrice;
 
   @override
   State<FinishOrderScreenTwo> createState() => _FinishOrderScreenTwoState();
@@ -22,11 +26,11 @@ class _FinishOrderScreenTwoState extends State<FinishOrderScreenTwo> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Valor total dos itens: R\$23,90"),
-            Text("Entrega: R\$12,90"),
+            Text("Valor total dos itens: R\$${widget.itensPrice.toStringAsFixed(2).replaceAll(".", ",")}"),
+            Text("Entrega: R\$${widget.deliverPrice.toStringAsFixed(2).replaceAll(".", ",")}"),
             Text("Adicionais: R\$0,00"),
             Text(
-              "Total: R\$46,80",
+              "Total: R\$${(widget.itensPrice + widget.deliverPrice).toStringAsFixed(2).replaceAll(".", ",")}",
               style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
             ),
           ],

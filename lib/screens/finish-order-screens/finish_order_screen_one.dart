@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/domain/models/order/order.dart';
 import 'package:projeto_de_sistemas/screens/components/register/button.dart';
 import 'package:projeto_de_sistemas/utils/functions/select_time.dart';
 
 // ignore: must_be_immutable
 class FinishOrderScreenOne extends StatefulWidget {
-  FinishOrderScreenOne({super.key, required this.selected});
+  FinishOrderScreenOne({
+    super.key,
+    required this.selected,
+    required this.order,
+  });
   String selected;
+  Order order;
 
   @override
   State<FinishOrderScreenOne> createState() => _FinishOrderScreenOneState();
@@ -107,7 +113,10 @@ class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
                                               ),
                                             );
                                           },
-                                          icon: Icon(Icons.date_range, color: Colors.indigo,),
+                                          icon: Icon(
+                                            Icons.date_range,
+                                            color: Colors.indigo,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -118,7 +127,10 @@ class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
                                           onPressed: () async {
                                             selectTime(context, 8, 21);
                                           },
-                                          icon: Icon(Icons.timer, color: Colors.indigo,),
+                                          icon: Icon(
+                                            Icons.timer,
+                                            color: Colors.indigo,
+                                          ),
                                         ),
                                       ],
                                     ),

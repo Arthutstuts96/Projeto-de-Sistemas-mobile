@@ -7,19 +7,19 @@ class OrderHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Text(
-            "Histórico de pedidos",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Text(
+              "Histórico de pedidos",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
           ),
-        ),
-        SingleChildScrollView(
-          padding: EdgeInsets.all(16),
-          child: UniversalStepper(
+          UniversalStepper(
             inverted: false,
             stepperDirection: Axis.vertical,
             elementBuilder: (context, index) {
@@ -64,8 +64,8 @@ class OrderHistory extends StatelessWidget {
             elementCount: 5 - 1,
             badgePosition: StepperBadgePosition.start,
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

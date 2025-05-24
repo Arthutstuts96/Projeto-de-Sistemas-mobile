@@ -28,11 +28,11 @@ class BottomModal extends StatelessWidget {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              Text("Subtotal: R\$${fullPrice.toStringAsFixed(2)}"),
-              const Text("Entrega: R\$10,00"),
+              Text("Subtotal: R\$${fullPrice.toStringAsFixed(2).replaceAll(".", ",")}"),
+              const Text("Entrega: R\$?"),
               const SizedBox(height: 10),
               Text(
-                "Total: R\$${(fullPrice+10).toStringAsFixed(2)}",
+                "Total: R\$${(fullPrice).toStringAsFixed(2).replaceAll(".", ",")}",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 42),
               ),
               ElevatedButton(
