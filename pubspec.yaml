@@ -14,6 +14,11 @@ dependencies:
   dio: ^5.8.0+1
   shared_preferences: ^2.5.3
   flutter_svg: ^2.0.10
+  device_preview: ^1.2.0
+  universal_stepper: ^1.0.0+1
+  step_progress_indicator: ^1.0.2
+  pix_flutter: ^2.2.0
+  diacritic: ^0.1.6
 
 dev_dependencies:
   flutter_test:
@@ -26,6 +31,7 @@ flutter:
     - assets/images/
     - assets/images/GPS.png
     - assets/images/delivery.png
+    - assets/images/choose_screen_background.jpg
   fonts:
     - family: Poppins
       fonts:
@@ -35,5 +41,4 @@ flutter:
     - family: Leckerli One
       fonts:
         - asset: assets/fonts/Leckerli_One/LeckerliOne-Regular.ttf
-        
           weight: 700

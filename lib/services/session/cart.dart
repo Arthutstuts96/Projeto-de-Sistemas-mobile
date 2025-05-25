@@ -16,16 +16,14 @@ class CartSession {
           Cart(
             cartItems: [],
             orderNumber: 'ORDER_${DateTime.now().millisecondsSinceEpoch}',
+            itensPrice: 0.0,
             client: 0, // Valor padrão, ajuste conforme necessário
-            paymentStatus: 'PENDING',
-            orderStatus: 'OPEN',
-            totalValue: 0.0,
           );
 
       // Adiciona o novo produto
       cart.cartItems.add(product);
       // Atualiza o valor total
-      cart.totalValue += product.unityPrice * product.quantity;
+      cart.itensPrice += product.unityPrice * product.quantityToBuy;
 
       // Salva o carrinho atualizado
       await prefs.setString(_cartKey, jsonEncode(cart.toJson()));
@@ -75,9 +73,42 @@ class CartSession {
       }
 
       // Atualiza o valor total
-      cart.totalValue -= product.unityPrice * product.quantity;
+      cart.itensPrice -= product.unityPrice * product.quantityToBuy;
 
       // Salva o carrinho atualizado
+      await prefs.setString(_cartKey, jsonEncode(cart.toJson()));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> editItemInCart(Product updatedProduct) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      Cart? cart = await getCart();
+
+      if (cart == null || cart.cartItems.isEmpty) {
+        return false;
+      }
+
+      bool found = false;
+
+      for (int i = 0; i < cart.cartItems.length; i++) {
+        final item = cart.cartItems[i];
+        if (item.id == updatedProduct.id) {
+          cart.itensPrice -= item.unityPrice * item.quantityToBuy;
+          cart.itensPrice +=
+              updatedProduct.unityPrice * updatedProduct.quantityToBuy;
+
+          cart.cartItems[i] = updatedProduct;
+          found = true;
+          break;
+        }
+      }
+      // Não achou
+      if (!found) return false;
+
       await prefs.setString(_cartKey, jsonEncode(cart.toJson()));
       return true;
     } catch (e) {

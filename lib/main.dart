@@ -1,16 +1,22 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/screens/cart_screen.dart';
+import 'package:projeto_de_sistemas/screens/order-screens/finish_order_screen.dart';
+import 'package:projeto_de_sistemas/screens/order-screens/order_screen.dart';
 import 'package:projeto_de_sistemas/screens/search_products_screen.dart';
-import 'package:projeto_de_sistemas/screens/splash_screen.dart';
-import 'package:projeto_de_sistemas/screens/login_screen.dart';
+import 'package:projeto_de_sistemas/screens/login-register-screens/splash_screen.dart';
+import 'package:projeto_de_sistemas/screens/login-register-screens/login_screen.dart';
 import 'package:projeto_de_sistemas/screens/home_screen.dart';
 import 'package:projeto_de_sistemas/screens/main_screen.dart';
 import 'package:projeto_de_sistemas/screens/perfil_screen.dart';
 import 'package:projeto_de_sistemas/screens/deliveryhome_screen.dart';
 
-
 void main() {
-  runApp(const TrazAi());
+  runApp(DevicePreview(
+      enabled: false,
+      tools: [...DevicePreview.defaultTools],
+      builder: (context) => const TrazAi(),
+    ),);
 }
 
 class TrazAi extends StatelessWidget {
@@ -19,6 +25,10 @@ class TrazAi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        fontFamily: 'Poppins',
+        useMaterial3: true,
+      ),
       debugShowCheckedModeBanner: false,
       routes: {
         "splash_screen": (context) => const SplashScreen(),
@@ -29,6 +39,8 @@ class TrazAi extends StatelessWidget {
         "delivery_screen": (context) =>  const DeliveryHomeScreen(),
         "cart": (context) =>  CartScreen(),
         "search_products": (context) =>  SearchProductsScreen(),
+        "order_screen": (context) =>  OrderScreen(),
+        "finish_order_screen": (context) =>  FinishOrderScreen(),
       },
       initialRoute: "splash_screen",
     );

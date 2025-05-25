@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_de_sistemas/screens/choose_screen.dart';
+import 'package:projeto_de_sistemas/screens/login-register-screens/choose_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -8,11 +8,13 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> { 
+  int duration = 2;
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 5)).then((_) {
+    Future.delayed(Duration(seconds: duration)).then((_) {
       if (mounted) {
         Navigator.of(
           context,

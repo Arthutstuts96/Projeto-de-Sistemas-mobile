@@ -14,6 +14,7 @@ class Product {
   int reviews;
   double rating;
   String imageUrl;
+  int quantityToBuy;
 
   Product({
     required this.id,
@@ -28,6 +29,7 @@ class Product {
     required this.reviews,
     required this.rating,
     required this.imageUrl,
+    this.quantityToBuy = 1,
   });
 
   Product copyWith({
@@ -43,6 +45,7 @@ class Product {
     int? reviews,
     double? rating,
     String? imageUrl,
+    int? quantityToBuy,
   }) {
     return Product(
       id: id ?? this.id,
@@ -57,6 +60,7 @@ class Product {
       reviews: reviews ?? this.reviews,
       rating: rating ?? this.rating,
       imageUrl: imageUrl ?? this.imageUrl,
+      quantityToBuy: quantityToBuy ?? this.quantityToBuy,
     );
   }
 
@@ -74,6 +78,7 @@ class Product {
       'reviews': reviews,
       'rating': rating,
       'imageUrl': imageUrl,
+      'quantityToBuy': quantityToBuy,
     };
   }
 
@@ -85,12 +90,14 @@ class Product {
       unityPrice: map['unitPrice'] as double,
       category: map['category'] as String,
       brand: map['brand'] as String,
-      market: map['market'] as String,
+      market: map['market'] ?? '',
       quantity: map['stockQuantity'] as int,
       barCode: map['barCode'] as String,
       reviews: map['reviews'] as int,
       rating: map['rating'] as double,
       imageUrl: map['imageUrl'] as String,
+      quantityToBuy:
+          map['quantityToBuy'] is int ? map['quantityToBuy'] as int : 1,
     );
   }
 
@@ -111,12 +118,13 @@ class Product {
       reviews: json['qtd_avaliacoes'] ?? 0,
       rating: double.tryParse(json['avaliacao']?.toString() ?? '0.0') ?? 0.0,
       imageUrl: json['imagem'] ?? '',
+      quantityToBuy: json['quantityToBuy'] ?? 1,
     );
   }
 
   @override
   String toString() {
-    return 'Product(id: $id, name: $name, description: $description, unitPrice: $unityPrice, category: $category, brand: $brand, market: $market, stockQuantity: $quantity, barCode: $barCode, reviews: $reviews, rating: $rating, imageUrl: $imageUrl)';
+    return 'Product(id: $id, name: $name, description: $description, unitPrice: $unityPrice, category: $category, brand: $brand, market: $market, stockQuantity: $quantity, barCode: $barCode, reviews: $reviews, rating: $rating, imageUrl: $imageUrl, quantityToBuy: $quantityToBuy)';
   }
 
   @override
@@ -134,7 +142,8 @@ class Product {
         other.barCode == barCode &&
         other.reviews == reviews &&
         other.rating == rating &&
-        other.imageUrl == imageUrl;
+        other.imageUrl == imageUrl &&
+        other.quantityToBuy == quantityToBuy;
   }
 
   @override
@@ -150,6 +159,7 @@ class Product {
         barCode.hashCode ^
         reviews.hashCode ^
         rating.hashCode ^
-        imageUrl.hashCode;
+        imageUrl.hashCode ^
+        quantityToBuy.hashCode;
   }
 }

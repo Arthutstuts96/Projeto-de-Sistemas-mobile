@@ -3,6 +3,7 @@ import 'package:projeto_de_sistemas/controllers/cart_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/products/cart.dart';
 import 'package:projeto_de_sistemas/screens/components/modals/bottom_modal.dart';
 import 'package:projeto_de_sistemas/screens/components/products/cart_product.dart';
+import 'package:projeto_de_sistemas/screens/order-screens/finish_order_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -19,7 +20,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
-    refreshCart(); 
+    refreshCart();
   }
 
   Future<void> refreshCart() async {
@@ -29,13 +30,13 @@ class _CartScreenState extends State<CartScreen> {
 
     if (newCart != null) {
       for (var item in newCart.cartItems) {
-        newFullPrice += item.unityPrice;
+        newFullPrice += item.unityPrice * item.quantityToBuy;
       }
     }
 
     setState(() {
-      _cart = Future.value(newCart); 
-      fullPrice = newFullPrice; 
+      _cart = Future.value(newCart);
+      fullPrice = newFullPrice;
     });
   }
 
@@ -66,42 +67,13 @@ class _CartScreenState extends State<CartScreen> {
           SizedBox(height: 100),
           BottomModal(
             fullPrice: fullPrice,
-            onSave: () async {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder:
-                    (c) => const Center(
-                      child: CircularProgressIndicator(color: Colors.orange),
-                    ),
-              );
-              try {
-                // final bool response = await cartController.saveCart(
-                //   cart: Cart(
-                //     cartItems: [],
-                //     orderNumber: "1",
-                //     client: 1,
-                //     paymentStatus: "Pago",
-                //     orderStatus: "Entregue",
-                //     totalValue: 1221.32,
-                //   ),
-                // );
-                Future.delayed(Duration(seconds: 2), () {
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Pedido salvo com sucesso!'),
-                      backgroundColor: Colors.lightGreen,
-                    ),
-                  );
-                  cartController.clearCart();
-                  refreshCart();
-                });
-              } catch (e) {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text('Erro inesperado: $e')));
+            onPressed: () {
+              if (fullPrice != 0) {
+                Navigator.push(context, _createRoute(FinishOrderScreen()));
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Não tem nenhum item no carrinho!'), backgroundColor: Colors.redAccent,),
+                );
               }
             },
           ),
@@ -127,26 +99,28 @@ class _CartScreenState extends State<CartScreen> {
                 snapshot.data!.cartItems.isEmpty) {
               return Padding(
                 padding: const EdgeInsets.all(56),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Opacity(
-                      opacity: 0.5,
-                      child: Image.asset(
-                        "assets/images/no_itens_in_bag.png",
-                        width: 250,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Opacity(
+                        opacity: 0.5,
+                        child: Image.asset(
+                          "assets/images/no_itens_in_bag.png",
+                          width: 250,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      "Não tem itens no carrinho. Adicione alguma coisa para vê-la aqui!",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Color.fromARGB(255, 151, 151, 151),
+                      // const SizedBox(height: 20),
+                      const Text(
+                        "Não tem itens no carrinho. Adicione alguma coisa para vê-la aqui!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color.fromARGB(255, 151, 151, 151),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             }
@@ -172,4 +146,19 @@ class _CartScreenState extends State<CartScreen> {
       },
     );
   }
+}
+
+Route _createRoute(Widget page) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(position: animation.drive(tween), child: child);
+    },
+  );
 }
