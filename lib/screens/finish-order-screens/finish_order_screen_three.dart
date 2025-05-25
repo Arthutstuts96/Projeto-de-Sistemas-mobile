@@ -36,7 +36,7 @@ class _FinishOrderScreenThreeState extends State<FinishOrderScreenThree> {
                   alignment: Alignment.centerLeft,
                   child: Button(onPressed: () {
                     Navigator.pop(context);
-                  }, text: "Quero repensar meu carrinho!", padding: EdgeInsets.all(12),),
+                  }, text: "Quero repensar meu carrinho!", padding: const EdgeInsets.all(12),),
                 ),
               ),
             ],

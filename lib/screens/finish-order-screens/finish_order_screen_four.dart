@@ -58,7 +58,7 @@ class _FinishOrderScreenFourState extends State<FinishOrderScreenFour> {
             maxLines: null,
             expands: true,
             textAlignVertical: TextAlignVertical.top,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: OutlineInputBorder(),
               contentPadding: EdgeInsets.all(12),
             ),
@@ -72,8 +72,8 @@ class _FinishOrderScreenFourState extends State<FinishOrderScreenFour> {
               sendOrder();
             },
             text: "Enviar pedido",
-            color: Color(0xFFFFAA00),
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+            color: const Color(0xFFFFAA00),
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
           ),
         ),
       ],

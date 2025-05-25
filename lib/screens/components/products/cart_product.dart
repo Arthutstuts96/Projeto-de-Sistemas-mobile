@@ -10,7 +10,7 @@ class CartProduct extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: Key("Asas"),
+      key: const Key("Asas"),
       onDismissed: (direction) {
         onDismiss();
       },
@@ -37,7 +37,7 @@ class CartProduct extends StatelessWidget {
                         Container(
                           height: 100,
                           width: 140.0,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             border: Border()
                           ),
                           child: Image.network(
@@ -47,10 +47,10 @@ class CartProduct extends StatelessWidget {
                         ),
                         const SizedBox(width: 12),
                         ConstrainedBox(
-                          constraints: BoxConstraints(maxWidth: 200),
+                          constraints: const BoxConstraints(maxWidth: 200),
                           child: RichText(
                             text: TextSpan(
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.black,
                               ),
@@ -58,7 +58,7 @@ class CartProduct extends StatelessWidget {
                                 TextSpan(text: '${product.name}\n'),
                                 TextSpan(
                                   text: 'R\$${product.unityPrice}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.green,
                                   ),

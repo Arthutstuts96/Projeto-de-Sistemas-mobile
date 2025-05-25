@@ -11,6 +11,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 160, // 👈 Define uma largura apropriada para card horizontal
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black12),
         borderRadius: BorderRadius.circular(12),
@@ -25,6 +26,12 @@ class ProductCard extends StatelessWidget {
               height: 100,
               width: double.infinity,
               fit: BoxFit.cover,
+              errorBuilder:
+                  (_, __, ___) => Container(
+                    height: 100,
+                    color: Colors.grey[300],
+                    child: const Center(child: Icon(Icons.broken_image)),
+                  ),
             ),
           ),
           Padding(
@@ -32,12 +39,14 @@ class ProductCard extends StatelessWidget {
             child: Text(
               product.name,
               style: const TextStyle(fontWeight: FontWeight.bold),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
-              "R\$${product.unityPrice.toString()}",
+              "R\$${product.unityPrice.toStringAsFixed(2)}",
               style: const TextStyle(color: Colors.green),
             ),
           ),
@@ -54,7 +63,10 @@ class ProductCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <IconButton>[
-                IconButton(onPressed: () {}, icon: Icon(Icons.star_border)),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.star_border),
+                ),
                 IconButton(
                   onPressed: () async {
                     final bool response = await cartController.addItemToCart(
@@ -69,7 +81,7 @@ class ProductCard extends StatelessWidget {
                       );
                     }
                   },
-                  icon: Icon(Icons.shopping_bag_outlined),
+                  icon: const Icon(Icons.shopping_bag_outlined),
                 ),
               ],
             ),
@@ -79,3 +91,5 @@ class ProductCard extends StatelessWidget {
     );
   }
 }
+
+//Caso dê conflito: mudei definida largura horizontal fixa e não quebra linha para textos

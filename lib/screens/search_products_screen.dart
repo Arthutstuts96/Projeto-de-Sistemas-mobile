@@ -92,8 +92,8 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFFFAA00),
-        title: Text(
+        backgroundColor: const Color(0xFFFFAA00),
+        title: const Text(
           "Procurar por item/mercado",
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -104,7 +104,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
         actions: [
           if (_searchMode == "item")
             IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.filter_alt_outlined,
                 size: 35,
                 color: Colors.black,
@@ -113,7 +113,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
             ),
         ],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(60),
+          preferredSize: const Size.fromHeight(60),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: TextFormField(
@@ -126,7 +126,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,
                 ),
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
               ),
             ),
           ),
@@ -159,11 +159,11 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
                           color:
                               _searchMode == "item"
                                   ? Colors.white
-                                  : Color(0xFFFFAA00),
+                                  : const Color(0xFFFFAA00),
                         ),
                       ),
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     ElevatedButton(
                       onPressed: () => _onModeChanged("market"),
                       style: ElevatedButton.styleFrom(
@@ -178,7 +178,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
                           color:
                               _searchMode == "market"
                                   ? Colors.white
-                                  : Color(0xFFFFAA00),
+                                  : const Color(0xFFFFAA00),
                         ),
                       ),
                     ),
@@ -194,9 +194,15 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
                 future: _searchFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return Center(child: Text("Erro ao carregar dados."));
+                    return const Center(
+                      child: Text(
+                        "Erro ao carregar produtos. Verifique sua conexão de internet e tente novamente!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    );
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return Padding(
                       padding: const EdgeInsets.all(56),
@@ -242,7 +248,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
                                 item is Market) {
                               return CardMarket(market: item);
                             } else {
-                              return SizedBox.shrink();
+                              return const SizedBox.shrink();
                             }
                           }).toList(),
                     ),
@@ -297,7 +303,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text("Cancelar"),
+                  child: const Text("Cancelar"),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -307,7 +313,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
                     });
                     Navigator.pop(context);
                   },
-                  child: Text("Salvar"),
+                  child: const Text("Salvar"),
                 ),
               ],
             );

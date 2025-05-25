@@ -26,7 +26,7 @@ class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 12,
       children: [
-        Text(
+        const Text(
           "Escolha o endereço de entrega",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
@@ -75,7 +75,7 @@ class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
                           }
                         },
                         text: "Salvar",
-                        padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                       ),
                     ],
                   );
@@ -85,13 +85,13 @@ class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
             text: "Trocar endereço",
           ),
         ),
-        SizedBox(height: 16),
-        Text(
+        const SizedBox(height: 16),
+        const Text(
           "Horários",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         RadioListTile<String>(
-          contentPadding: EdgeInsets.all(2),
+          contentPadding: const EdgeInsets.all(2),
           title: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -121,18 +121,18 @@ class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
         ),
         const Divider(),
         RadioListTile<String>(
-          contentPadding: EdgeInsets.all(2),
+          contentPadding: const EdgeInsets.all(2),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Mais econômico!',
                 style: TextStyle(fontSize: 12, color: Color(0xFFFFAA00)),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Agendar compra'),
+                  const Text('Agendar compra'),
                   InkWell(
                     onTap: () {
                       showDialog<void>(
@@ -147,7 +147,7 @@ class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
                                   children: [
                                     Row(
                                       children: [
-                                        Text("Dia"),
+                                        const Text("Dia"),
                                         IconButton(
                                           onPressed: () async {
                                             await showDatePicker(
@@ -159,7 +159,7 @@ class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
                                               ),
                                             );
                                           },
-                                          icon: Icon(
+                                          icon: const Icon(
                                             Icons.date_range,
                                             color: Colors.indigo,
                                           ),
@@ -168,12 +168,12 @@ class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
                                     ),
                                     Row(
                                       children: [
-                                        Text("Hora"),
+                                        const Text("Hora"),
                                         IconButton(
                                           onPressed: () async {
                                             selectTime(context, 8, 21);
                                           },
-                                          icon: Icon(
+                                          icon: const Icon(
                                             Icons.timer,
                                             color: Colors.indigo,
                                           ),
@@ -197,7 +197,7 @@ class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
                             ),
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       "Escolher",
                       style: TextStyle(
                         decoration: TextDecoration.underline,
@@ -206,7 +206,7 @@ class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
                       ),
                     ),
                   ),
-                  Text(
+                  const Text(
                     'Total: R\$12,90',
                     style: TextStyle(color: Colors.green, fontSize: 12),
                   ),

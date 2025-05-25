@@ -105,7 +105,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
         ],
       ),
       bottomNavigationBar: Container(
-        color: Color(0xFFfff8d9),
+        color: const Color(0xFFfff8d9),
         child: Padding(
           
           padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 48),
@@ -224,7 +224,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
               controller: controllers['phone']!,
               placeholder: "00 00000-0000",
               type: TextInputType.phone,
-              validator: (value) => validatePhone(value),
+              // validator: (value) => validatePhone(value),
             ),
             FormInput(
               label: "Email",

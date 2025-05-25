@@ -13,7 +13,7 @@ class BottomModal extends StatelessWidget {
       maxChildSize: 0.6, // altura máxima ao expandir
       builder: (context, scrollController) {
         return Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
             boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
@@ -29,18 +29,18 @@ class BottomModal extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text("Subtotal: R\$${fullPrice.toStringAsFixed(2).replaceAll(".", ",")}"),
-              const Text("Entrega: R\$?"),
+              const Text("Entrega: R\$0,00"),
               const SizedBox(height: 10),
               Text(
                 "Total: R\$${(fullPrice).toStringAsFixed(2).replaceAll(".", ",")}",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 42),
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 42),
               ),
               ElevatedButton(
                 onPressed: onPressed,
                 style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(Colors.green),
-                  shadowColor: WidgetStatePropertyAll(Colors.black),
-                  elevation: WidgetStatePropertyAll(8),
+                  backgroundColor: const WidgetStatePropertyAll(Colors.green),
+                  shadowColor: const WidgetStatePropertyAll(Colors.black),
+                  elevation: const WidgetStatePropertyAll(8),
                   shape: WidgetStatePropertyAll(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),

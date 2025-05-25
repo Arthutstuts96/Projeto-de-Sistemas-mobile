@@ -65,9 +65,9 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
         ),
-        title: Text("Finalize seu pedido"),
+        title: const Text("Finalize seu pedido"),
       ),
       body: Column(
         children: [
@@ -77,15 +77,15 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
             totalSteps: 4,
             currentStep: index,
             size: 28,
-            selectedColor: Color(0xFFFFAA00),
+            selectedColor: const Color(0xFFFFAA00),
             unselectedColor: Colors.grey,
             customStep: (index, color, _) {
-              return color == Color(0xFFFFAA00)
+              return color == const Color(0xFFFFAA00)
                   ? Container(
                     color: color,
-                    child: Icon(Icons.check, color: Colors.white),
+                    child: const Icon(Icons.check, color: Colors.white),
                   )
-                  : Container(color: color, child: Icon(Icons.remove));
+                  : Container(color: color, child: const Icon(Icons.remove));
             },
           ),
           Padding(
@@ -141,7 +141,7 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
       case 4:
         return FinishOrderScreenFour(order: order);
     }
-    return Center(child: Text('Parece que não há nada para fazer aqui...'));
+    return const Center(child: Text('Parece que não há nada para fazer aqui...'));
   }
 }
 // cartController.clearCart();

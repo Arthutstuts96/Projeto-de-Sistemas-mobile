@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order.dart';
+import 'package:projeto_de_sistemas/services/session/order.dart';
 import 'package:projeto_de_sistemas/utils/api_configs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -7,7 +8,12 @@ class OrderApi {
   final Dio dio = Dio();
 
   Future<int> saveOrder({required Order order}) async {
+    final OrderSession orderSession = OrderSession();
+
     try {
+      //Deleta pedido atual
+      await orderSession.deleteOrder();
+
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('access_token');
 
@@ -56,9 +62,12 @@ class OrderApi {
         ),
       );
 
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        await orderSession.saveOrder(order);
+      }
+
       return response.statusCode ?? 0;
     } catch (e) {
-      print("Erro ao salvar usuário: $e");
       return 0;
     }
   }
