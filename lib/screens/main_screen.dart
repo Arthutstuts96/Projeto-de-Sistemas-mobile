@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/screens/cart_screen.dart';
 import 'package:projeto_de_sistemas/screens/home_screen.dart';
-import 'package:projeto_de_sistemas/screens/order_screen.dart';
+import 'package:projeto_de_sistemas/screens/order-screens/order_screen.dart';
 import 'package:projeto_de_sistemas/screens/perfil_screen.dart';
 import 'package:projeto_de_sistemas/screens/search_products_screen.dart';
 

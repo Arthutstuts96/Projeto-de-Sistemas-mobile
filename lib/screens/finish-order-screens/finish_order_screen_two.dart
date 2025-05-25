@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order.dart';
+import 'package:projeto_de_sistemas/utils/widgets/generate_pix.dart';
 
 // ignore: must_be_immutable
 class FinishOrderScreenTwo extends StatefulWidget {
-  FinishOrderScreenTwo({super.key, required this.order, this.deliverPrice = 0, this.itensPrice = 0});
+  FinishOrderScreenTwo({
+    super.key,
+    required this.order,
+    this.deliverPrice = 0,
+    this.itensPrice = 0,
+  });
   Order order;
   final double itensPrice;
   final double deliverPrice;
@@ -26,8 +32,12 @@ class _FinishOrderScreenTwoState extends State<FinishOrderScreenTwo> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Valor total dos itens: R\$${widget.itensPrice.toStringAsFixed(2).replaceAll(".", ",")}"),
-            Text("Entrega: R\$${widget.deliverPrice.toStringAsFixed(2).replaceAll(".", ",")}"),
+            Text(
+              "Valor total dos itens: R\$${widget.itensPrice.toStringAsFixed(2).replaceAll(".", ",")}",
+            ),
+            Text(
+              "Entrega: R\$${widget.deliverPrice.toStringAsFixed(2).replaceAll(".", ",")}",
+            ),
             Text("Adicionais: R\$0,00"),
             Text(
               "Total: R\$${(widget.itensPrice + widget.deliverPrice).toStringAsFixed(2).replaceAll(".", ",")}",
@@ -43,7 +53,7 @@ class _FinishOrderScreenTwoState extends State<FinishOrderScreenTwo> {
           children: [
             InkWell(
               onTap: () {
-                //TODO: comunicação pix para pagamento
+                showPixDialog(context);
               },
               child: Container(
                 width: double.infinity,

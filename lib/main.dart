@@ -1,11 +1,11 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/screens/cart_screen.dart';
-import 'package:projeto_de_sistemas/screens/finish_order_screen.dart';
-import 'package:projeto_de_sistemas/screens/order_screen.dart';
+import 'package:projeto_de_sistemas/screens/order-screens/finish_order_screen.dart';
+import 'package:projeto_de_sistemas/screens/order-screens/order_screen.dart';
 import 'package:projeto_de_sistemas/screens/search_products_screen.dart';
-import 'package:projeto_de_sistemas/screens/splash_screen.dart';
-import 'package:projeto_de_sistemas/screens/login_screen.dart';
+import 'package:projeto_de_sistemas/screens/login-register-screens/splash_screen.dart';
+import 'package:projeto_de_sistemas/screens/login-register-screens/login_screen.dart';
 import 'package:projeto_de_sistemas/screens/home_screen.dart';
 import 'package:projeto_de_sistemas/screens/main_screen.dart';
 import 'package:projeto_de_sistemas/screens/perfil_screen.dart';

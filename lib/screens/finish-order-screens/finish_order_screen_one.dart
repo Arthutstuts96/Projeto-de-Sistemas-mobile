@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order.dart';
 import 'package:projeto_de_sistemas/screens/components/register/button.dart';
-import 'package:projeto_de_sistemas/utils/functions/select_time.dart';
+import 'package:projeto_de_sistemas/utils/widgets/select_time.dart';
 
 // ignore: must_be_immutable
 class FinishOrderScreenOne extends StatefulWidget {
@@ -18,6 +18,8 @@ class FinishOrderScreenOne extends StatefulWidget {
 }
 
 class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
+  String _address = "Endereço não definido";
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -29,15 +31,59 @@ class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         Row(
-          spacing: 4,
           children: [
-            Icon(Icons.location_on_outlined, size: 24),
-            Text("Plano Diretor Sul, Quadra 432, 26 de Lote"),
+            const Icon(Icons.location_on_outlined, size: 24),
+            const SizedBox(width: 4),
+            Expanded(child: Text(_address, overflow: TextOverflow.ellipsis)),
           ],
         ),
         SizedBox(
           width: double.infinity,
-          child: Button(onPressed: () {}, text: "Trocar endereço"),
+          child: Button(
+            onPressed: () {
+              String tempAddress = _address;
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text("Alterar endereço"),
+                    content: TextFormField(
+                      initialValue: tempAddress,
+                      onChanged: (value) => tempAddress = value,
+                      decoration: const InputDecoration(
+                        labelText: "Novo endereço",
+                        hintText: "Digite seu novo endereço",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text(
+                          "Cancelar",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                      Button(
+                        onPressed: () {
+                          final newAddress = tempAddress.trim();
+                          if (newAddress.isNotEmpty) {
+                            setState(() {
+                              _address = newAddress;
+                            });
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        text: "Salvar",
+                        padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            text: "Trocar endereço",
+          ),
         ),
         SizedBox(height: 16),
         Text(

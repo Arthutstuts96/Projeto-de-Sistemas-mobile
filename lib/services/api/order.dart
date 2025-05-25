@@ -1,12 +1,20 @@
 import 'package:dio/dio.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order.dart';
 import 'package:projeto_de_sistemas/utils/api_configs.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderApi {
   final Dio dio = Dio();
 
   Future<int> saveOrder({required Order order}) async {
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('access_token');
+
+      if (token == null) {
+        throw Exception('Token não encontrado. Usuário não autenticado.');
+      }
+
       final response = await dio.post(
         '$ipHost/pedidos/create',
         data: {
@@ -39,7 +47,13 @@ class OrderApi {
                   )
                   .toList(),
         },
-        options: Options(contentType: Headers.jsonContentType),
+        options: Options(
+          contentType: Headers.jsonContentType,
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Accept': 'application/json',
+          },
+        ),
       );
 
       return response.statusCode ?? 0;

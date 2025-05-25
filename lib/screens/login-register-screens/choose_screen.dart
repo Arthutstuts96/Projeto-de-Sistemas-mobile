@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:projeto_de_sistemas/screens/login_screen.dart';
-import 'package:projeto_de_sistemas/screens/register_user_screen.dart';
+import 'package:projeto_de_sistemas/screens/login-register-screens/login_screen.dart';
+import 'package:projeto_de_sistemas/screens/login-register-screens/register_user_screen.dart';
 import 'package:projeto_de_sistemas/utils/api_configs.dart';
 import 'package:projeto_de_sistemas/utils/consts.dart';
 import 'package:url_launcher/url_launcher.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_de_sistemas/screens/choose_screen.dart';
+import 'package:projeto_de_sistemas/screens/login-register-screens/choose_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

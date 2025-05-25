@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/order_controller.dart';
 import 'package:projeto_de_sistemas/screens/components/register/button.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order.dart';
+import 'package:projeto_de_sistemas/screens/order-screens/order_success_screen.dart';
 
 // ignore: must_be_immutable
 class FinishOrderScreenFour extends StatefulWidget {
@@ -24,15 +25,19 @@ class _FinishOrderScreenFourState extends State<FinishOrderScreenFour> {
 
     final orderSent = await _orderController.saveOrder(order: widget.order);
     if (orderSent.toString().startsWith("2")) {
-      ScaffoldMessenger.of(
+      Navigator.push(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Pedido enviado!'), backgroundColor: Colors.green,));
-      //TODO: tela de sucesso
-      // Navigator.pushReplacementNamed(context, "main_screen");
+        MaterialPageRoute(builder: (context) => OrderSuccessScreen()),
+      );
     } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Um erro inesperado aconteceu. Por favor, tente novamente mais tarde'), backgroundColor: Colors.redAccent,));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Um erro inesperado aconteceu. Por favor, tente novamente mais tarde',
+          ),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
   }
 

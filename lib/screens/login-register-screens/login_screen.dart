@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_de_sistemas/screens/register_user_screen.dart';
+import 'package:projeto_de_sistemas/screens/login-register-screens/register_user_screen.dart';
 import 'package:projeto_de_sistemas/utils/consts.dart';
 import 'package:projeto_de_sistemas/utils/functions/login_validation.dart';
 import 'package:flutter/services.dart';
