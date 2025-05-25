@@ -15,7 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFFF9F4FA),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             // Transição com fundo branco e categorias
             Container(
-              color: Colors.white,
+              color: Color(0xFFF9F4FA),
               child: Column(
                 children: [
                   Transform.translate(
@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              childAspectRatio: 0.75,
+                              childAspectRatio: 0.72,
                               crossAxisSpacing: 12,
                               mainAxisSpacing: 12,
                             ),
