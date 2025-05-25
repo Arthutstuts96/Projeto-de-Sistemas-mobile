@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_de_sistemas/controllers/login_controller.dart'; // Ajustado para o caminho correto
+import 'package:flutter/services.dart';
+import 'package:projeto_de_sistemas/controllers/login_controller.dart';
 
 class PerfilScreen extends StatelessWidget {
   PerfilScreen({Key? key}) : super(key: key);
@@ -41,42 +42,48 @@ class PerfilScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Perfil')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton.icon(
-              onPressed: () => _confirmLogout(context),
-              icon: const Icon(Icons.logout),
-              label: const Text('Sair'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent,
-                foregroundColor: const Color.fromARGB(255, 223, 23, 23),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 12,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Color.fromARGB(255, 255, 152, 0),
+        statusBarIconBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Perfil')),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton.icon(
+                onPressed: () => _confirmLogout(context),
+                icon: const Icon(Icons.logout),
+                label: const Text('Sair'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.redAccent,
+                  foregroundColor: const Color.fromARGB(255, 223, 23, 23),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20), // Espaço entre os botões
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.pushNamed(context, 'delivery_screen');
-              },
-              icon: const Icon(Icons.delivery_dining),
-              label: const Text('Ir para Delivery Home'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 12,
+              const SizedBox(height: 20), // Espaço entre os botões
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pushNamed(context, 'delivery_screen');
+                },
+                icon: const Icon(Icons.delivery_dining),
+                label: const Text('Ir para Delivery Home'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

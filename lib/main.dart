@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/screens/cart_screen.dart';
 import 'package:projeto_de_sistemas/screens/order-screens/finish_order_screen.dart';
 import 'package:projeto_de_sistemas/screens/order-screens/order_screen.dart';
+import 'package:projeto_de_sistemas/screens/product_screen.dart';
 import 'package:projeto_de_sistemas/screens/search_products_screen.dart';
 import 'package:projeto_de_sistemas/screens/login-register-screens/splash_screen.dart';
 import 'package:projeto_de_sistemas/screens/login-register-screens/login_screen.dart';
@@ -41,6 +42,7 @@ class TrazAi extends StatelessWidget {
         "search_products": (context) =>  SearchProductsScreen(),
         "order_screen": (context) =>  OrderScreen(),
         "finish_order_screen": (context) =>  FinishOrderScreen(),
+        "product_screen": (context) =>  ProductScreen(),
       },
       initialRoute: "splash_screen",
     );

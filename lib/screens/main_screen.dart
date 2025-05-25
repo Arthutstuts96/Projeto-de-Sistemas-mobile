@@ -6,7 +6,9 @@ import 'package:projeto_de_sistemas/screens/perfil_screen.dart';
 import 'package:projeto_de_sistemas/screens/search_products_screen.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final int initialIndex;
+
+  const MainScreen({super.key, this.initialIndex = 0});
 
   @override
   State<MainScreen> createState() => _MainScreenState();

@@ -17,7 +17,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: Color.fromARGB(255, 255, 152, 0),
+        statusBarColor: Color(0xFFFFAA00),
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
@@ -27,7 +27,7 @@ class LoginScreen extends StatelessWidget {
             children: [
               Positioned.fill(
                 child: Image.asset(
-                  "assets/images/background.png",
+                  "assets/images/backgrounded.png",
                   fit: BoxFit.cover,
                 ),
               ),
@@ -58,7 +58,7 @@ class LoginScreen extends StatelessWidget {
                                   fontSize: 50,
                                   fontWeight: FontWeight.normal,
                                   fontFamily: "Leckerli One",
-                                  color: Color(0xFFC07C00),
+                                  color: Color(0xFFFFAA00),
                                 ),
                               ),
                               const SizedBox(height: 16),
@@ -74,14 +74,28 @@ class LoginScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(15),
                                     borderSide: const BorderSide(
                                       width: 3.0,
-                                      color: Color(0xFFC07C00),
+                                      color: Color(0xFFFFAA00),
                                     ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(15),
                                     borderSide: const BorderSide(
                                       width: 3.0,
-                                      color: Color(0xFFC07C00),
+                                      color: Color(0xFFFFAA00),
+                                    ),
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    borderSide: const BorderSide(
+                                      width: 3.0,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    borderSide: const BorderSide(
+                                      width: 3.0,
+                                      color: Color(0xFFFFAA00),
                                     ),
                                   ),
                                 ),
@@ -99,14 +113,28 @@ class LoginScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(15),
                                     borderSide: const BorderSide(
                                       width: 3.0,
-                                      color: Color(0xFFC07C00),
+                                      color: Color(0xFFFFAA00),
                                     ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(15),
                                     borderSide: const BorderSide(
                                       width: 3.0,
-                                      color: Color(0xFFC07C00),
+                                      color: Color(0xFFFFAA00),
+                                    ),
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    borderSide: const BorderSide(
+                                      width: 3.0,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    borderSide: const BorderSide(
+                                      width: 3.0,
+                                      color: Color(0xFFFFAA00),
                                     ),
                                   ),
                                 ),
@@ -147,7 +175,7 @@ class LoginScreen extends StatelessWidget {
                                       style: ButtonStyle(
                                         backgroundColor:
                                             const WidgetStatePropertyAll(
-                                              Color(0xFFC07C00),
+                                              Color(0xFFFFAA00),
                                             ),
                                         minimumSize:
                                             const WidgetStatePropertyAll(
@@ -159,7 +187,7 @@ class LoginScreen extends StatelessWidget {
                                               12,
                                             ),
                                             side: const BorderSide(
-                                              color: Color(0xFFC07C00),
+                                              color: Color(0xFFFFAA00),
                                               width: 2,
                                             ),
                                           ),
@@ -180,7 +208,7 @@ class LoginScreen extends StatelessWidget {
                                         fontFamily: "poppins",
                                         fontWeight: FontWeight.w600,
                                         fontStyle: FontStyle.normal,
-                                        color: Color.fromARGB(255, 100, 65, 0),
+                                        color: Color(0xFFFFAA00),
                                         fontSize: 16,
                                       ),
                                     ),
