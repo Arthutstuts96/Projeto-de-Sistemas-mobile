@@ -4,6 +4,7 @@ import 'order_item.dart';
 import 'deliver_data.dart';
 
 class Order {
+  String? enderecoEntrega;
   String numeroPedido;
   int? usuario;
   String statusPagamento;
@@ -16,6 +17,7 @@ class Order {
   List<OrderItem> itens;
 
   Order({
+    this.enderecoEntrega,
     required this.numeroPedido,
     this.usuario,
     required this.statusPagamento,
@@ -29,6 +31,7 @@ class Order {
   });
 
   Order copyWith({
+    String? enderecoEntrega,
     String? numeroPedido,
     int? usuario,
     String? statusPagamento,
@@ -41,6 +44,7 @@ class Order {
     List<DeliverData>? dadosEntrega,
   }) {
     return Order(
+      enderecoEntrega: enderecoEntrega ?? this.enderecoEntrega,
       numeroPedido: numeroPedido ?? this.numeroPedido,
       usuario: usuario ?? this.usuario,
       statusPagamento: statusPagamento ?? this.statusPagamento,
@@ -56,6 +60,7 @@ class Order {
 
   Map<String, dynamic> toMap() {
     return {
+      'enderecoEntrega': enderecoEntrega,
       'numeroPedido': numeroPedido,
       'usuario': usuario,
       'statusPagamento': statusPagamento,
@@ -71,6 +76,7 @@ class Order {
 
   factory Order.fromMap(Map<String, dynamic> map) {
     return Order(
+      enderecoEntrega: map['enderecoEntrega'] as String?,
       numeroPedido: map['numeroPedido'] as String,
       usuario: map['usuario'],
       statusPagamento: map['statusPagamento'] as String,
@@ -101,7 +107,7 @@ class Order {
 
   @override
   String toString() {
-    return 'Order(numeroPedido: $numeroPedido, usuario: $usuario, statusPagamento: $statusPagamento, statusPedido: $statusPedido, valorTotal: $valorTotal, descricao: $descricao, dataPagamento: $dataPagamento, criadoEm: $criadoEm, itens: $itens, dadosEntrega: $dadosEntrega)';
+    return 'Order(enderecoEntrega: $enderecoEntrega ,numeroPedido: $numeroPedido, usuario: $usuario, statusPagamento: $statusPagamento, statusPedido: $statusPedido, valorTotal: $valorTotal, descricao: $descricao, dataPagamento: $dataPagamento, criadoEm: $criadoEm, itens: $itens, dadosEntrega: $dadosEntrega)';
   }
 
   @override
@@ -109,6 +115,7 @@ class Order {
     if (identical(this, other)) return true;
 
     return other is Order &&
+        other.enderecoEntrega == enderecoEntrega &&
         other.numeroPedido == numeroPedido &&
         other.usuario == usuario &&
         other.statusPagamento == statusPagamento &&
@@ -124,6 +131,7 @@ class Order {
   @override
   int get hashCode {
     return numeroPedido.hashCode ^
+        enderecoEntrega.hashCode ^
         usuario.hashCode ^
         statusPagamento.hashCode ^
         statusPedido.hashCode ^

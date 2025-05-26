@@ -11,7 +11,7 @@ class DeliveryTaskMock {
   final String enderecoEntrega;
   final String itensResumo;
   DeliveryTaskStatusMock status;
-  String? idEntregadorAtribuido; // Para simular a atribuição
+  String? idEntregadorAtribuido;
 
   DeliveryTaskMock({
     required this.id,
