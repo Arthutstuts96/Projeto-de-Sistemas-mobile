@@ -349,7 +349,6 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
                     Navigator.pop(dialogContext);
                   },
                   child: const Text("Salvar"),
-                  child: const Text("Salvar"),
                 ),
               ],
             );
