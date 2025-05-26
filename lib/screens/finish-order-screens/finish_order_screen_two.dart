@@ -38,10 +38,10 @@ class _FinishOrderScreenTwoState extends State<FinishOrderScreenTwo> {
             Text(
               "Entrega: R\$${widget.deliverPrice.toStringAsFixed(2).replaceAll(".", ",")}",
             ),
-            Text("Adicionais: R\$0,00"),
+            const Text("Adicionais: R\$0,00"),
             Text(
               "Total: R\$${(widget.itensPrice + widget.deliverPrice).toStringAsFixed(2).replaceAll(".", ",")}",
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
             ),
           ],
         ),
@@ -57,13 +57,13 @@ class _FinishOrderScreenTwoState extends State<FinishOrderScreenTwo> {
               },
               child: Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(12),
-                child: Row(
+                padding: const EdgeInsets.all(12),
+                child: const Row(
                   spacing: 8,
                   children: [
                     Icon(
                       Icons.pix,
-                      color: const Color.fromARGB(255, 2, 122, 94),
+                      color: Color.fromARGB(255, 2, 122, 94),
                     ),
                     Text("Pix", style: TextStyle(fontSize: 16)),
                   ],
@@ -83,8 +83,8 @@ class _FinishOrderScreenTwoState extends State<FinishOrderScreenTwo> {
               },
               child: Container(
                 width: double.infinity,
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                child: Row(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
@@ -115,8 +115,8 @@ class _FinishOrderScreenTwoState extends State<FinishOrderScreenTwo> {
               },
               child: Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(12),
-                child: Row(
+                padding: const EdgeInsets.all(12),
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(

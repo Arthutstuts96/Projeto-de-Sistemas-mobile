@@ -9,7 +9,7 @@ class CardOrderHistory extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 4,
       children: [
-        Text("20/03/2024"),
+        const Text("20/03/2024"),
         Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -29,18 +29,18 @@ class CardOrderHistory extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       "Pedido N°: ABC234",
                       style: TextStyle(
                         fontWeight: FontWeight.w800,
                         fontSize: 16,
                       ),
                     ),
-                    IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+                    IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     spacing: 2,
@@ -56,8 +56,8 @@ class CardOrderHistory extends StatelessWidget {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     spacing: 2,
@@ -73,8 +73,8 @@ class CardOrderHistory extends StatelessWidget {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     spacing: 2,
@@ -87,7 +87,7 @@ class CardOrderHistory extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
               ],
             ),
           ),

@@ -44,9 +44,9 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actionsPadding: EdgeInsets.symmetric(horizontal: 8),
-        backgroundColor: Color(0xFFFFAA00),
-        title: Text(
+        actionsPadding: const EdgeInsets.symmetric(horizontal: 8),
+        backgroundColor: const Color(0xFFFFAA00),
+        title: const Text(
           "Seu carrinho",
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -57,19 +57,18 @@ class _CartScreenState extends State<CartScreen> {
         actions: <Widget>[
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.credit_card, size: 36, color: Colors.black),
+            icon: const Icon(Icons.credit_card, size: 36, color: Colors.black),
           ),
         ],
       ),
       body: Stack(
         children: [
           renderCartItens(),
-          SizedBox(height: 100),
           BottomModal(
             fullPrice: fullPrice,
             onPressed: () {
               if (fullPrice != 0) {
-                Navigator.push(context, _createRoute(FinishOrderScreen()));
+                Navigator.push(context, _createRoute(const FinishOrderScreen()));
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Não tem nenhum item no carrinho!'), backgroundColor: Colors.redAccent,),
@@ -110,7 +109,6 @@ class _CartScreenState extends State<CartScreen> {
                           width: 250,
                         ),
                       ),
-                      // const SizedBox(height: 20),
                       const Text(
                         "Não tem itens no carrinho. Adicione alguma coisa para vê-la aqui!",
                         textAlign: TextAlign.center,
@@ -129,7 +127,7 @@ class _CartScreenState extends State<CartScreen> {
             return RefreshIndicator(
               onRefresh: refreshCart,
               child: ListView.builder(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 80),
                 itemCount: cart.cartItems.length,
                 itemBuilder: (context, index) {
                   final product = cart.cartItems[index];
@@ -137,6 +135,7 @@ class _CartScreenState extends State<CartScreen> {
                     product: product,
                     onDismiss: () {
                       cartController.removeItemFromCart(product: product);
+                      cart.cartItems.remove(product);
                     },
                   );
                 },

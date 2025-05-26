@@ -15,8 +15,8 @@ class ChooseScreen extends StatelessWidget {
       body: Column(
         children: [
           Image.asset("assets/images/choose_screen_background.jpg"),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
             child: Text(
               "Vamos começar do começo",
               textAlign: TextAlign.center,
@@ -37,17 +37,17 @@ class ChooseScreen extends StatelessWidget {
                     MaterialPageRoute(
                       builder:
                           (context) =>
-                              RegisterUserScreen(userType: UserTypes.client),
+                              const RegisterUserScreen(userType: UserTypes.client),
                     ),
                   );
                 },
                 child: Ink(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.blue,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Column(
+                  child: const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
@@ -66,17 +66,17 @@ class ChooseScreen extends StatelessWidget {
                     MaterialPageRoute(
                       builder:
                           (context) =>
-                              RegisterUserScreen(userType: UserTypes.worker),
+                              const RegisterUserScreen(userType: UserTypes.worker),
                     ),
                   );
                 },
                 child: Ink(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.redAccent,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Column(
+                  child: const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
@@ -118,14 +118,14 @@ class ChooseScreen extends StatelessWidget {
               textAlign: TextAlign.center,
               text: TextSpan(
                 children: [
-                  TextSpan(
+                  const TextSpan(
                     text:
                         "Caso você seja dono de um mercado, entre em contato conosco ",
                     style: TextStyle(color: Colors.black, fontSize: 16),
                   ),
                   TextSpan(
                     text: "clicando aqui",
-                    style: TextStyle(color: Colors.blue, fontSize: 16),
+                    style: const TextStyle(color: Colors.blue, fontSize: 16),
                     recognizer:
                         TapGestureRecognizer()
                           ..onTap = () {
