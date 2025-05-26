@@ -20,7 +20,7 @@ class OrderApi {
       if (token == null) {
         throw Exception('Token não encontrado. Usuário não autenticado.');
       }
-
+      print(order);
       final response = await dio.post(
         '$ipHost/pedidos/create',
         data: {
@@ -28,7 +28,7 @@ class OrderApi {
           "usuario": order.usuario,
           "status_pagamento": order.statusPagamento,
           "status_pedido": order.statusPedido,
-          "valor_total": order.valorTotal,
+          "valor_total": double.parse(order.valorTotal.toStringAsFixed(2)),
           "descricao": order.descricao,
           "data_pagamento": order.dataPagamento?.toIso8601String(),
           "criado_em": order.criadoEm.toIso8601String(),

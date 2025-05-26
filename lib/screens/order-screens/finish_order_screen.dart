@@ -43,14 +43,17 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
     cart = (await _cartController.getCart())!;
 
     order.numeroPedido = cart.orderNumber;
-    order.itens = cart.cartItems.map(
-      (item) => OrderItem(
-        disponibilidade: true,
-        precoUnitario: item.unityPrice,
-        quantidade: item.quantityToBuy,
-        produtoId: item.id,
-      )
-    ).toList();
+    order.itens =
+        cart.cartItems
+            .map(
+              (item) => OrderItem(
+                disponibilidade: true,
+                precoUnitario: item.unityPrice,
+                quantidade: item.quantityToBuy,
+                produtoId: item.id,
+              ),
+            )
+            .toList();
     for (var item in order.itens) {
       itensValorTotal += item.precoUnitario * item.quantidade;
     }
@@ -88,9 +91,11 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
                   : Container(color: color, child: const Icon(Icons.remove));
             },
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
-            child: getScreenByIndex(),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+              child: getScreenByIndex(),
+            ),
           ),
         ],
       ),
@@ -141,7 +146,9 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
       case 4:
         return FinishOrderScreenFour(order: order);
     }
-    return const Center(child: Text('Parece que não há nada para fazer aqui...'));
+    return const Center(
+      child: Text('Parece que não há nada para fazer aqui...'),
+    );
   }
 }
 // cartController.clearCart();

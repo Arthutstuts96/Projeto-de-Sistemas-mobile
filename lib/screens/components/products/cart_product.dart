@@ -10,7 +10,7 @@ class CartProduct extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: const Key("Asas"),
+      key: Key(product.id.toString()),
       onDismissed: (direction) {
         onDismiss();
       },

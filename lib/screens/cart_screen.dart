@@ -135,6 +135,7 @@ class _CartScreenState extends State<CartScreen> {
                     product: product,
                     onDismiss: () {
                       cartController.removeItemFromCart(product: product);
+                      cart.cartItems.remove(product);
                     },
                   );
                 },

@@ -19,24 +19,30 @@ class _FinishOrderScreenThreeState extends State<FinishOrderScreenThree> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 12,
       children: [
-        const Text(
-          "Revise os itens do carrinho",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        const Padding(
+          padding: EdgeInsets.only(bottom: 12),
+          child: Text(
+            "Revise os itens do carrinho",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
         ),
-        // const Spacer(),
-        SingleChildScrollView(
-          child: Column(
+        Expanded(
+          child: ListView(
+            padding: EdgeInsets.zero,
             children: [
               ...mapItens(),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Button(onPressed: () {
-                    Navigator.pop(context);
-                  }, text: "Quero repensar meu carrinho!", padding: const EdgeInsets.all(12),),
+                  child: Button(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    text: "Quero repensar meu carrinho!",
+                    padding: const EdgeInsets.all(12),
+                  ),
                 ),
               ),
             ],
