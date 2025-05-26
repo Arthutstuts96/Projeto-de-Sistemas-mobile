@@ -2,6 +2,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:projeto_de_sistemas/controllers/active_delivery_controller.dart'; 
+import 'package:projeto_de_sistemas/controllers/products_controller.dart';
 import 'package:projeto_de_sistemas/screens/cart_screen.dart';
 import 'package:projeto_de_sistemas/screens/order-screens/finish_order_screen.dart';
 import 'package:projeto_de_sistemas/screens/order-screens/order_screen.dart';
@@ -22,6 +23,8 @@ void main() {
       builder: (context) => MultiProvider( // 3. ADICIONE O MULTIPROVIDER (ou ChangeNotifierProvider se for só um)
         providers: [
           ChangeNotifierProvider(create: (_) => ActiveDeliveryController()),
+          ChangeNotifierProvider(create: (_) => HomeProductsController()),
+          ChangeNotifierProvider(create: (_) => SearchScreenController()),
           // Adicione outros providers/controllers aqui se necessário no futuro
           // Ex: ChangeNotifierProvider(create: (_) => CartController()), // Se seus controllers forem ChangeNotifiers
         ],

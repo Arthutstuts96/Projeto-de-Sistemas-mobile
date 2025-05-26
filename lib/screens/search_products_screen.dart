@@ -1,6 +1,6 @@
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
-import 'package:projeto_de_sistemas/controllers/market_controller.dart';
+import 'package:provider/provider.dart';
 import 'package:projeto_de_sistemas/controllers/products_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/products/product.dart';
 import 'package:projeto_de_sistemas/domain/models/market.dart';
@@ -15,254 +15,295 @@ class SearchProductsScreen extends StatefulWidget {
 }
 
 class _SearchProductsScreenState extends State<SearchProductsScreen> {
-  String _activeFilter = "name";
-  String _searchQuery = "";
-  String _searchMode = "item"; // "item" ou "market"
-  late Future<List<dynamic>> _searchFuture;
+  // Os estados locais para _activeFilter, _searchQuery e _searchMode
+  // serão agora gerenciados ou sincronizados com o SearchScreenController.
+  // Para a UI, podemos manter cópias locais que são atualizadas
+  // ou ler diretamente do controller. Vamos ler do controller.
+  // O controller será a fonte da verdade.
+
+  final TextEditingController _searchTextController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _searchFuture = _fetchData();
-  }
-
-  Future<List<dynamic>> _fetchData() async {
-    if (_searchMode == "item") {
-      final products = await ProductController().fetchProducts();
-      return _filterProductList(products);
-    } else {
-      final markets = await MarketController().getAllMarkets();
-      return _filterMarketList(markets);
-    }
-  }
-
-  List<Product> _filterProductList(List<Product> list) {
-    return list.where((product) {
-      final value = removeDiacritics(
-        _getProductPropertyValue(product, _activeFilter).toLowerCase(),
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Carrega os dados iniciais (produtos ou mercados, dependendo do modo padrão)
+      // e aplica o filtro inicial (query vazia).
+      final controller = Provider.of<SearchScreenController>(
+        context,
+        listen: false,
       );
-      final query = removeDiacritics(_searchQuery.toLowerCase());
-      return value.contains(query);
-    }).toList();
-  }
-
-  List<Market> _filterMarketList(List<Market> list) {
-    return list.where((market) {
-      return market.name!.toLowerCase().contains(_searchQuery.toLowerCase());
-    }).toList();
-  }
-
-  String _getProductPropertyValue(Product product, String property) {
-    switch (property) {
-      case 'name':
-        return product.name;
-      case 'brand':
-        return product.description;
-      case 'category':
-        return product.category;
-      case 'market':
-        return product.market;
-      default:
-        return '';
-    }
-  }
-
-  void _refreshData() {
-    setState(() {
-      _searchFuture = _fetchData();
-    });
-  }
-
-  void _onSearchChanged(String query) {
-    setState(() {
-      _searchQuery = query;
-      _searchFuture = _fetchData();
-    });
-  }
-
-  void _onModeChanged(String mode) {
-    setState(() {
-      _searchMode = mode;
-      _searchQuery = "";
-      _searchFuture = _fetchData();
+      _searchTextController.text =
+          controller.searchQuery; // Sincroniza o campo de texto
+      controller.initialLoad();
     });
   }
 
   @override
+  void dispose() {
+    _searchTextController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleRefresh(BuildContext context) async {
+    final controller = Provider.of<SearchScreenController>(
+      context,
+      listen: false,
+    );
+    // Ao puxar para atualizar, força o refresh dos dados base do modo atual
+    // e reaplica os filtros/query atuais.
+    await controller.updateSearchParameters(forceRefreshData: true);
+  }
+
+  void _onSearchChanged(BuildContext context, String query) {
+    Provider.of<SearchScreenController>(
+      context,
+      listen: false,
+    ).updateSearchParameters(newQuery: query);
+  }
+
+  void _onModeChanged(BuildContext context, String mode) {
+    _searchTextController.clear(); // Limpa o texto da busca ao mudar de modo
+    Provider.of<SearchScreenController>(
+      context,
+      listen: false,
+    ).updateSearchParameters(newSearchMode: mode, newQuery: ""); // Reseta query
+  }
+
+  void _applyProductFilter(BuildContext context, String newFilter) {
+    Provider.of<SearchScreenController>(
+      context,
+      listen: false,
+    ).updateSearchParameters(newProductFilter: newFilter);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFFFFAA00),
-        title: Text(
-          "Procurar por item/mercado",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-            fontSize: 24,
-          ),
-        ),
-        actions: [
-          if (_searchMode == "item")
-            IconButton(
-              icon: Icon(
-                Icons.filter_alt_outlined,
-                size: 35,
+    return Consumer<SearchScreenController>(
+      builder: (context, controller, child) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: const Color(0xFFFFAA00),
+            title: const Text(
+              "Procurar por item/mercado",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
                 color: Colors.black,
+                fontSize: 24,
               ),
-              onPressed: () => _showFilterDialog(),
             ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(60),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: TextFormField(
-              onChanged: _onSearchChanged,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: "Pesquisar...",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
+            actions: [
+              if (controller.searchMode == "item")
+                IconButton(
+                  icon: const Icon(
+                    Icons.filter_alt_outlined,
+                    size: 35,
+                    color: Colors.black,
+                  ),
+                  onPressed:
+                      () => _showFilterDialog(
+                        context,
+                        controller.activeProductFilter,
+                      ),
                 ),
-                prefixIcon: Icon(Icons.search),
+            ],
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(60),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 16,
+                ),
+                child: TextFormField(
+                  controller: _searchTextController,
+                  onChanged: (query) => _onSearchChanged(context, query),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: "Pesquisar...",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
+                    ),
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon:
+                        controller.searchQuery.isNotEmpty
+                            ? IconButton(
+                              icon: const Icon(Icons.clear),
+                              onPressed: () {
+                                _searchTextController.clear();
+                                _onSearchChanged(context, "");
+                              },
+                            )
+                            : null,
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Resultados",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8,
                 ),
-                Row(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton(
-                      onPressed: () => _onModeChanged("item"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            _searchMode == "item"
-                                ? Colors.orange
-                                : const Color.fromARGB(255, 255, 255, 255),
-                      ),
-                      child: Text(
-                        "Item",
-                        style: TextStyle(
-                          color:
-                              _searchMode == "item"
-                                  ? Colors.white
-                                  : Color(0xFFFFAA00),
-                        ),
+                    const Text(
+                      "Resultados",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: () => _onModeChanged("market"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            _searchMode == "market"
-                                ? Colors.orange
-                                : const Color.fromARGB(255, 255, 255, 255),
-                      ),
-                      child: Text(
-                        "Mercado",
-                        style: TextStyle(
-                          color:
-                              _searchMode == "market"
-                                  ? Colors.white
-                                  : Color(0xFFFFAA00),
+                    Row(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () => _onModeChanged(context, "item"),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                controller.searchMode == "item"
+                                    ? Colors.orange
+                                    : Colors.white,
+                          ),
+                          child: Text(
+                            "Item",
+                            style: TextStyle(
+                              color:
+                                  controller.searchMode == "item"
+                                      ? Colors.white
+                                      : const Color(0xFFFFAA00),
+                            ),
+                          ),
                         ),
+                        const SizedBox(width: 8),
+                        ElevatedButton(
+                          onPressed: () => _onModeChanged(context, "market"),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                controller.searchMode == "market"
+                                    ? Colors.orange
+                                    : Colors.white,
+                          ),
+                          child: Text(
+                            "Mercado",
+                            style: TextStyle(
+                              color:
+                                  controller.searchMode == "market"
+                                      ? Colors.white
+                                      : const Color(0xFFFFAA00),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () => _handleRefresh(context),
+                  child: _buildResultsList(controller),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildResultsList(SearchScreenController controller) {
+    if (controller.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (controller.error != null) {
+      return Center(child: Text("Erro: ${controller.error}"));
+    } else if (controller.filteredItems.isEmpty) {
+      return LayoutBuilder(
+        // Para o SingleChildScrollView dentro do RefreshIndicator funcionar
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Padding(
+                padding: const EdgeInsets.all(56),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Opacity(
+                      opacity: 0.5,
+                      child: Image.asset(
+                        "assets/images/no_itens_in_bag.png",
+                        width: 250,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      "Nenhum resultado encontrado.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color.fromARGB(255, 151, 151, 151),
                       ),
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: () async => _refreshData(),
-              child: FutureBuilder<List<dynamic>>(
-                future: _searchFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text("Erro ao carregar dados."));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Padding(
-                      padding: const EdgeInsets.all(56),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Opacity(
-                            opacity: 0.5,
-                            child: Image.asset(
-                              "assets/images/no_itens_in_bag.png",
-                              width: 250,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          const Text(
-                            "Nenhum resultado encontrado.",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Color.fromARGB(255, 151, 151, 151),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-
-                  final items = snapshot.data!;
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: GridView.count(
-                      crossAxisCount: _searchMode == "market" ? 1 : 2,
-                      childAspectRatio: _searchMode == "market" ? 1 : 0.72,
-                      shrinkWrap: true,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      children:
-                          items.map((item) {
-                            if (_searchMode == "item" && item is Product) {
-                              return ProductCard(product: item);
-                            } else if (_searchMode == "market" &&
-                                item is Market) {
-                              return CardMarket(market: item);
-                            } else {
-                              return SizedBox.shrink();
-                            }
-                          }).toList(),
-                    ),
-                  );
-                },
               ),
             ),
-          ),
-        ],
+          );
+        },
+      );
+    }
+
+    final items = controller.filteredItems;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: GridView.count(
+        crossAxisCount: controller.searchMode == "market" ? 1 : 2,
+        childAspectRatio:
+            controller.searchMode == "market"
+                ? (MediaQuery.of(context).size.width / (150))
+                : 0.72, // Ajuste para card de mercado
+        shrinkWrap: false, // Deixe o GridView scrollar
+        physics:
+            const AlwaysScrollableScrollPhysics(), // Para funcionar com RefreshIndicator
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        padding: const EdgeInsets.only(
+          bottom: 16,
+        ), // Espaço para não colar no final
+        children:
+            items.map((item) {
+              if (controller.searchMode == "item" && item is Product) {
+                return ProductCard(product: item);
+              } else if (controller.searchMode == "market" && item is Market) {
+                return CardMarket(market: item);
+              } else {
+                return const SizedBox.shrink();
+              }
+            }).toList(),
       ),
     );
   }
 
-  void _showFilterDialog() {
-    String tempFilter = _activeFilter;
+  void _showFilterDialog(BuildContext context, String currentFilter) {
+    String tempFilter = currentFilter;
+    final searchController = Provider.of<SearchScreenController>(
+      context,
+      listen: false,
+    );
+
     showDialog(
       context: context,
-      builder: (context) {
+      builder: (dialogContext) {
+        // Renomeado para evitar conflito com context da tela
         return StatefulBuilder(
+          // Necessário para o Radio atualizar dentro do Dialog
           builder: (context, setModalState) {
+            // setModalState é do StatefulBuilder
             return AlertDialog(
               title: const Text('Escolha como filtrar:'),
               content: Column(
@@ -272,42 +313,42 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
                     "Por nome",
                     "name",
                     tempFilter,
-                    setModalState,
+                    (newValue) => setModalState(() => tempFilter = newValue),
                   ),
                   _buildRadioOption(
                     "Por categoria",
                     "category",
                     tempFilter,
-                    setModalState,
+                    (newValue) => setModalState(() => tempFilter = newValue),
                   ),
                   _buildRadioOption(
                     "Por marca",
                     "brand",
                     tempFilter,
-                    setModalState,
+                    (newValue) => setModalState(() => tempFilter = newValue),
                   ),
                   _buildRadioOption(
                     "Por mercado",
                     "market",
                     tempFilter,
-                    setModalState,
+                    (newValue) => setModalState(() => tempFilter = newValue),
                   ),
                 ],
               ),
               actions: [
                 TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text("Cancelar"),
+                  onPressed: () => Navigator.pop(dialogContext),
+                  child: const Text("Cancelar"),
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    setState(() {
-                      _activeFilter = tempFilter;
-                      _searchFuture = _fetchData();
-                    });
-                    Navigator.pop(context);
+                    _applyProductFilter(
+                      context,
+                      tempFilter,
+                    ); // Usa o context da tela
+                    Navigator.pop(dialogContext);
                   },
-                  child: Text("Salvar"),
+                  child: const Text("Salvar"),
                 ),
               ],
             );
@@ -321,7 +362,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
     String label,
     String value,
     String groupValue,
-    void Function(void Function()) setModalState,
+    ValueChanged<String> onChanged,
   ) {
     return ListTile(
       title: Text(label),
@@ -329,11 +370,17 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
         value: value,
         groupValue: groupValue,
         onChanged: (newValue) {
-          setModalState(() {
-            groupValue = newValue!;
-          });
+          if (newValue != null) {
+            onChanged(newValue);
+          }
         },
       ),
+      onTap: () {
+        // Para permitir clicar na linha toda
+        if (value != groupValue) {
+          onChanged(value);
+        }
+      },
     );
   }
 }

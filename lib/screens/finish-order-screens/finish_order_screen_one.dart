@@ -70,6 +70,9 @@ class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
                           if (newAddress.isNotEmpty) {
                             setState(() {
                               _address = newAddress;
+
+                              widget.order.enderecoEntrega =
+                                  _address;
                             });
                             Navigator.of(context).pop();
                           }
