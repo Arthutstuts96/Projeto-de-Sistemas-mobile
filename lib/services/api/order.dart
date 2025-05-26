@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order.dart';
+import 'package:projeto_de_sistemas/services/session/order.dart';
 import 'package:projeto_de_sistemas/utils/api_configs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -7,14 +8,19 @@ class OrderApi {
   final Dio dio = Dio();
 
   Future<int> saveOrder({required Order order}) async {
+    final OrderSession orderSession = OrderSession();
+
     try {
+      //Deleta pedido atual
+      await orderSession.deleteOrder();
+
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('access_token');
 
       if (token == null) {
         throw Exception('Token não encontrado. Usuário não autenticado.');
       }
-
+      print(order);
       final response = await dio.post(
         '$ipHost/pedidos/create',
         data: {
@@ -22,7 +28,7 @@ class OrderApi {
           "usuario": order.usuario,
           "status_pagamento": order.statusPagamento,
           "status_pedido": order.statusPedido,
-          "valor_total": order.valorTotal,
+          "valor_total": double.parse(order.valorTotal.toStringAsFixed(2)),
           "descricao": order.descricao,
           "data_pagamento": order.dataPagamento?.toIso8601String(),
           "criado_em": order.criadoEm.toIso8601String(),
@@ -56,9 +62,12 @@ class OrderApi {
         ),
       );
 
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        await orderSession.saveOrder(order);
+      }
+
       return response.statusCode ?? 0;
     } catch (e) {
-      print("Erro ao salvar usuário: $e");
       return 0;
     }
   }

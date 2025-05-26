@@ -27,11 +27,12 @@ class ProductCard extends StatelessWidget {
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(12),
               ),
-              child: Image.network(
-                product.imageUrl,
-                height: 100,
-                width: double.infinity,
-                fit: BoxFit.contain,
+              child: Center(
+                child: Image.network(
+                  product.imageUrl,
+                  height: 100,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Padding(
@@ -89,3 +90,5 @@ class ProductCard extends StatelessWidget {
     );
   }
 }
+
+//Caso dê conflito: mudei definida largura horizontal fixa e não quebra linha para textos

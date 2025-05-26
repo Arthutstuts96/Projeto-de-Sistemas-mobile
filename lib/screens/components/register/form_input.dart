@@ -16,7 +16,7 @@ class FormInput extends StatelessWidget {
   final TextInputType type;
   final TextEditingController controller;
   final bool isPassword;
-  final String? Function(String?)? validator; // Aqui mudamos para uma função
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class FormInput extends StatelessWidget {
         }
       },     
       decoration: InputDecoration(
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
         label: Text(label),
         hintText: placeholder,
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/controllers/cart_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/products/product.dart';
-import 'package:projeto_de_sistemas/services/session/cart.dart';
 
 // ignore: must_be_immutable
 class ChangeQuantityButton extends StatefulWidget {
@@ -16,7 +16,7 @@ class _ChangeQuantityButtonState extends State<ChangeQuantityButton> {
     final updatedProduct = widget.product.copyWith(
       quantityToBuy: widget.product.quantityToBuy,
     );
-    await CartSession().editItemInCart(updatedProduct);
+    await CartController().editItemFromCart(product: updatedProduct);
   }
 
   @override

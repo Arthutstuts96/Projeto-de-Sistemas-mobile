@@ -10,6 +10,7 @@ class CartSession {
   Future<bool> addItemToCart(Product product) async {
     try {
       final prefs = await SharedPreferences.getInstance();
+
       // Recupera o carrinho atual ou cria um novo
       Cart cart =
           await getCart() ??
@@ -20,10 +21,21 @@ class CartSession {
             client: 0, // Valor padrão, ajuste conforme necessário
           );
 
-      // Adiciona o novo produto
-      cart.cartItems.add(product);
-      // Atualiza o valor total
-      cart.itensPrice += product.unityPrice * product.quantityToBuy;
+      // Verifica se o produto já está no carrinho
+      final existingProductIndex = cart.cartItems.indexWhere(
+        (item) => item.id == product.id,
+      );
+
+      if (existingProductIndex != -1) {
+        cart.cartItems[existingProductIndex].quantityToBuy += 1;
+      } else {
+        cart.cartItems.add(product);
+      }
+
+      cart.itensPrice = cart.cartItems.fold(
+        0.0,
+        (total, item) => total + (item.unityPrice * item.quantityToBuy),
+      );
 
       // Salva o carrinho atualizado
       await prefs.setString(_cartKey, jsonEncode(cart.toJson()));
