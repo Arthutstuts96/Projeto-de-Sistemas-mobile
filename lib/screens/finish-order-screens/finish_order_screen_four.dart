@@ -24,7 +24,7 @@ class _FinishOrderScreenFourState extends State<FinishOrderScreenFour> {
     widget.order.descricao = _controller.text;
     widget.order.criadoEm = DateTime.now();
     widget.order.statusPagamento = "pendente";
-    widget.order.statusPedido = "ativo";
+    widget.order.statusPedido = "pendente";
 
     final orderSent = await _orderController.saveOrder(order: widget.order);
 

@@ -3,6 +3,7 @@ import 'package:projeto_de_sistemas/controllers/login_controller.dart';
 import 'package:projeto_de_sistemas/controllers/user_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/users/user.dart';
 import 'package:projeto_de_sistemas/screens/components/profile/options_buttons.dart';
+import 'package:projeto_de_sistemas/screens/components/register/button.dart';
 import 'package:projeto_de_sistemas/screens/profile_screens/address_screen.dart';
 import 'package:projeto_de_sistemas/screens/profile_screens/help_screen.dart';
 import 'package:projeto_de_sistemas/screens/profile_screens/my_account_screen.dart';
@@ -54,13 +55,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onPressed: () => Navigator.of(context).pop(),
                 child: const Text('Cancelar'),
               ),
-              ElevatedButton(
+              Button(
                 onPressed: () {
                   Navigator.of(context).pop();
                   _logout(context);
                 },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                child: const Text('Sair'),
+                color: Colors.red,
+                text: 'Sair',
+                padding: const EdgeInsets.symmetric(
+                  vertical: 4,
+                  horizontal: 12,
+                ),
               ),
             ],
           ),
@@ -72,9 +77,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (currentUser == null) {
       return Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text(
               "Usuário não encontrado: Por favor, tente entrar novamente",
+              textAlign: TextAlign.center,
             ),
             OptionsButtons(
               text: "Sair",
@@ -159,7 +167,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return MyAccountScreen(title: "Minha conta");
+                          return MyAccountScreen(
+                            title: "Minha conta",
+                            user: currentUser,
+                          );
                         },
                       ),
                     );
@@ -197,11 +208,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   },
                 ),
                 const Divider(),
-                const OptionsButtons(
-                  text: "Meus cartões",
-                  icon: Icons.credit_score,
-                ),
-                const Divider(),
+                // const OptionsButtons(
+                //   text: "Meus cartões",
+                //   icon: Icons.credit_score,
+                // ),
+                // const Divider(),
                 OptionsButtons(
                   text: "Ajuda",
                   icon: Icons.help_outlined,

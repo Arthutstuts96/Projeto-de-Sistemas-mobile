@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/domain/models/users/user.dart';
 
 class MyAccountScreen extends StatelessWidget {
-  const MyAccountScreen({super.key, required this.title});
+  const MyAccountScreen({super.key, required this.title, this.user});
   final String title;
+  final User? user;
 
   @override
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> accountOptions = [
       {
         'title': 'Dados Pessoais',
-        'description': 'Visualize e edite seu nome, email e CPF.',
+        'description': 'Visualize seu nome, email e CPF.',
         'onTap': () {
-          // Navigator.pushNamed(context, '/personal_data');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PersonalData(currentUser: user),
+            ),
+          );
         },
       },
       // Você pode adicionar mais opções abaixo conforme necessário
@@ -46,6 +53,7 @@ class MyAccountScreen extends StatelessWidget {
             ),
             onPressed: item['onTap'],
             child: Column(
+              spacing: 4,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -56,18 +64,65 @@ class MyAccountScreen extends StatelessWidget {
                     color: Colors.black,
                   ),
                 ),
-                const SizedBox(height: 4),
                 Text(
                   item['description'],
-                  style: TextStyle(
-                    color: Colors.grey[700],
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.grey[700], fontSize: 14),
                 ),
               ],
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class PersonalData extends StatelessWidget {
+  const PersonalData({super.key, this.currentUser});
+  final User? currentUser;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Dados pessoais")),
+      body: Column(
+        children: [
+          ListTile(
+            title: const Text("Nome", style: TextStyle(fontSize: 16)),
+            subtitle: Text(
+              currentUser!.completeName,
+              style: const TextStyle(color: Color.fromARGB(255, 116, 116, 116)),
+            ),
+          ),
+          ListTile(
+            title: const Text("CPF", style: TextStyle(fontSize: 16)),
+            subtitle: Text(
+              currentUser!.cpf,
+              style: const TextStyle(color: Color.fromARGB(255, 116, 116, 116)),
+            ),
+          ),
+          ListTile(
+            title: const Text("Email", style: TextStyle(fontSize: 16)),
+            subtitle: Text(
+              currentUser!.email,
+              style: const TextStyle(color: Color.fromARGB(255, 116, 116, 116)),
+            ),
+          ),
+          ListTile(
+            title: const Text("Telefone", style: TextStyle(fontSize: 16)),
+            subtitle: Text(
+              currentUser!.phone != "" ? currentUser!.phone : "Não informado",
+              style: const TextStyle(color: Color.fromARGB(255, 116, 116, 116)),
+            ),
+          ),
+          ListTile(
+            title: const Text("Senha", style: TextStyle(fontSize: 16)),
+            subtitle: Text(
+              '*' * currentUser!.password.length,
+              style: const TextStyle(color: Color.fromARGB(255, 116, 116, 116)),
+            ),
+          ),
+        ],
       ),
     );
   }

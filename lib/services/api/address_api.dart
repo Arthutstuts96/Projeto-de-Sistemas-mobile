@@ -27,7 +27,7 @@ class AddressApi {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data;
-        return data.map<Address>((json) => Address.fromJson(json)).toList();
+        return data.map<Address>((json) => Address.fromMap(json)).toList();
       } else {
         throw Exception('Erro ao buscar endereços: ${response.statusCode}');
       }
@@ -49,21 +49,21 @@ class AddressApi {
       if (token == null) {
         throw Exception('Token não encontrado. Usuário não autenticado.');
       }
+      final body = {
+        'user_email': address.user?.email,
+        'city': address.city,
+        'state': address.state,
+        'street': address.street,
+        'number': address.number,
+        'quadra': address.quadra,
+        'lote': address.lote,
+        'reference': address.reference,
+        'observation': address.observation,
+      };
 
-      print(address);
       final response = await _dio.post(
-        '$ipHost/users/addresses',
-        data: {
-          'user_email': address.user.email,
-          'city': address.city,
-          'state': address.state,
-          'street': address.street,
-          'number': address.number,
-          'quadra': address.quadra,
-          'lote': address.lote,
-          'reference': address.reference,
-          'observation': address.observation,
-        },
+        '$ipHost/users/addresses/',
+        data: body,
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',
@@ -77,7 +77,6 @@ class AddressApi {
         return false;
       }
     } catch (e) {
-      print(e);
       return false;
     }
   }

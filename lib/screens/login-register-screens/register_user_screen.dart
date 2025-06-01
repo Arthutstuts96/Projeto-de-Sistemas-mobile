@@ -33,7 +33,6 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
     'email': TextEditingController(),
     'cep': TextEditingController(),
     'street': TextEditingController(),
-    'neighbourhood': TextEditingController(),
     'city': TextEditingController(),
     'state': TextEditingController(),
     'usuario': TextEditingController(),
@@ -251,11 +250,6 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
               label: "Rua",
               controller: controllers['street']!,
               placeholder: "Nome da rua",
-            ),
-            FormInput(
-              label: "Bairro",
-              controller: controllers['neighbourhood']!,
-              placeholder: "Bairro",
             ),
             FormInput(
               label: "Cidade",

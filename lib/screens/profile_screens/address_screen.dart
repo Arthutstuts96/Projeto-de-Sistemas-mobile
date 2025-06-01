@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/address_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/users/address.dart';
 import 'package:projeto_de_sistemas/domain/models/users/user.dart';
-import 'package:projeto_de_sistemas/screens/components/register/button.dart';
+import 'package:projeto_de_sistemas/utils/widgets/address_dialog.dart';
 
 class AddressScreen extends StatefulWidget {
   const AddressScreen({super.key, required this.title, required this.user});
@@ -26,10 +26,11 @@ class _AdressScreenState extends State<AddressScreen> {
   }
 
   Future<void> refreshAddresses() async {
+    final newList = await _addressController.getAllAddressesByUserEmail(
+      user: widget.user,
+    );
     setState(() {
-      addressListFuture = _addressController.getAllAddressesByUserEmail(
-        user: widget.user,
-      );
+      addressListFuture = Future.value(newList);
     });
   }
 
@@ -43,7 +44,9 @@ class _AdressScreenState extends State<AddressScreen> {
           future: addressListFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                child: CircularProgressIndicator(color: Color(0xFFFFAA00)),
+              );
             } else if (snapshot.hasError) {
               return Center(child: Text('Erro: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -51,13 +54,18 @@ class _AdressScreenState extends State<AddressScreen> {
             } else {
               final addresses = snapshot.data!;
               return ListView.builder(
+                key: UniqueKey(),
                 padding: const EdgeInsets.all(16),
                 itemCount: addresses.length,
                 itemBuilder: (context, index) {
                   final address = addresses[index];
                   return ListTile(
-                    title: Text(address.street),
-                    subtitle: Text('${address.city} - ${address.state}'),
+                    title: Text(
+                      "Quadra ${address.quadra}, Lote ${address.lote}",
+                    ),
+                    subtitle: Text(
+                      '${address.city} - ${address.state}\n${address.street}',
+                    ),
                     leading: const Icon(Icons.location_on),
                   );
                 },
@@ -66,33 +74,19 @@ class _AdressScreenState extends State<AddressScreen> {
           },
         ),
       ),
-      floatingActionButton: Button(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          final bool response = await _addressController.saveAddress(
-            address: Address(
-              user: widget.user,
-              city: "city",
-              state: "state",
-              street: "street",
-              number: "number",
-              neighborhood: "neighborhood",
-              quadra: "quadra",
-              lote: "lote",
-              reference: "reference",
-              observation: "observation",
-            ),
-          );
-          if (response) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text("cadastrado com sucesso")));
-          } else {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text("O cadastro deu errado. Por favor, tente novamente")));
+          final success = await showAddressDialog(context, widget.user);
+          if (success) {
+            await refreshAddresses();
           }
         },
-        text: "Cadastrar novo endereço",
+        backgroundColor: Colors.blue,
+        label: Text(
+          "Cadastrar novo endereço",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        icon: Icon(Icons.add_location_alt, color: Colors.white),
       ),
     );
   }
