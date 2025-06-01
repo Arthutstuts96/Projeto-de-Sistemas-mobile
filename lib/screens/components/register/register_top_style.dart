@@ -24,7 +24,7 @@ class RegisterTopStyle extends StatelessWidget {
                 color: Color.fromARGB(255, 44, 44, 44),
               ),
             ),
-            Image.asset("assets/images/logo.png", width: 280),
+            Image.asset("assets/images/girl/logo.png", width: 280),
           ],
         ),
         Text(

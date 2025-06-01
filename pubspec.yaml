@@ -30,6 +30,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/images/girl/
     - assets/images/GPS.png
     - assets/images/delivery.png
     - assets/images/choose_screen_background.jpg

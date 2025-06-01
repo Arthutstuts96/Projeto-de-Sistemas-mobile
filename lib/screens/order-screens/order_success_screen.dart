@@ -15,7 +15,7 @@ class OrderSuccessScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           spacing: 12,
           children: [
-            Image.asset("assets/images/girl_success_jumping.png", width: 160),
+            Image.asset("assets/images/girl/girl_success_jumping.png", width: 160),
             const Text(
               "Sucesso!",
               style: TextStyle(

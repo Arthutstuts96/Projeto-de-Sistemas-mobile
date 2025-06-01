@@ -33,7 +33,6 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
     'email': TextEditingController(),
     'cep': TextEditingController(),
     'street': TextEditingController(),
-    'neighbourhood': TextEditingController(),
     'city': TextEditingController(),
     'state': TextEditingController(),
     'usuario': TextEditingController(),
@@ -253,11 +252,6 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
               placeholder: "Nome da rua",
             ),
             FormInput(
-              label: "Bairro",
-              controller: controllers['neighbourhood']!,
-              placeholder: "Bairro",
-            ),
-            FormInput(
               label: "Cidade",
               controller: controllers['city']!,
               placeholder: "Palmas",
@@ -439,7 +433,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
           ),
           Button(
             onPressed: () async {
-              final success = await registerController.saveUser(
+              final success = await registerController.saveClientUser(
                 user: mapFormDataToUser(),
               );
               if (success) {

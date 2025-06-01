@@ -64,6 +64,7 @@ class _MarketScreenState extends State<MarketScreen> {
                 spacing: 8,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Image.asset("assets/images/market_image_placeholder.jpg"),
                   Text(
                     widget.market.name!,
                     style: const TextStyle(
@@ -96,7 +97,6 @@ class _MarketScreenState extends State<MarketScreen> {
                 ],
               ),
             ),
-            Image.asset("assets/images/market_image_placeholder.jpg"),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Column(
@@ -176,7 +176,7 @@ class _MarketScreenState extends State<MarketScreen> {
                         Opacity(
                           opacity: 0.5,
                           child: Image.asset(
-                            "assets/images/no_itens_in_bag.png",
+                            "assets/images/girl/no_itens_in_bag.png",
                             width: 250,
                           ),
                         ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/controllers/user_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order.dart';
 import 'package:projeto_de_sistemas/screens/components/register/button.dart';
+import 'package:projeto_de_sistemas/utils/widgets/address_dialog.dart';
 import 'package:projeto_de_sistemas/utils/widgets/select_time.dart';
 
 // ignore: must_be_immutable
@@ -18,7 +20,9 @@ class FinishOrderScreenOne extends StatefulWidget {
 }
 
 class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
+  //TODO: colocar o id do endereço que o usuário tiver esvolhido no form da entrega
   String _address = "Endereço não definido";
+  final UserController _userController = UserController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,57 +39,20 @@ class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
             const Icon(Icons.location_on_outlined, size: 24),
             const SizedBox(width: 4),
             Expanded(child: Text(_address, overflow: TextOverflow.ellipsis)),
+            //TODO: buscar endereços cadastrados desse usuário
+            Icon(Icons.arrow_drop_down)
           ],
         ),
         SizedBox(
           width: double.infinity,
           child: Button(
-            onPressed: () {
-              String tempAddress = _address;
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: const Text("Alterar endereço"),
-                    content: TextFormField(
-                      initialValue: tempAddress,
-                      onChanged: (value) => tempAddress = value,
-                      decoration: const InputDecoration(
-                        labelText: "Novo endereço",
-                        hintText: "Digite seu novo endereço",
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: const Text(
-                          "Cancelar",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
-                      Button(
-                        onPressed: () {
-                          final newAddress = tempAddress.trim();
-                          if (newAddress.isNotEmpty) {
-                            setState(() {
-                              _address = newAddress;
-
-                              widget.order.enderecoEntrega =
-                                  _address;
-                            });
-                            Navigator.of(context).pop();
-                          }
-                        },
-                        text: "Salvar",
-                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-                      ),
-                    ],
-                  );
-                },
-              );
+            onPressed: () async {
+              final user = await _userController.getCurrentUserFromSession();
+              if (user != null) {
+                showAddressDialog(context, user);
+              }
             },
-            text: "Trocar endereço",
+            text: "Colocar novo endereço",
           ),
         ),
         const SizedBox(height: 16),

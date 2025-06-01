@@ -1,7 +1,7 @@
 import 'package:projeto_de_sistemas/domain/models/products/cart.dart';
 import 'package:projeto_de_sistemas/domain/models/products/product.dart';
 import 'package:projeto_de_sistemas/domain/repository/cart_repository.dart';
-import 'package:projeto_de_sistemas/services/session/cart.dart';
+import 'package:projeto_de_sistemas/services/session/cart_session.dart';
 
 class CartController implements CartRepository {
   final CartSession _cartSession = CartSession();

@@ -4,7 +4,7 @@ import 'package:projeto_de_sistemas/domain/models/products/product.dart';
 import 'package:projeto_de_sistemas/screens/components/buttons/back_button.dart';
 import 'package:projeto_de_sistemas/screens/main_screen.dart'; // Para a BottomNavigationBar
 import 'package:projeto_de_sistemas/controllers/cart_controller.dart'; // Seu CartController // Para o card de produto
-import 'package:projeto_de_sistemas/services/api/products_home.dart'; // Seu serviço de API para buscar produtos
+import 'package:projeto_de_sistemas/services/api/products_home_api.dart'; // Seu serviço de API para buscar produtos
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
