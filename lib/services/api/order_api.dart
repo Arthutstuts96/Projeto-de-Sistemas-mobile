@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order.dart';
-import 'package:projeto_de_sistemas/services/session/order.dart';
+import 'package:projeto_de_sistemas/services/session/order_session.dart';
 import 'package:projeto_de_sistemas/utils/api_configs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

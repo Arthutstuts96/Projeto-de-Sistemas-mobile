@@ -42,7 +42,7 @@ class LoginScreen extends StatelessWidget {
                         Transform.translate(
                           offset: const Offset(0, -45),
                           child: Image.asset(
-                            "assets/images/logo_login.png",
+                            "assets/images/girl/logo_login.png",
                             height: 300,
                             width: 300,
                           ),

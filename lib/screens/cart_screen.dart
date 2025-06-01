@@ -105,7 +105,7 @@ class _CartScreenState extends State<CartScreen> {
                       Opacity(
                         opacity: 0.5,
                         child: Image.asset(
-                          "assets/images/no_itens_in_bag.png",
+                          "assets/images/girl/no_itens_in_bag.png",
                           width: 250,
                         ),
                       ),

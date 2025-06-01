@@ -12,7 +12,7 @@ import 'package:projeto_de_sistemas/screens/login-register-screens/splash_screen
 import 'package:projeto_de_sistemas/screens/login-register-screens/login_screen.dart';
 import 'package:projeto_de_sistemas/screens/home_screen.dart';
 import 'package:projeto_de_sistemas/screens/main_screen.dart';
-import 'package:projeto_de_sistemas/screens/perfil_screen.dart';
+import 'package:projeto_de_sistemas/screens/profile_screen.dart';
 import 'package:projeto_de_sistemas/screens/deliveryhome_screen.dart';
 
 void main() {
@@ -50,7 +50,7 @@ class TrazAi extends StatelessWidget {
         "login_screen": (context) => LoginScreen(),
         "home_screen": (context) => HomeScreen(),
         "main_screen": (context) => MainScreen(),
-        "perfil_screen": (context) => PerfilScreen(),
+        "perfil_screen": (context) => ProfileScreen(),
         "delivery_screen": (context) => const DeliveryHomeScreen(),
         "cart": (context) => CartScreen(),
         "search_products": (context) => SearchProductsScreen(),
@@ -58,7 +58,7 @@ class TrazAi extends StatelessWidget {
         "finish_order_screen": (context) => FinishOrderScreen(),
         "product_screen": (context) => ProductScreen(),
       },
-      initialRoute: "splash_screen",
+      initialRoute: "login_screen",
     );
   }
 }
