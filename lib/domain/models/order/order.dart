@@ -13,7 +13,7 @@ class Order {
   String? descricao;
   DateTime? dataPagamento;
   DateTime criadoEm;
-  List<DeliverData>? dadosEntrega;
+  DeliverData? dadosEntrega;
   List<OrderItem> itens;
 
   Order({
@@ -41,7 +41,7 @@ class Order {
     DateTime? dataPagamento,
     DateTime? criadoEm,
     List<OrderItem>? itens,
-    List<DeliverData>? dadosEntrega,
+    DeliverData? dadosEntrega,
   }) {
     return Order(
       enderecoEntrega: enderecoEntrega ?? this.enderecoEntrega,
@@ -70,7 +70,7 @@ class Order {
       'dataPagamento': dataPagamento?.toIso8601String(),
       'criadoEm': criadoEm.toIso8601String(),
       'itens': itens.map((x) => x.toMap()).toList(),
-      'dadosEntrega': dadosEntrega?.map((x) => x.toMap()).toList(),
+      'dadosEntrega': dadosEntrega,
     };
   }
 
@@ -81,29 +81,26 @@ class Order {
       usuario: map['usuario'],
       statusPagamento: map['statusPagamento'] as String,
       statusPedido: map['statusPedido'] as String,
-      valorTotal: map['valorTotal'] is int
-          ? (map['valorTotal'] as int).toDouble()
-          : map['valorTotal'] as double,
+      valorTotal:
+          map['valorTotal'] is int
+              ? (map['valorTotal'] as int).toDouble()
+              : map['valorTotal'] as double,
       descricao: map['descricao'],
-      dataPagamento: map['dataPagamento'] != null
-          ? DateTime.parse(map['dataPagamento'])
-          : null,
+      dataPagamento:
+          map['dataPagamento'] != null
+              ? DateTime.parse(map['dataPagamento'])
+              : null,
       criadoEm: DateTime.parse(map['criadoEm']),
       itens: List<OrderItem>.from(
         (map['itens'] as List).map((x) => OrderItem.fromMap(x)),
       ),
-      dadosEntrega: map['dadosEntrega'] != null
-          ? List<DeliverData>.from(
-              (map['dadosEntrega'] as List).map((x) => DeliverData.fromMap(x)),
-            )
-          : null,
+      dadosEntrega: map['dadosEntrega'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Order.fromJson(String source) =>
-      Order.fromMap(json.decode(source));
+  factory Order.fromJson(String source) => Order.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -125,7 +122,7 @@ class Order {
         other.dataPagamento == dataPagamento &&
         other.criadoEm == criadoEm &&
         listEquals(other.itens, itens) &&
-        listEquals(other.dadosEntrega, dadosEntrega);
+        other.dadosEntrega == dadosEntrega;
   }
 
   @override

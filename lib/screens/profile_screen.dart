@@ -143,7 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       context,
                     ).showSnackBar(const SnackBar(content: Text("data")));
                   },
-                  child: const CircleAvatar(
+                  child: const CircleAvatar(                   
                     backgroundImage: AssetImage(
                       "assets/images/choose_screen_background.jpg",
                     ),

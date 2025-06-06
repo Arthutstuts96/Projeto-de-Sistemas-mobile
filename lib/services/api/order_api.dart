@@ -32,15 +32,7 @@ class OrderApi {
           "descricao": order.descricao,
           "data_pagamento": order.dataPagamento?.toIso8601String(),
           "criado_em": order.criadoEm.toIso8601String(),
-          "dados_entrega":
-              order.dadosEntrega
-                  ?.map(
-                    (d) => {
-                      "tipo_veiculo": d.tipoVeiculo,
-                      "endereco_id": d.enderecoId,
-                    },
-                  )
-                  .toList(),
+          "dados_entrega": order.dadosEntrega,
           "itens":
               order.itens
                   .map(

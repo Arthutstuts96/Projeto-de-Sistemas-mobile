@@ -1,5 +1,6 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/screens/main_shopper_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:projeto_de_sistemas/controllers/active_delivery_controller.dart'; 
 import 'package:projeto_de_sistemas/controllers/products_controller.dart';
@@ -18,7 +19,7 @@ import 'package:projeto_de_sistemas/screens/deliveryhome_screen.dart';
 void main() {
   runApp(
     DevicePreview(
-      enabled: false,
+      enabled: true,
       tools: [...DevicePreview.defaultTools],
       builder: (context) => MultiProvider( // 3. ADICIONE O MULTIPROVIDER (ou ChangeNotifierProvider se for só um)
         providers: [
@@ -50,6 +51,7 @@ class TrazAi extends StatelessWidget {
         "login_screen": (context) => LoginScreen(),
         "home_screen": (context) => HomeScreen(),
         "main_screen": (context) => MainScreen(),
+        "main_shopper_screen": (context) => MainShopperScreen(),
         "perfil_screen": (context) => ProfileScreen(),
         "delivery_screen": (context) => const DeliveryHomeScreen(),
         "cart": (context) => CartScreen(),
@@ -58,7 +60,7 @@ class TrazAi extends StatelessWidget {
         "finish_order_screen": (context) => FinishOrderScreen(),
         "product_screen": (context) => ProductScreen(),
       },
-      initialRoute: "main_screen",
+      initialRoute: "main_shopper_screen",
     );
   }
 }

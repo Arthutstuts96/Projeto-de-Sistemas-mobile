@@ -30,7 +30,7 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
     valorTotal: 0.0,
     criadoEm: DateTime.now(),
     itens: [],
-    dadosEntrega: [],
+    dadosEntrega: null,
   );
 
   @override
