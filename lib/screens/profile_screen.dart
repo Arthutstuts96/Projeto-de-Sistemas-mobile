@@ -143,7 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       context,
                     ).showSnackBar(const SnackBar(content: Text("data")));
                   },
-                  child: const CircleAvatar(                   
+                  child: const CircleAvatar(
                     backgroundImage: AssetImage(
                       "assets/images/choose_screen_background.jpg",
                     ),
@@ -158,7 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
               children: [
-                verifyAccountContainer(),
+                VerifyAccountBanner(currentUser: currentUser!),
                 OptionsButtons(
                   text: "Minha conta",
                   icon: Icons.person,
@@ -185,9 +185,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   },
                 ),
                 const Divider(),
-                const OptionsButtons(
+                OptionsButtons(
                   text: "Entrar como separador",
                   icon: Icons.person_search_rounded,
+                  onClick: () {
+                    Navigator.pushNamed(context, 'main_shopper_screen');
+                  },
                 ),
                 const Divider(),
                 OptionsButtons(
@@ -243,64 +246,92 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+}
 
-  Widget verifyAccountContainer() {
-    if (verifiedAccount) {
-      return Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        padding: const EdgeInsets.only(bottom: 12),
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment(0.8, 1),
-            colors: <Color>[
-              Color.fromARGB(255, 207, 53, 79),
-              Color.fromARGB(255, 228, 168, 198),
-            ],
-          ),
-        ),
-        child: Row(
-          spacing: 8,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.asset(
-              "assets/images/girl/girl_verify_account.png",
-              width: 100,
-            ),
-            Expanded(
-              child: Column(
-                spacing: 4,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 20),
-                  Text(
-                    "${currentUser!.firstName}, Deixe sua conta mais segura verificando ela por aqui",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w200,
-                      color: Colors.white,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      launchUrl(Uri.parse(ipHost));
-                    },
-                    child: const Text(
-                      "Verificar conta",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w200,
-                        color: Color(0xFF0000FF),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+class VerifyAccountBanner extends StatefulWidget {
+  final User currentUser;
+
+  const VerifyAccountBanner({super.key, required this.currentUser});
+
+  @override
+  State<VerifyAccountBanner> createState() => _VerifyAccountBannerState();
+}
+
+class _VerifyAccountBannerState extends State<VerifyAccountBanner> {
+  bool showBanner = true;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!showBanner) {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment(0.8, 1),
+          colors: <Color>[
+            Color.fromARGB(255, 207, 53, 79),
+            Color.fromARGB(255, 228, 168, 198),
           ],
         ),
-      );
-    }
-    return const SizedBox.shrink();
+      ),
+      child: Stack(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.asset(
+                "assets/images/girl/girl_verify_account.png",
+                width: 100,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    Text(
+                      "${widget.currentUser.firstName}, Deixe sua conta mais segura verificando ela por aqui",
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w200,
+                        color: Colors.white,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        launchUrl(Uri.parse(ipHost));
+                      },
+                      child: const Text(
+                        "Verificar conta",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w200,
+                          color: Color(0xFF0000FF),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            top: -8,
+            right: -8,
+            child: IconButton(
+              icon: const Icon(Icons.close, color: Colors.white),
+              onPressed: () {
+                setState(() {
+                  showBanner = false;
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

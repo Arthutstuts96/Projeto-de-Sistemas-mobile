@@ -3,7 +3,7 @@ import 'package:projeto_de_sistemas/controllers/cart_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/products/cart.dart';
 import 'package:projeto_de_sistemas/screens/components/modals/bottom_modal.dart';
 import 'package:projeto_de_sistemas/screens/components/products/cart_product.dart';
-import 'package:projeto_de_sistemas/screens/order-screens/finish_order_screen.dart';
+import 'package:projeto_de_sistemas/screens/finish-order-screens/finish_order_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});

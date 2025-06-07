@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:projeto_de_sistemas/controllers/active_delivery_controller.dart'; 
 import 'package:projeto_de_sistemas/controllers/products_controller.dart';
 import 'package:projeto_de_sistemas/screens/cart_screen.dart';
-import 'package:projeto_de_sistemas/screens/order-screens/finish_order_screen.dart';
+import 'package:projeto_de_sistemas/screens/finish-order-screens/finish_order_screen.dart';
 import 'package:projeto_de_sistemas/screens/order-screens/order_screen.dart';
 import 'package:projeto_de_sistemas/screens/product_screen.dart';
 import 'package:projeto_de_sistemas/screens/search_products_screen.dart';
@@ -19,7 +19,7 @@ import 'package:projeto_de_sistemas/screens/deliveryhome_screen.dart';
 void main() {
   runApp(
     DevicePreview(
-      enabled: true,
+      enabled: false,
       tools: [...DevicePreview.defaultTools],
       builder: (context) => MultiProvider( // 3. ADICIONE O MULTIPROVIDER (ou ChangeNotifierProvider se for só um)
         providers: [

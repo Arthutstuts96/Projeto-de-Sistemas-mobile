@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/screens/profile_screen.dart';
-import 'package:projeto_de_sistemas/screens/shopper_order_screen.dart';
-import 'package:projeto_de_sistemas/screens/shopperhome_screen.dart';
+import 'package:projeto_de_sistemas/screens/shopper/shopper_extract_screen.dart';
+import 'package:projeto_de_sistemas/screens/shopper/shopper_order_screen.dart';
+import 'package:projeto_de_sistemas/screens/shopper/shopperhome_screen.dart';
 
 class MainShopperScreen extends StatefulWidget {
   final int initialIndex;
@@ -19,6 +20,7 @@ class _MainShopperScreenState extends State<MainShopperScreen> {
   final List<Widget> _screens = [
     ShopperHomeScreen(),
     ShopperOrderScreen(),
+    ShopperExtractScreen(),
     ProfileScreen(),
   ];
 
