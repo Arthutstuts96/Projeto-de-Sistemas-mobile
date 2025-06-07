@@ -1,9 +1,14 @@
 // lib/screens/deliveryhome_screen.dart
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../controllers/active_delivery_controller.dart';
-import '../domain/models/delivery_task_mock_model.dart'; // Usando o nome do seu arquivo de model
+import '../domain/models/delivery_task_mock_model.dart';
 import 'components/new_delivery_popup.dart';
+import 'package:geolocator/geolocator.dart';
 
 class DeliveryHomeScreen extends StatefulWidget {
   const DeliveryHomeScreen({super.key});
@@ -13,6 +18,21 @@ class DeliveryHomeScreen extends StatefulWidget {
 }
 
 class _DeliveryHomeScreenState extends State<DeliveryHomeScreen> {
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
+  Future<void> _goToUserLocation() async {
+    await Permission.location.request();
+    Position position = await Geolocator.getCurrentPosition();
+    print(position);
+    GoogleMapController controller = await _controller.future;
+    controller.animateCamera(
+      CameraUpdate.newLatLngZoom(
+        LatLng(position.latitude, position.longitude),
+        16,
+      ),
+    );
+  }
+
   final double _initialChildSize = 0.1;
   final double _minChildSize = 0.1;
   final double _maxChildSize = 0.7;
@@ -87,19 +107,26 @@ class _DeliveryHomeScreenState extends State<DeliveryHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // REMOVIDA A AppBar DAQUI PARA MANTER SUA APARÊNCIA ORIGINAL
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          _goToUserLocation();
+        },
+        child: const Icon(Icons.my_location),
+      ),
       body: Stack(
         children: [
           GestureDetector(
             onTap: _minimizeModal,
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/GPS.png"),
-                  fit: BoxFit.cover,
-                ),
+            child: GoogleMap(
+              zoomControlsEnabled: false,
+              compassEnabled: false,
+              myLocationEnabled: true,
+              onMapCreated:
+                  (GoogleMapController controller) =>
+                      _controller.complete(controller),
+              initialCameraPosition: const CameraPosition(
+                target: LatLng(-23.560334, 45.634915),
+                zoom: 10,
               ),
             ),
           ),
