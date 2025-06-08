@@ -31,6 +31,11 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
     criadoEm: DateTime.now(),
     itens: [],
     dadosEntrega: [],
+    // mercadoLatitude: 0.0,
+    // mercadoLongitude: 0.0,
+    // clientLatitude: 0.0,
+    // clientLongitude: 0.0,
+    enderecoEntrega: '',
   );
 
   @override

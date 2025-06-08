@@ -20,6 +20,9 @@ dependencies:
   pix_flutter: ^2.2.0
   diacritic: ^0.1.6
   provider: ^6.0.0
+  google_maps_flutter: ^2.12.2
+  geolocator: ^14.0.1
+  permission_handler: ^12.0.0+1
 
 dev_dependencies:
   flutter_test:

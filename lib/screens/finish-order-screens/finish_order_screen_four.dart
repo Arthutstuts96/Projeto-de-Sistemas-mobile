@@ -28,6 +28,8 @@ class _FinishOrderScreenFourState extends State<FinishOrderScreenFour> {
 
     final orderSent = await _orderController.saveOrder(order: widget.order);
 
+    print('Retorno de orderSent: $orderSent');
+
     if (!mounted) return;
 
     if (orderSent.toString().startsWith("2")) {
@@ -56,9 +58,13 @@ class _FinishOrderScreenFourState extends State<FinishOrderScreenFour> {
             widget.order.numeroPedido.isNotEmpty
                 ? widget.order.numeroPedido
                 : "PED_SIMULADO",
-        customerName: nomeCliente, // Substitua por nome real se tiver
+        customerName: nomeCliente,
         deliveryAddress: enderecoEntrega,
         itemsSummary: itensResumo,
+        mercadoLatitude: widget.order.mercadoLatitude ?? 0.0,
+        mercadoLongitude: widget.order.mercadoLongitude ?? 0.0,
+        clientLatitude: widget.order.clientLatitude ?? 0.0,
+        clientLongitude: widget.order.clientLongitude ?? 0.0,
       );
 
       ScaffoldMessenger.of(context).showSnackBar(

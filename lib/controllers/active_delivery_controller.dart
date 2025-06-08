@@ -1,12 +1,14 @@
-// lib/controllers/active_delivery_controller.dart
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import '../domain/models/delivery_task_mock_model.dart';
-// Remova o import de 'delivery_task_mocks.dart' se 'obterNovoDeliveryTaskMock' não for mais usado aqui
+import 'package:projeto_de_sistemas/services/navigation_service.dart';
+import 'package:geolocator/geolocator.dart';
 
 class ActiveDeliveryController with ChangeNotifier {
   DeliveryTaskMock? _currentTask;
   bool _popupForCurrentTaskShown = false;
   final String _simulatedDriverId = "driver_beta_01";
+  final NavigationService _navigationService = NavigationService();
 
   DeliveryTaskMock? get currentTask => _currentTask;
 
@@ -16,13 +18,16 @@ class ActiveDeliveryController with ChangeNotifier {
           DeliveryTaskStatusMock.aguardandoAceiteEntregador &&
       !_popupForCurrentTaskShown;
 
-  // MÉTODO MODIFICADO para aceitar dados do pedido
   void simulateNewTaskAvailable({
-    required String orderId, // ID do pedido original do cliente
-    required String
-    customerName, // Nome do cliente (pode ser mockado se não tiver)
-    required String deliveryAddress, // Endereço de entrega
-    required String itemsSummary, // Um resumo dos itens
+    required String orderId,
+    required String customerName,
+    required String deliveryAddress,
+    required String itemsSummary,
+
+    required double mercadoLatitude,
+    required double mercadoLongitude,
+    required double clientLatitude,
+    required double clientLongitude,
   }) {
     if (_currentTask == null ||
         _currentTask!.status == DeliveryTaskStatusMock.entregue) {
@@ -32,6 +37,11 @@ class ActiveDeliveryController with ChangeNotifier {
         enderecoEntrega: deliveryAddress,
         itensResumo: itemsSummary,
         status: DeliveryTaskStatusMock.aguardandoAceiteEntregador,
+
+        mercadoLatitude: mercadoLatitude,
+        mercadoLongitude: mercadoLongitude,
+        clientLatitude: clientLatitude,
+        clientLongitude: clientLongitude,
       );
       _popupForCurrentTaskShown = false;
       print(
@@ -45,7 +55,6 @@ class ActiveDeliveryController with ChangeNotifier {
     }
   }
 
-  // ... resto dos métodos (acceptTask, declineTask, etc. permanecem os mesmos) ...
   void acceptTask() {
     if (_currentTask != null) {
       _currentTask!.status = DeliveryTaskStatusMock.aceitoPeloEntregador;
@@ -95,5 +104,129 @@ class ActiveDeliveryController with ChangeNotifier {
     _currentTask = null;
     _popupForCurrentTaskShown = false;
     notifyListeners();
+  }
+
+  Future<void> startNavigationToMercado(BuildContext context) async {
+    if (currentTask == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Nenhuma tarefa ativa para navegar.")),
+      );
+      return;
+    }
+
+    Position? motoboyLocation;
+    try {
+      motoboyLocation = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+    } catch (e) {
+      print("Erro ao obter localização do motoboy: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Não foi possível obter sua localização atual."),
+        ),
+      );
+      return;
+    }
+
+    if (motoboyLocation == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Localização do motoboy não disponível.")),
+      );
+      return;
+    }
+    final double mercadoLat = currentTask!.mercadoLatitude;
+    final double mercadoLng = currentTask!.mercadoLongitude;
+
+    final bool launched = await _navigationService.navigateTo(
+      startLatitude: motoboyLocation.latitude,
+      startLongitude: motoboyLocation.longitude,
+      endLatitude: mercadoLat,
+      endLongitude: mercadoLng,
+      isToMercado: true,
+    );
+
+    if (launched) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Iniciando navegação para o mercado...")),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Falha ao iniciar navegação. Verifique se Waze ou Google Maps estão instalados.",
+          ),
+        ),
+      );
+    }
+  }
+  Future<void> startNavigationToClient(BuildContext context) async {
+    if (currentTask == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Nenhuma tarefa ativa para navegar até o cliente."),
+        ),
+      );
+      return;
+    }
+
+    // 1. Obter a localização atual do motoboy (origem da rota)
+    // Mesmo que o ideal seja do mercado, para o teste MVP, usamos a do motoboy
+    Position? motoboyLocation;
+    try {
+      motoboyLocation = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+    } catch (e) {
+      print("Erro ao obter localização do motoboy para cliente: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Não foi possível obter sua localização atual para navegar até o cliente.",
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (motoboyLocation == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Localização do motoboy não disponível para navegar até o cliente.",
+          ),
+        ),
+      );
+      return;
+    }
+
+    // 2. Coordenadas do cliente (destino da rota)
+    final double clientLat =
+        currentTask!.clientLatitude!; // Use ! pois já garantiu que não é null
+    final double clientLng = currentTask!.clientLongitude!; //
+
+    // 3. Chamar o serviço de navegação
+    final bool launched = await _navigationService.navigateTo(
+      startLatitude: motoboyLocation.latitude,
+      startLongitude: motoboyLocation.longitude,
+      endLatitude: clientLat,
+      endLongitude: clientLng,
+      isToMercado:
+          false, // <--- Indica que NÃO é para o mercado (é para o cliente)
+    );
+
+    if (launched) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Iniciando navegação para o cliente...")),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Falha ao iniciar navegação. Verifique se Waze ou Google Maps estão instalados.",
+          ),
+        ),
+      );
+    }
   }
 }

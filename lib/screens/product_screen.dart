@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:projeto_de_sistemas/domain/models/products/product.dart';
 import 'package:projeto_de_sistemas/screens/components/buttons/back_button.dart';
 import 'package:projeto_de_sistemas/screens/main_screen.dart'; // Para a BottomNavigationBar
-import 'package:projeto_de_sistemas/controllers/cart_controller.dart'; // Seu CartController // Para o card de produto
-import 'package:projeto_de_sistemas/services/api/products_home_api.dart'; // Seu serviço de API para buscar produtos
+import 'package:projeto_de_sistemas/controllers/cart_controller.dart';
+import 'package:projeto_de_sistemas/services/api/products_home_api.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -332,7 +332,6 @@ class _ProductScreenState extends State<ProductScreen> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: InkWell(
-                            // Permite o clique no card
                             onTap: () {
                               // Navega para a tela do produto relacionado
                               Navigator.push(
