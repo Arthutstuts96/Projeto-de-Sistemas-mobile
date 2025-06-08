@@ -12,6 +12,11 @@ class DeliveryTaskMock {
   final String itensResumo;
   DeliveryTaskStatusMock status;
   String? idEntregadorAtribuido;
+  // Mock das coordenadas de localização dos mercado and clientes
+  final double mercadoLatitude;
+  final double mercadoLongitude;
+  final double clientLatitude;
+  final double clientLongitude;
 
   DeliveryTaskMock({
     required this.id,
@@ -20,5 +25,10 @@ class DeliveryTaskMock {
     required this.itensResumo,
     this.status = DeliveryTaskStatusMock.aguardandoAceiteEntregador,
     this.idEntregadorAtribuido,
+
+    required this.mercadoLatitude,
+    required this.mercadoLongitude,
+    required this.clientLatitude,
+    required this.clientLongitude,
   });
 }
