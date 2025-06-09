@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/cart_controller.dart';
+import 'package:projeto_de_sistemas/domain/models/order/deliver_data.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order_item.dart';
 import 'package:projeto_de_sistemas/domain/models/products/cart.dart';
@@ -30,7 +31,7 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
     valorTotal: 0.0,
     criadoEm: DateTime.now(),
     itens: [],
-    dadosEntrega: [],
+    dadosEntrega: DeliverData(pedidoId: 0, tipoVeiculo: "", enderecoId: 0),
     // mercadoLatitude: 0.0,
     // mercadoLongitude: 0.0,
     // clientLatitude: 0.0,
