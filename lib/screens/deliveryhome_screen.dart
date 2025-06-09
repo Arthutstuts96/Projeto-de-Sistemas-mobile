@@ -1,9 +1,14 @@
-// lib/screens/deliveryhome_screen.dart
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:projeto_de_sistemas/services/location_service.dart';
 import 'package:provider/provider.dart';
 import '../controllers/active_delivery_controller.dart';
-import '../domain/models/delivery_task_mock_model.dart'; // Usando o nome do seu arquivo de model
+import '../domain/models/delivery_task_mock_model.dart';
 import 'components/new_delivery_popup.dart';
+import 'package:geolocator/geolocator.dart';
 
 class DeliveryHomeScreen extends StatefulWidget {
   const DeliveryHomeScreen({super.key});
@@ -13,20 +18,75 @@ class DeliveryHomeScreen extends StatefulWidget {
 }
 
 class _DeliveryHomeScreenState extends State<DeliveryHomeScreen> {
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
+  final LocationService locationService = LocationService();
+  static const CameraPosition _kInitialPosition = CameraPosition(
+    target: LatLng(-23.560334, 45.634915), // Coordenadas de exemplo
+    zoom: 10,
+  );
+
+  CameraPosition _initialCameraPosition = _kInitialPosition;
+  @override
+  void initState() {
+    super.initState();
+    _initializeMapCamera();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAndShowNewTaskPopup();
+    });
+  }
+
+  Future<void> _initializeMapCamera() async {
+    try {
+      Position? lastKnownPosition =
+          await locationService.getLastKnownLocation();
+      if (lastKnownPosition != null) {
+        setState(() {
+          _initialCameraPosition = CameraPosition(
+            target: LatLng(
+              lastKnownPosition.latitude,
+              lastKnownPosition.longitude,
+            ),
+            zoom: 16,
+          );
+        });
+      }
+
+      // 2. Tentar obter a localização atual com mais precisão
+      Position currentPosition = await locationService.getCurrentLocation();
+      if (currentPosition != null && mounted) {
+        setState(() {
+          _initialCameraPosition = CameraPosition(
+            target: LatLng(currentPosition.latitude, currentPosition.longitude),
+            zoom: 16,
+          );
+        });
+        // Se o mapa já estiver criado e você obteve uma nova localização, mova a câmera
+        if (_controller.isCompleted) {
+          GoogleMapController controller = await _controller.future;
+          controller.animateCamera(
+            CameraUpdate.newLatLngZoom(
+              LatLng(currentPosition.latitude, currentPosition.longitude),
+              16,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      print(
+        "Erro ao inicializar câmera do mapa com localização do usuário: $e",
+      );
+      // Em caso de erro (permissão negada, GPS desabilitado), o mapa usará a posição padrão
+      // Você pode mostrar uma SnackBar aqui para informar o usuário.
+    }
+  }
+
   final double _initialChildSize = 0.1;
   final double _minChildSize = 0.1;
   final double _maxChildSize = 0.7;
   int _selectedIndex = 0;
   final DraggableScrollableController _modalController =
       DraggableScrollableController();
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkAndShowNewTaskPopup();
-    });
-  }
 
   void _checkAndShowNewTaskPopup() {
     if (!mounted) return;
@@ -87,20 +147,30 @@ class _DeliveryHomeScreenState extends State<DeliveryHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // REMOVIDA A AppBar DAQUI PARA MANTER SUA APARÊNCIA ORIGINAL
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          _initializeMapCamera();
+        },
+        backgroundColor: const Color(0xFFFFAA00),
+        child: const Icon(Icons.my_location, color: Colors.white),
+      ),
       body: Stack(
         children: [
           GestureDetector(
             onTap: _minimizeModal,
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/GPS.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
+            child: GoogleMap(
+              zoomControlsEnabled: false,
+              compassEnabled: false,
+              mapType: MapType.terrain,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: false,
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+                controller.animateCamera(
+                  CameraUpdate.newCameraPosition(_initialCameraPosition),
+                );
+              },
+              initialCameraPosition: _initialCameraPosition,
             ),
           ),
           DraggableScrollableSheet(
@@ -216,6 +286,21 @@ class _DeliveryHomeScreenState extends State<DeliveryHomeScreen> {
               ),
             ),
             const SizedBox(height: 24),
+
+            if (task.status == DeliveryTaskStatusMock.aceitoPeloEntregador ||
+                task.status ==
+                    DeliveryTaskStatusMock
+                        .aguardandoAceiteEntregador) // Ou ajuste a condição conforme quiser
+              _buildActionButton(
+                context: context,
+                label: 'IR PARA O MERCADO',
+                onPressed: () {
+                  deliveryController.startNavigationToMercado(context);
+                },
+                color: Colors.blueAccent, // Cor para o botão de navegação
+              ),
+            const SizedBox(height: 16),
+
             if (task.status == DeliveryTaskStatusMock.aceitoPeloEntregador)
               _buildActionButton(
                 context: context,
@@ -223,6 +308,22 @@ class _DeliveryHomeScreenState extends State<DeliveryHomeScreen> {
                 onPressed: () => deliveryController.confirmCollection(),
                 color: Colors.orange,
               ),
+
+            if (task.status ==
+                DeliveryTaskStatusMock
+                    .coletadoPeloEntregador) // Mostra após a coleta
+              _buildActionButton(
+                context: context,
+                label: 'NAVEGAR PARA O CLIENTE',
+                onPressed: () {
+                  deliveryController.startNavigationToClient(
+                    context,
+                  ); // Chama o novo método
+                },
+                color: Colors.purple, // Cor diferente para diferenciar
+              ),
+            const SizedBox(height: 16),
+
             if (task.status == DeliveryTaskStatusMock.coletadoPeloEntregador)
               _buildActionButton(
                 context: context,
@@ -519,22 +620,30 @@ class _TopStatusBar extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                      size: 20,
+                  SizedBox(
+                    width: 40,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                      onPressed: () {
+                        if (Navigator.canPop(context)) {
+                          Navigator.pop(context);
+                        }
+                      },
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                     ),
-                    onPressed: () {
-                      if (Navigator.canPop(context)) {
-                        Navigator.pop(context);
-                      }
-                    },
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
                   ),
+
+                  Spacer(flex: 1),
+
+                  
+
                   InkWell(
                     onTap: statusAction,
                     child: DecoratedBox(
@@ -560,6 +669,9 @@ class _TopStatusBar extends StatelessWidget {
                       ),
                     ),
                   ),
+
+                  Spacer(flex: 1),
+                  const SizedBox(width: 12),
                   const Icon(
                     Icons.notifications_none,
                     color: Colors.white,

@@ -5,6 +5,12 @@ import 'deliver_data.dart';
 
 class Order {
   String? enderecoEntrega;
+
+  final double? mercadoLatitude;
+  final double? mercadoLongitude;
+  final double? clientLatitude;
+  final double? clientLongitude;
+
   String numeroPedido;
   int? usuario;
   String statusPagamento;
@@ -28,6 +34,11 @@ class Order {
     required this.criadoEm,
     required this.itens,
     required this.dadosEntrega,
+
+    this.mercadoLatitude = -10.178542485637115,
+    this.mercadoLongitude = -48.33290926223811,
+    this.clientLatitude = -10.232807,
+    this.clientLongitude = -48.322240,
   });
 
   Order copyWith({
@@ -42,6 +53,10 @@ class Order {
     DateTime? criadoEm,
     List<OrderItem>? itens,
     DeliverData? dadosEntrega,
+    double? mercadoLatitude,
+    double? mercadoLongitude,
+    double? clientLatitude,
+    double? clientLongitude,
   }) {
     return Order(
       enderecoEntrega: enderecoEntrega ?? this.enderecoEntrega,
@@ -55,6 +70,10 @@ class Order {
       criadoEm: criadoEm ?? this.criadoEm,
       itens: itens ?? this.itens,
       dadosEntrega: dadosEntrega ?? this.dadosEntrega,
+      mercadoLatitude: mercadoLatitude ?? this.mercadoLatitude,
+      mercadoLongitude: mercadoLongitude ?? this.mercadoLongitude,
+      clientLatitude: clientLatitude ?? this.clientLatitude,
+      clientLongitude: clientLongitude ?? this.clientLongitude,
     );
   }
 
@@ -71,10 +90,20 @@ class Order {
       'criadoEm': criadoEm.toIso8601String(),
       'itens': itens.map((x) => x.toMap()).toList(),
       'dadosEntrega': dadosEntrega,
+      'mercadoLatitude': mercadoLatitude,
+      'mercadoLongitude': mercadoLongitude,
+      'clientLatitude': clientLatitude,
+      'clientLongitude': clientLongitude,
     };
   }
 
   factory Order.fromMap(Map<String, dynamic> map) {
+    // Valores padrão para as coordenadas do mercado e do cliente
+    const double defaultMercadoLat = -10.178542485637115;
+    const double defaultMercadoLon = -48.33290926223811;
+    const double defaultClientLat = -10.232807;
+    const double defaultClientLon = -48.322240;
+
     return Order(
       enderecoEntrega: map['enderecoEntrega'] as String?,
       numeroPedido: map['numeroPedido'] as String,
@@ -95,6 +124,10 @@ class Order {
         (map['itens'] as List).map((x) => OrderItem.fromMap(x)),
       ),
       dadosEntrega: map['dadosEntrega'],
+      mercadoLatitude: map['mercadoLatitude'] as double? ?? defaultMercadoLat,
+      mercadoLongitude: map['mercadoLongitude'] as double? ?? defaultMercadoLon,
+      clientLatitude: map['clientLatitude'] as double? ?? defaultClientLat,
+      clientLongitude: map['clientLongitude'] as double? ?? defaultClientLon,
     );
   }
 
@@ -104,7 +137,7 @@ class Order {
 
   @override
   String toString() {
-    return 'Order(enderecoEntrega: $enderecoEntrega ,numeroPedido: $numeroPedido, usuario: $usuario, statusPagamento: $statusPagamento, statusPedido: $statusPedido, valorTotal: $valorTotal, descricao: $descricao, dataPagamento: $dataPagamento, criadoEm: $criadoEm, itens: $itens, dadosEntrega: $dadosEntrega)';
+    return 'Order(enderecoEntrega: $enderecoEntrega ,numeroPedido: $numeroPedido, usuario: $usuario, statusPagamento: $statusPagamento, statusPedido: $statusPedido, valorTotal: $valorTotal, descricao: $descricao, dataPagamento: $dataPagamento, criadoEm: $criadoEm, itens: $itens, dadosEntrega: $dadosEntrega, mercadoLatitude: $mercadoLatitude, mercadoLongitude: $mercadoLongitude, clientLatitude: $clientLatitude, clientLongitude: $clientLongitude)';
   }
 
   @override
@@ -122,7 +155,11 @@ class Order {
         other.dataPagamento == dataPagamento &&
         other.criadoEm == criadoEm &&
         listEquals(other.itens, itens) &&
-        other.dadosEntrega == dadosEntrega;
+        other.dadosEntrega == dadosEntrega &&
+        other.mercadoLatitude == mercadoLatitude &&
+        other.mercadoLongitude == mercadoLongitude &&
+        other.clientLatitude == clientLatitude &&
+        other.clientLongitude == clientLongitude;
   }
 
   @override
@@ -137,6 +174,10 @@ class Order {
         dataPagamento.hashCode ^
         criadoEm.hashCode ^
         itens.hashCode ^
-        dadosEntrega.hashCode;
+        dadosEntrega.hashCode ^
+        mercadoLatitude.hashCode ^
+        mercadoLongitude.hashCode ^
+        clientLatitude.hashCode ^
+        clientLongitude.hashCode;
   }
 }

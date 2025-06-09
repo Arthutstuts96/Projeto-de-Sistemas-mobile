@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/cart_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/products/cart.dart';
 import 'package:projeto_de_sistemas/screens/components/modals/bottom_modal.dart';
+import 'package:projeto_de_sistemas/screens/components/page_screen_transition.dart';
 import 'package:projeto_de_sistemas/screens/components/products/cart_product.dart';
 import 'package:projeto_de_sistemas/screens/finish-order-screens/finish_order_screen.dart';
 
@@ -68,7 +69,7 @@ class _CartScreenState extends State<CartScreen> {
             fullPrice: fullPrice,
             onPressed: () {
               if (fullPrice != 0) {
-                Navigator.push(context, _createRoute(const FinishOrderScreen()));
+                Navigator.push(context, navigateUsingTransitionFromBelow(const FinishOrderScreen()));
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Não tem nenhum item no carrinho!'), backgroundColor: Colors.redAccent,),
@@ -145,19 +146,4 @@ class _CartScreenState extends State<CartScreen> {
       },
     );
   }
-}
-
-Route _createRoute(Widget page) {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => page,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(0.0, 1.0);
-      const end = Offset.zero;
-      const curve = Curves.ease;
-
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-      return SlideTransition(position: animation.drive(tween), child: child);
-    },
-  );
 }

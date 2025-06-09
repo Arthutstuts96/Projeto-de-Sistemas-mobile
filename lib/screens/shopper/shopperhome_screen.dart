@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/screens/components/page_screen_transition.dart';
+import 'package:projeto_de_sistemas/screens/shopper/accept_order_screen.dart';
 
 class ShopperHomeScreen extends StatelessWidget {
   const ShopperHomeScreen({super.key});
@@ -8,7 +10,6 @@ class ShopperHomeScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          Text("data"),
           DraggableScrollableSheet(
             initialChildSize: 0.3,
             minChildSize: 0.3,
@@ -23,7 +24,7 @@ class ShopperHomeScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Center(child: Icon(Icons.drag_handle, color: Colors.grey)),
-                    Text(
+                    const Text(
                       "Pedidos mais recentes",
                       style: TextStyle(
                         fontSize: 20,
@@ -37,9 +38,9 @@ class ShopperHomeScreen extends StatelessWidget {
                           horizontal: 8,
                           vertical: 12,
                         ),
-                        itemCount: 5,
+                        itemCount: 1,
                         itemBuilder:
-                            (context, index) => OrdersInfos(
+                            (context, index) => const OrdersInfos(
                               imagePath:
                                   "assets/images/choose_screen_background.jpg",
                               title: "Supermercado Maior • A 4,4km de você",
@@ -72,6 +73,9 @@ class OrdersInfos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: (){
+        Navigator.push(context, navigateUsingTransitionFromBelow(const AcceptOrderScreen()));
+      },
       leading: CircleAvatar(backgroundImage: AssetImage(imagePath)),
       title: Text(
         title,

@@ -15,23 +15,15 @@ class ShopperOrderScreen extends StatefulWidget {
 
 class _ShopperOrderScreenState extends State<ShopperOrderScreen> {
   Order? order = Order(
-    numeroPedido: "243242342343414",
+    numeroPedido: "ORDER_342343414",
     statusPagamento: "pendente",
     statusPedido: "pendente",
     valorTotal: 213.32,
     criadoEm: DateTime.now(),
-    descricao: "Quero mais é que você se foda meu amigo",
+    descricao: "Quero as bananas verdes!",
     itens: [
       OrderItem(quantidade: 1, precoUnitario: 10.00, disponibilidade: true),
       OrderItem(quantidade: 1, precoUnitario: 5.00, disponibilidade: true),
-      OrderItem(quantidade: 1, precoUnitario: 10.00, disponibilidade: true),
-      OrderItem(quantidade: 1, precoUnitario: 10.00, disponibilidade: true),
-      OrderItem(quantidade: 1, precoUnitario: 10.00, disponibilidade: true),
-      OrderItem(quantidade: 1, precoUnitario: 10.00, disponibilidade: true),
-      OrderItem(quantidade: 1, precoUnitario: 10.00, disponibilidade: true),
-      OrderItem(quantidade: 1, precoUnitario: 10.00, disponibilidade: true),
-      OrderItem(quantidade: 1, precoUnitario: 10.00, disponibilidade: true),
-      OrderItem(quantidade: 1, precoUnitario: 10.00, disponibilidade: true),
       OrderItem(quantidade: 1, precoUnitario: 10.00, disponibilidade: true),
     ],
     dadosEntrega: DeliverData(pedidoId: 0, tipoVeiculo: "", enderecoId: 0),
@@ -43,7 +35,7 @@ class _ShopperOrderScreenState extends State<ShopperOrderScreen> {
     return Scaffold(
       appBar: AppBar(
         actionsPadding: const EdgeInsets.symmetric(horizontal: 8),
-        backgroundColor: Color.fromARGB(255, 228, 35, 35),
+        backgroundColor: const Color.fromARGB(255, 228, 35, 35),
         title: const Text(
           "Pedido atual",
           style: TextStyle(
@@ -65,7 +57,7 @@ class _ShopperOrderScreenState extends State<ShopperOrderScreen> {
       ),
       body:
           order == null
-              ? Center(
+              ? const Center(
                 child: Text(
                   "Você não está separando nenhum pedido no momento",
                   textAlign: TextAlign.center,
@@ -83,16 +75,16 @@ class _ShopperOrderScreenState extends State<ShopperOrderScreen> {
                         Column(
                           spacing: 4,
                           children: [
-                            IconRow(
+                            const IconRow(
                               title: "Cliente: Null",
                               icon: Icon(Icons.person, size: 20),
                             ),
                             IconRow(
                               title:
                                   "Ativo desde: ${order!.criadoEm.toLocal().toString()}",
-                              icon: Icon(Icons.timer, size: 20),
+                              icon: const Icon(Icons.timer, size: 20),
                             ),
-                            IconRow(
+                            const IconRow(
                               title: "Comentário do cliente:",
                               icon: Icon(Icons.chat, size: 20),
                             ),
@@ -101,8 +93,8 @@ class _ShopperOrderScreenState extends State<ShopperOrderScreen> {
                         Container(
                           width: MediaQuery.of(context).size.width * 0.95,
                           height: 28 * 3, //3 linhas
-                          margin: EdgeInsets.all(4),
-                          padding: EdgeInsets.all(8),
+                          margin: const EdgeInsets.all(4),
+                          padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                             color: const Color.fromARGB(255, 155, 191, 255),
@@ -121,14 +113,14 @@ class _ShopperOrderScreenState extends State<ShopperOrderScreen> {
                   Flexible(child: OrderDetailsUnchecked(order: order)),
                 ],
               ),
-      floatingActionButton: Container(
-        height: 80.0,
-        width: 80.0,
+      floatingActionButton: SizedBox(
+        height: 70.0,
+        width: 70.0,
         child: FittedBox(
           child: FloatingActionButton(
             onPressed: () {},
-            backgroundColor: Color.fromARGB(255, 228, 35, 35),
-            splashColor: Color.fromARGB(255, 255, 81, 0),
+            backgroundColor: const Color.fromARGB(255, 228, 35, 35),
+            splashColor: const Color.fromARGB(255, 255, 81, 0),
             child: SvgPicture.asset(
               "assets/images/shopping_cart.svg",
               semanticsLabel:
