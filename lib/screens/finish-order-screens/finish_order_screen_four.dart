@@ -1,4 +1,3 @@
-// lib/screens/finish-order-screens/finish_order_screen_four.dart
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/order_controller.dart';
 import 'package:projeto_de_sistemas/screens/components/register/button.dart';
@@ -27,8 +26,6 @@ class _FinishOrderScreenFourState extends State<FinishOrderScreenFour> {
     widget.order.statusPedido = "pendente";
 
     final orderSent = await _orderController.saveOrder(order: widget.order);
-
-    print('Retorno de orderSent: $orderSent');
 
     if (!mounted) return;
 
