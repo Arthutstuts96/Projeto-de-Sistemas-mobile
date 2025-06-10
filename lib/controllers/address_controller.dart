@@ -8,11 +8,7 @@ class AddressController implements AdressRepository {
 
   @override
   Future<List<Address>> getAllAddressesByUserEmail({required User user}) async {
-    final addressList = await _addressApi.getAllAdresses();
-    return addressList;
-    // return addressList
-    //     .where((element) => element.user?.email == user.email)
-    //     .toList();
+    return await _addressApi.getAllAdressesByUserEmail();
   }
   
   @override

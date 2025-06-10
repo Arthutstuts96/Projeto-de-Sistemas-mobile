@@ -19,7 +19,7 @@ class Order {
   String? descricao;
   DateTime? dataPagamento;
   DateTime criadoEm;
-  List<DeliverData>? dadosEntrega;
+  DeliverData? dadosEntrega;
   List<OrderItem> itens;
 
   Order({
@@ -52,7 +52,7 @@ class Order {
     DateTime? dataPagamento,
     DateTime? criadoEm,
     List<OrderItem>? itens,
-    List<DeliverData>? dadosEntrega,
+    DeliverData? dadosEntrega,
     double? mercadoLatitude,
     double? mercadoLongitude,
     double? clientLatitude,
@@ -89,7 +89,7 @@ class Order {
       'dataPagamento': dataPagamento?.toIso8601String(),
       'criadoEm': criadoEm.toIso8601String(),
       'itens': itens.map((x) => x.toMap()).toList(),
-      'dadosEntrega': dadosEntrega?.map((x) => x.toMap()).toList(),
+      'dadosEntrega': dadosEntrega,
       'mercadoLatitude': mercadoLatitude,
       'mercadoLongitude': mercadoLongitude,
       'clientLatitude': clientLatitude,
@@ -98,7 +98,6 @@ class Order {
   }
 
   factory Order.fromMap(Map<String, dynamic> map) {
-
     // Valores padrão para as coordenadas do mercado e do cliente
     const double defaultMercadoLat = -10.178542485637115;
     const double defaultMercadoLon = -48.33290926223811;
@@ -124,14 +123,7 @@ class Order {
       itens: List<OrderItem>.from(
         (map['itens'] as List).map((x) => OrderItem.fromMap(x)),
       ),
-      dadosEntrega:
-          map['dadosEntrega'] != null
-              ? List<DeliverData>.from(
-                (map['dadosEntrega'] as List).map(
-                  (x) => DeliverData.fromMap(x),
-                ),
-              )
-              : null,
+      dadosEntrega: map['dadosEntrega'],
       mercadoLatitude: map['mercadoLatitude'] as double? ?? defaultMercadoLat,
       mercadoLongitude: map['mercadoLongitude'] as double? ?? defaultMercadoLon,
       clientLatitude: map['clientLatitude'] as double? ?? defaultClientLat,
@@ -163,7 +155,7 @@ class Order {
         other.dataPagamento == dataPagamento &&
         other.criadoEm == criadoEm &&
         listEquals(other.itens, itens) &&
-        listEquals(other.dadosEntrega, dadosEntrega) &&
+        other.dadosEntrega == dadosEntrega &&
         other.mercadoLatitude == mercadoLatitude &&
         other.mercadoLongitude == mercadoLongitude &&
         other.clientLatitude == clientLatitude &&

@@ -1,4 +1,3 @@
-import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:projeto_de_sistemas/controllers/products_controller.dart';
@@ -263,18 +262,12 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: GridView.count(
         crossAxisCount: controller.searchMode == "market" ? 1 : 2,
-        childAspectRatio:
-            controller.searchMode == "market"
-                ? (MediaQuery.of(context).size.width / (150))
-                : 0.72, // Ajuste para card de mercado
-        shrinkWrap: false, // Deixe o GridView scrollar
-        physics:
-            const AlwaysScrollableScrollPhysics(), // Para funcionar com RefreshIndicator
+        childAspectRatio: controller.searchMode == "market" ? 1.2 : 0.72,
+        shrinkWrap: false,
+        physics: const AlwaysScrollableScrollPhysics(),
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-        padding: const EdgeInsets.only(
-          bottom: 16,
-        ), // Espaço para não colar no final
+        padding: const EdgeInsets.only(bottom: 16),
         children:
             items.map((item) {
               if (controller.searchMode == "item" && item is Product) {
@@ -291,11 +284,6 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
 
   void _showFilterDialog(BuildContext context, String currentFilter) {
     String tempFilter = currentFilter;
-    final searchController = Provider.of<SearchScreenController>(
-      context,
-      listen: false,
-    );
-
     showDialog(
       context: context,
       builder: (dialogContext) {
