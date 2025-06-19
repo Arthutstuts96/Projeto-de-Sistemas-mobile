@@ -3,11 +3,15 @@ import 'package:dio/dio.dart';
 import 'package:projeto_de_sistemas/utils/api_configs.dart';
 
 class RegisterUserApi {
-  final Dio dio = Dio();
+  final Dio _dio;
+
+  RegisterUserApi() : _dio = Dio();
+  // Construtor usado para mockar testes
+  RegisterUserApi.testable({required Dio dio}) : _dio = dio;
 
   Future<bool> saveUser({required User user}) async {
     try {
-      final response = await dio.post(
+      final response = await _dio.post(
         '$ipHost/api/signup/', 
         data: {
           'first_name': user.firstName,
