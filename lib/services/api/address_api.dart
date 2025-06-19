@@ -1,16 +1,30 @@
 import 'package:dio/dio.dart';
 import 'package:projeto_de_sistemas/domain/models/users/address.dart';
+import 'package:projeto_de_sistemas/locator.dart';
 import 'package:projeto_de_sistemas/services/session/user_session.dart';
 import 'package:projeto_de_sistemas/utils/api_configs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddressApi {
-  final Dio _dio = Dio();
+  final Dio _dio;
+  final SharedPreferences _prefs;
+  final UserSession _userSession;
+
+  AddressApi()
+    : _dio = getIt<Dio>(),
+      _prefs = getIt<SharedPreferences>(),
+      _userSession = getIt<UserSession>();
+  AddressApi.testable({
+    required Dio dio,
+    required SharedPreferences prefs,
+    required UserSession userSession,
+  }) : _dio = dio,
+       _prefs = prefs,
+       _userSession = userSession;
 
   Future<List<Address>> getAllAdresses() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('access_token');
+      final token = _prefs.getString('access_token');
 
       if (token == null) {
         throw Exception('Token não encontrado. Usuário não autenticado.');
@@ -44,9 +58,8 @@ class AddressApi {
 
   Future<List<Address>> getAllAdressesByUserEmail() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('access_token');
-      final user = await UserSession().getUserFromSession();
+      final token = _prefs.getString('access_token');
+      final user = await _userSession.getUserFromSession();
 
       if (token == null || user == null) {
         throw Exception('Token não encontrado. Usuário não autenticado.');
@@ -80,8 +93,7 @@ class AddressApi {
 
   Future<bool> saveAddress({required Address address}) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('access_token');
+      final token = _prefs.getString('access_token');
 
       if (token == null) {
         throw Exception('Token não encontrado. Usuário não autenticado.');
@@ -117,6 +129,4 @@ class AddressApi {
       return false;
     }
   }
-
-
 }

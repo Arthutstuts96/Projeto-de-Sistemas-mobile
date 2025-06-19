@@ -1,8 +1,9 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/locator.dart';
 import 'package:projeto_de_sistemas/screens/main_shopper_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:projeto_de_sistemas/controllers/active_delivery_controller.dart'; 
+import 'package:projeto_de_sistemas/controllers/active_delivery_controller.dart';
 import 'package:projeto_de_sistemas/controllers/products_controller.dart';
 import 'package:projeto_de_sistemas/screens/cart_screen.dart';
 import 'package:projeto_de_sistemas/screens/finish-order-screens/finish_order_screen.dart';
@@ -16,21 +17,26 @@ import 'package:projeto_de_sistemas/screens/main_screen.dart';
 import 'package:projeto_de_sistemas/screens/profile_screen.dart';
 import 'package:projeto_de_sistemas/screens/deliveryhome_screen.dart';
 
-void main() {
+Future<void> main() async {
+  // Busca todas as dependências ANTES de iniciar a aplicação
+  WidgetsFlutterBinding.ensureInitialized();
+  await setupLocator();
+
   runApp(
     DevicePreview(
       enabled: false,
       tools: [...DevicePreview.defaultTools],
-      builder: (context) => MultiProvider( // 3. ADICIONE O MULTIPROVIDER (ou ChangeNotifierProvider se for só um)
-        providers: [
-          ChangeNotifierProvider(create: (_) => ActiveDeliveryController()),
-          ChangeNotifierProvider(create: (_) => HomeProductsController()),
-          ChangeNotifierProvider(create: (_) => SearchScreenController()),
-          // Adicione outros providers/controllers aqui se necessário no futuro
-          // Ex: ChangeNotifierProvider(create: (_) => CartController()), // Se seus controllers forem ChangeNotifiers
-        ],
-        child: const TrazAi(),
-      ),
+      builder:
+          (context) => MultiProvider(
+            providers: [
+              ChangeNotifierProvider(create: (_) => ActiveDeliveryController()),
+              ChangeNotifierProvider(create: (_) => HomeProductsController()),
+              ChangeNotifierProvider(create: (_) => SearchScreenController()),
+              // Adicione outros providers/controllers aqui se necessário no futuro
+              // Ex: ChangeNotifierProvider(create: (_) => CartController()), // Se seus controllers forem ChangeNotifiers
+            ],
+            child: const TrazAi(),
+          ),
     ),
   );
 }
@@ -41,10 +47,7 @@ class TrazAi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        fontFamily: 'Poppins',
-        useMaterial3: true,
-      ),
+      theme: ThemeData(fontFamily: 'Poppins', useMaterial3: true),
       debugShowCheckedModeBanner: false,
       routes: {
         "splash_screen": (context) => const SplashScreen(),

@@ -82,11 +82,11 @@ class _AdressScreenState extends State<AddressScreen> {
           }
         },
         backgroundColor: Colors.blue,
-        label: Text(
+        label: const Text(
           "Cadastrar novo endereço",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        icon: Icon(Icons.add_location_alt, color: Colors.white),
+        icon: const Icon(Icons.add_location_alt, color: Colors.white),
       ),
     );
   }
