@@ -34,7 +34,7 @@ class RegisterUserApi {
       return false;
     }
   }
-
+  //TODO: implementar cadastros para os outros tipos de usuário
   // Future<bool> saveClient() async {
   //   return false;
   // }

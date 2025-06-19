@@ -61,7 +61,6 @@ void main() {
     test(
       'deve retornar false quando a API retornar um status code diferente de 201',
       () async {
-        // ARRANGE: Configure o mock para simular uma falha (ex: erro de validação 400)
         when(
           () => mockDio.post(
             any(),
@@ -71,7 +70,7 @@ void main() {
         ).thenAnswer(
           (_) async => Response(
             requestOptions: RequestOptions(path: url),
-            statusCode: 400, // Falha!
+            statusCode: 400, 
           ),
         );
 
