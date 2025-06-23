@@ -1,17 +1,19 @@
 import 'dart:convert';
 import 'package:projeto_de_sistemas/domain/models/products/cart.dart';
 import 'package:projeto_de_sistemas/domain/models/products/product.dart';
+import 'package:projeto_de_sistemas/locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CartSession {
   static const String _cartKey = 'cart';
+  final SharedPreferences _prefs;
+
+  CartSession() : _prefs = getIt<SharedPreferences>();
+  CartSession.testable({required SharedPreferences prefs}) : _prefs = prefs;
 
   // Adiciona um item ao carrinho
   Future<bool> addItemToCart(Product product) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-
-      // Recupera o carrinho atual ou cria um novo
       Cart cart =
           await getCart() ??
           Cart(
@@ -38,7 +40,7 @@ class CartSession {
       );
 
       // Salva o carrinho atualizado
-      await prefs.setString(_cartKey, jsonEncode(cart.toJson()));
+      await _prefs.setString(_cartKey, jsonEncode(cart.toJson()));
       return true;
     } catch (e) {
       return false;
@@ -47,8 +49,7 @@ class CartSession {
 
   // Recupera o carrinho do armazenamento
   Future<Cart?> getCart() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String? cartJson = prefs.getString(_cartKey);
+    final String? cartJson = _prefs.getString(_cartKey);
     if (cartJson != null) {
       return Cart.fromJson(jsonDecode(cartJson));
     }
@@ -57,21 +58,17 @@ class CartSession {
 
   // Salva o carrinho inteiro
   Future<void> saveCart(Cart cart) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_cartKey, jsonEncode(cart.toJson()));
+    await _prefs.setString(_cartKey, jsonEncode(cart.toJson()));
   }
 
   // Função para limpar o carrinho do armazenamento da sessão
   Future<void> deleteCart() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_cartKey);
+    await _prefs.remove(_cartKey);
   }
 
   // Remove um item do carrinho pelo produto e retorna true se bem-sucedido, false caso contrário
   Future<bool> removeItemFromCart(Product product) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      // Recupera o carrinho atual
       Cart? cart = await getCart();
       if (cart == null || cart.cartItems.isEmpty) {
         return false;
@@ -83,12 +80,9 @@ class CartSession {
       if (cart.cartItems.length == initialLength) {
         return false;
       }
-
-      // Atualiza o valor total
       cart.itensPrice -= product.unityPrice * product.quantityToBuy;
 
-      // Salva o carrinho atualizado
-      await prefs.setString(_cartKey, jsonEncode(cart.toJson()));
+      await _prefs.setString(_cartKey, jsonEncode(cart.toJson()));
       return true;
     } catch (e) {
       return false;
@@ -97,7 +91,6 @@ class CartSession {
 
   Future<bool> editItemInCart(Product updatedProduct) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
       Cart? cart = await getCart();
 
       if (cart == null || cart.cartItems.isEmpty) {
@@ -121,7 +114,7 @@ class CartSession {
       // Não achou
       if (!found) return false;
 
-      await prefs.setString(_cartKey, jsonEncode(cart.toJson()));
+      await _prefs.setString(_cartKey, jsonEncode(cart.toJson()));
       return true;
     } catch (e) {
       return false;
