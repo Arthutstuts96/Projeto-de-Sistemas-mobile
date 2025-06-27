@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/screens/components/register/button.dart';
 import 'package:projeto_de_sistemas/screens/login-register-screens/register_user_screen.dart';
 import 'package:projeto_de_sistemas/utils/consts.dart';
 import 'package:projeto_de_sistemas/utils/functions/login_validation.dart';
 import 'package:flutter/services.dart';
 import 'package:projeto_de_sistemas/controllers/login_controller.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final LoginController _loginController = LoginController();
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  String loginType = "client";
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +37,87 @@ class LoginScreen extends StatelessWidget {
                 child: Image.asset(
                   "assets/images/backgrounded.png",
                   fit: BoxFit.cover,
+                ),
+              ),
+
+              // BOTÃO ESCOLHER TIPO DE LOGIN
+              Positioned(
+                top: 8,
+                right: 0,
+                child: TextButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            return AlertDialog(
+                              title: const Text("Escolha como quer entrar"),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  RadioListTile<String>(
+                                    title: const Text("Cliente"),
+                                    value: "client",
+                                    groupValue: loginType,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        loginType = value!;
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  RadioListTile<String>(
+                                    title: const Text("Separador"),
+                                    value: "shopper",
+                                    groupValue: loginType,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        loginType = value!;
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  RadioListTile<String>(
+                                    title: const Text("Entregador"),
+                                    value: "delivery",
+                                    groupValue: loginType,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        loginType = value!;
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                Button(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  text: "Cancelar",
+                                  color: Colors.redAccent,
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFFAA00),
+                      border: Border.all(color: Color(0xFFC07C00), width: 1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Text(
+                      "Trocar login",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
                 ),
               ),
               Center(
@@ -147,25 +236,70 @@ class LoginScreen extends StatelessWidget {
                                     ElevatedButton(
                                       onPressed: () async {
                                         if (_formKey.currentState!.validate()) {
-                                          final result = await _loginController
-                                              .loginUser(
-                                                email:
-                                                    _emailController.text
-                                                        .trim(),
-                                                password:
-                                                    _passwordController.text,
-                                              );
-                                          if (result['success']) {
+                                          Map<String, dynamic> result = {
+                                            'success': false,
+                                            'error': 'Tipo de login inválido.',
+                                            'redirect': 'main_screen',
+                                          };
+
+                                          switch (loginType) {
+                                            case "client":
+                                              result = await _loginController
+                                                  .loginClientUser(
+                                                    email:
+                                                        _emailController.text
+                                                            .trim(),
+                                                    password:
+                                                        _passwordController
+                                                            .text,
+                                                  );
+                                              result['redirect'] =
+                                                  'main_screen';
+                                              break;
+
+                                            case "shopper":
+                                              result = await _loginController
+                                                  .loginShopperUser(
+                                                    email:
+                                                        _emailController.text
+                                                            .trim(),
+                                                    password:
+                                                        _passwordController
+                                                            .text,
+                                                  );
+                                              result['redirect'] =
+                                                  'main_shopper_screen';
+                                              break;
+
+                                            case "delivery":
+                                              result = await _loginController
+                                                  .loginDeliveryUser(
+                                                    email:
+                                                        _emailController.text
+                                                            .trim(),
+                                                    password:
+                                                        _passwordController
+                                                            .text,
+                                                  );
+                                              result['redirect'] =
+                                                  'delivery_screen';
+                                              break;
+                                          }
+                                          print(result);
+                                          if (result['success'] == true) {
                                             Navigator.pushReplacementNamed(
                                               context,
-                                              'main_screen',
+                                              result['redirect'],
                                             );
                                           } else {
                                             ScaffoldMessenger.of(
                                               context,
                                             ).showSnackBar(
                                               SnackBar(
-                                                content: Text(result['error']),
+                                                content: Text(
+                                                  result['error'] ??
+                                                      'Erro desconhecido',
+                                                ),
                                                 backgroundColor: Colors.red,
                                               ),
                                             );

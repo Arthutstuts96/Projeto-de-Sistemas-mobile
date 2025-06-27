@@ -61,18 +61,6 @@ class OrderApi {
       };
       print(data);
 
-      // final response = await dio.post(
-      //   '$ipHost/pedidos/create',
-      //   data: data,
-      //   options: Options(
-      //     contentType: Headers.jsonContentType,
-      //     headers: {
-      //       'Authorization': 'Bearer $token',
-      //       'Accept': 'application/json',
-      //     },
-      //   ),
-      // );
-
       Response response = await _dio.post(
         '$ipHost/pedidos/create',
         data: data,

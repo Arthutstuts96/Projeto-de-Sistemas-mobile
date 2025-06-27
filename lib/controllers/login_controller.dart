@@ -8,12 +8,17 @@ class LoginController implements LoginRepository {
   final LoginUserApi _loginUserApi = LoginUserApi();
 
   @override
-  Future<Map<String, dynamic>> loginUser({
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('access_token');
+    await prefs.remove('refresh_token');
+  }
+
+  @override
+  Future<Map<String, dynamic>> loginClientUser({
     required String email,
     required String password,
   }) async {
-    //TODO: Usar o get de usuário e salvá-lo na sessão com seus dados reais
-    // CADE O GET USUARIO PELO EMAIL??
     UserController().saveUserToSession(
       user: User(
         email: email,
@@ -30,13 +35,28 @@ class LoginController implements LoginRepository {
         dateJoined: DateTime.now(),
       ),
     );
-    return await _loginUserApi.loginUser(email: email, password: password);
+    return await _loginUserApi.loginClientUser(
+      email: email,
+      password: password,
+      loginUrl: 'api/token/',
+    );
   }
 
   @override
-  Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('access_token');
-    await prefs.remove('refresh_token');
+  Future<Map<String, dynamic>> loginDeliveryUser({
+    required String email,
+    required String password,
+  }) async {
+    return {'success': false, 'error': "Erro: Não implementado"};
+    // return await _loginUserApi.loginDeliveryUser(email: email, password: password, loginUrl: 'url_do_delivery');
+  }
+
+  @override
+  Future<Map<String, dynamic>> loginShopperUser({
+    required String email,
+    required String password,
+  }) async {
+    return {'success': false, 'error': "Erro: Não implementado"};
+    // return await _loginUserApi.loginShopperUser(email: email, password: password, loginUrl: 'url_do_separador');
   }
 }

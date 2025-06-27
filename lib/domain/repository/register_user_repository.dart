@@ -5,7 +5,15 @@ abstract class RegisterUserRepository {
 }
 
 abstract class LoginRepository {
-  Future<Map<String, dynamic>> loginUser({
+  Future<Map<String, dynamic>> loginClientUser({
+    required String email,
+    required String password,
+  });
+  Future<Map<String, dynamic>> loginShopperUser({
+    required String email,
+    required String password,
+  });
+  Future<Map<String, dynamic>> loginDeliveryUser({
     required String email,
     required String password,
   });

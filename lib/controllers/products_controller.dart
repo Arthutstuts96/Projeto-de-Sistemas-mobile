@@ -3,7 +3,7 @@ import 'package:projeto_de_sistemas/domain/repository/product_repository.dart';
 import 'package:projeto_de_sistemas/services/api/products_home_api.dart';
 import 'package:flutter/foundation.dart';
 import 'package:diacritic/diacritic.dart';
-import 'package:projeto_de_sistemas/domain/models/market.dart';
+import 'package:projeto_de_sistemas/domain/models/users/market.dart';
 import 'package:projeto_de_sistemas/controllers/market_controller.dart';
 
 class ProductController implements ProductRepository {
