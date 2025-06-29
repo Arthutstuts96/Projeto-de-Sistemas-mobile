@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projeto_de_sistemas/domain/models/order/deliver_data.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order_item.dart';
@@ -14,6 +13,7 @@ class ShopperOrderScreen extends StatefulWidget {
 }
 
 class _ShopperOrderScreenState extends State<ShopperOrderScreen> {
+  //TODO: pegar uma ordem real
   Order? order = Order(
     numeroPedido: "ORDER_342343414",
     statusPagamento: "pendente",
@@ -24,112 +24,132 @@ class _ShopperOrderScreenState extends State<ShopperOrderScreen> {
     itens: [
       OrderItem(quantidade: 1, precoUnitario: 10.00, disponibilidade: true),
       OrderItem(quantidade: 1, precoUnitario: 5.00, disponibilidade: true),
-      OrderItem(quantidade: 1, precoUnitario: 10.00, disponibilidade: true),
+      OrderItem(quantidade: 1, precoUnitario: 10.00, disponibilidade: false),
     ],
     dadosEntrega: DeliverData(pedidoId: 0, tipoVeiculo: "", enderecoId: 0),
   );
-  // Order? order;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actionsPadding: const EdgeInsets.symmetric(horizontal: 8),
         backgroundColor: const Color.fromARGB(255, 228, 35, 35),
+        foregroundColor: Colors.white,
         title: const Text(
           "Pedido atual",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-            fontSize: 24,
-          ),
+          style: TextStyle(fontSize: 24),
         ),
-        actions: <Widget>[
+        actions: [
           IconButton(
+            icon: const Icon(Icons.history_outlined, size: 28),
+            tooltip: "Histórico de pedidos",
             onPressed: () {},
-            icon: const Icon(
-              Icons.history_outlined,
-              size: 36,
-              color: Colors.black,
-            ),
           ),
         ],
       ),
       body:
           order == null
               ? const Center(
-                child: Text(
-                  "Você não está separando nenhum pedido no momento",
-                  textAlign: TextAlign.center,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Text(
+                    "Você não está separando nenhum pedido no momento",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16, color: Colors.black54),
+                  ),
                 ),
               )
               : Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const Text(
+                          "Informações do pedido",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
                         Text(
-                          "Você está separando os itens dessa compra: ${order!.numeroPedido}",
+                          "Separando o pedido #${order!.numeroPedido}",
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black87,
+                          ),
                         ),
-                        Column(
-                          spacing: 4,
-                          children: [
-                            const IconRow(
-                              title: "Cliente: Null",
-                              icon: Icon(Icons.person, size: 20),
-                            ),
-                            IconRow(
-                              title:
-                                  "Ativo desde: ${order!.criadoEm.toLocal().toString()}",
-                              icon: const Icon(Icons.timer, size: 20),
-                            ),
-                            const IconRow(
-                              title: "Comentário do cliente:",
-                              icon: Icon(Icons.chat, size: 20),
-                            ),
-                          ],
+                        const SizedBox(height: 12),
+                        const IconRow(
+                          title: "Cliente: Null",
+                          icon: Icon(Icons.person_outline, size: 20),
                         ),
+                        const SizedBox(height: 6),
+                        IconRow(
+                          title:
+                              "Ativo desde: ${order!.criadoEm.toLocal().toString()}",
+                          icon: const Icon(Icons.timer_outlined, size: 20),
+                        ),
+                        const SizedBox(height: 6),
+                        const IconRow(
+                          title: "Comentário do cliente:",
+                          icon: Icon(Icons.chat_outlined, size: 20),
+                        ),
+                        const SizedBox(height: 8),
                         Container(
-                          width: MediaQuery.of(context).size.width * 0.95,
-                          height: 28 * 3, //3 linhas
-                          margin: const EdgeInsets.all(4),
-                          padding: const EdgeInsets.all(8),
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
-                            color: const Color.fromARGB(255, 155, 191, 255),
+                            color: const Color.fromARGB(255, 232, 239, 255),
                           ),
                           child: Text(
-                            order?.descricao ??
-                                "Sem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descriçãoSem descrição",
-                            maxLines: 3,
+                            order?.descricao ?? "Sem descrição",
+                            maxLines: 4,
                             overflow: TextOverflow.ellipsis,
-                            // style: TextStyle(color: const Color.fromARGB(255, 56, 56, 56)),
+                            style: const TextStyle(fontSize: 14),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Flexible(child: OrderDetailsUnchecked(order: order)),
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 6,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: OrderDetailsUnchecked(order: order),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
                 ],
               ),
-      floatingActionButton: SizedBox(
-        height: 70.0,
-        width: 70.0,
-        child: FittedBox(
-          child: FloatingActionButton(
-            onPressed: () {},
-            backgroundColor: const Color.fromARGB(255, 228, 35, 35),
-            splashColor: const Color.fromARGB(255, 255, 81, 0),
-            child: SvgPicture.asset(
-              "assets/images/shopping_cart.svg",
-              semanticsLabel:
-                  'Ícone de um carrinho de supermercado, indicando que nele se vê o carrinho atual de itens pegos',
-              width: 40,
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

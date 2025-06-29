@@ -54,10 +54,9 @@ class MyAccountScreen extends StatelessWidget {
                         Navigator.of(context).pop();
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            backgroundColor: Colors.yellowAccent,
+                            backgroundColor: Color.fromARGB(255, 155, 140, 12),
                             content: Text(
                               'A permissão de administrador é necessária para deletar a conta',
-                              style: TextStyle(color: Colors.black),
                             ),
                           ),
                         );
