@@ -1,7 +1,8 @@
-import 'package:projeto_de_sistemas/controllers/user_controller.dart';
+import 'package:projeto_de_sistemas/controllers/user_session_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/users/user.dart';
 import 'package:projeto_de_sistemas/domain/repository/register_user_repository.dart';
 import 'package:projeto_de_sistemas/services/api/login_user_api.dart';
+import 'package:projeto_de_sistemas/services/session/user_session.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController implements LoginRepository {
@@ -12,6 +13,7 @@ class LoginController implements LoginRepository {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('access_token');
     await prefs.remove('refresh_token');
+    await UserSession().deleteUserFromSession();
   }
 
   @override
@@ -35,7 +37,7 @@ class LoginController implements LoginRepository {
         dateJoined: DateTime.now(),
       ),
     );
-    return await _loginUserApi.loginClientUser(
+    return await _loginUserApi.loginUser(
       email: email,
       password: password,
       loginUrl: 'api/token/',
@@ -47,8 +49,11 @@ class LoginController implements LoginRepository {
     required String email,
     required String password,
   }) async {
-    return {'success': false, 'error': "Erro: Não implementado"};
-    // return await _loginUserApi.loginDeliveryUser(email: email, password: password, loginUrl: 'url_do_delivery');
+    return await _loginUserApi.loginUser(
+      email: email,
+      password: password,
+      loginUrl: 'api/token/',
+    );
   }
 
   @override
@@ -56,7 +61,10 @@ class LoginController implements LoginRepository {
     required String email,
     required String password,
   }) async {
-    return {'success': false, 'error': "Erro: Não implementado"};
-    // return await _loginUserApi.loginShopperUser(email: email, password: password, loginUrl: 'url_do_separador');
+    return await _loginUserApi.loginUser(
+      email: email,
+      password: password,
+      loginUrl: 'api/token/',
+    );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_de_sistemas/screens/components/register/button.dart';
+import 'package:projeto_de_sistemas/screens/components/button.dart';
 import 'package:projeto_de_sistemas/screens/login-register-screens/register_user_screen.dart';
 import 'package:projeto_de_sistemas/utils/consts.dart';
 import 'package:projeto_de_sistemas/utils/functions/login_validation.dart';
@@ -107,10 +107,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     );
                   },
                   child: Container(
-                    padding: EdgeInsets.all(5),
+                    padding: EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       color: Color(0xFFFFAA00),
-                      border: Border.all(color: Color(0xFFC07C00), width: 1),
+                      // border: Border.all(color: Color(0xFFC07C00), width: 1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Text(
@@ -285,7 +285,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   'delivery_screen';
                                               break;
                                           }
-                                          print(result);
                                           if (result['success'] == true) {
                                             Navigator.pushReplacementNamed(
                                               context,

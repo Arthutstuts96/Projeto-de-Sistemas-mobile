@@ -28,7 +28,7 @@ class Button extends StatelessWidget {
       },
       child: Text(
         text,
-        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
     );
   }

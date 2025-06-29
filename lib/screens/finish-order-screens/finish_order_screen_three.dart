@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/domain/models/products/cart.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order.dart';
 import 'package:projeto_de_sistemas/screens/components/products/cart_product_no_dismiss.dart';
-import 'package:projeto_de_sistemas/screens/components/register/button.dart';
+import 'package:projeto_de_sistemas/screens/components/button.dart';
 
 // ignore: must_be_immutable
 class FinishOrderScreenThree extends StatefulWidget {

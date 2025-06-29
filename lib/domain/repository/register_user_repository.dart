@@ -1,7 +1,9 @@
 import 'package:projeto_de_sistemas/domain/models/users/user.dart';
 
 abstract class RegisterUserRepository {
-    Future<void> saveClientUser({required User user});
+    Future<bool> saveClientUser({required User user});
+    Future<bool> saveDeliveryUser({required User user});
+    Future<bool> saveShopperUser({required User user});
 }
 
 abstract class LoginRepository {

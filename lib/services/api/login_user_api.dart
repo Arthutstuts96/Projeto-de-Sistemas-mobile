@@ -8,7 +8,7 @@ class LoginUserApi {
 
   LoginUserApi() : _dio = getIt<Dio>();
 
-  Future<Map<String, dynamic>> loginClientUser({
+  Future<Map<String, dynamic>> loginUser({
     required String email,
     required String password,
     required String loginUrl,

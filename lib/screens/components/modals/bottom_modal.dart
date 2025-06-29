@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/utils/functions/format_functions.dart';
 
 class BottomModal extends StatelessWidget {
   const BottomModal({super.key, required this.onPressed, required this.fullPrice});
@@ -32,7 +33,7 @@ class BottomModal extends StatelessWidget {
               const Text("Entrega: R\$0,00"),
               const SizedBox(height: 10),
               Text(
-                "Total: R\$${(fullPrice).toStringAsFixed(2).replaceAll(".", ",")}",
+                "Total: R\$${(formatMonetary(fullPrice))}",
                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 42),
               ),
               ElevatedButton(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_de_sistemas/screens/components/register/button.dart';
+import 'package:projeto_de_sistemas/screens/components/button.dart';
 
 class AcceptOrderScreen extends StatelessWidget {
   const AcceptOrderScreen({super.key});

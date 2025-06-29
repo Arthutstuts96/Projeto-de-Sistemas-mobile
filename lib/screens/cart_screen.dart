@@ -55,12 +55,6 @@ class _CartScreenState extends State<CartScreen> {
             fontSize: 24,
           ),
         ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.credit_card, size: 36, color: Colors.black),
-          ),
-        ],
       ),
       body: Stack(
         children: [

@@ -2,7 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/register_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/users/user.dart';
-import 'package:projeto_de_sistemas/screens/components/register/button.dart';
+import 'package:projeto_de_sistemas/screens/components/button.dart';
 import 'package:projeto_de_sistemas/screens/components/register/form_input.dart';
 import 'package:projeto_de_sistemas/screens/components/register/register_form.dart';
 import 'package:projeto_de_sistemas/screens/components/register/register_top_style.dart';
@@ -220,7 +220,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
               label: "Telefone",
               controller: controllers['phone']!,
               placeholder: "00 00000-0000",
-              type: TextInputType.phone,             
+              type: TextInputType.phone,
               // validator: (value) => validatePhone(value),
             ),
             FormInput(
@@ -390,11 +390,22 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
           ),
           Button(
             onPressed: () async {
+              final user = mapFormDataToUser();
+              print(user);
               final success = await registerController.saveClientUser(
-                user: mapFormDataToUser(),
+                user: user,
               );
               if (success) {
                 Navigator.pushReplacementNamed(context, "login_screen");
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      "Algo deu errado! Verifique suas informações e tente novamente",
+                    ),
+                    backgroundColor: Colors.redAccent,
+                  ),
+                );
               }
             },
             text: "Concluir cadastro",

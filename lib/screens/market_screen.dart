@@ -206,7 +206,11 @@ class _MarketScreenState extends State<MarketScreen> {
                       separatorBuilder: (_, __) => const SizedBox(width: 12),
                       itemBuilder: (context, index) {
                         final product = items[index];
-                        return ProductCard(product: product);
+                        return SizedBox(
+                          width: 160,
+                          height: 160,
+                          child: ProductCard(product: product),
+                        );
                       },
                     ),
                   ),
