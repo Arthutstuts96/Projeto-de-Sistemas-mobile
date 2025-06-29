@@ -1,9 +1,7 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/locator.dart';
-import 'package:projeto_de_sistemas/screens/login-register-screens/register_user_screen.dart';
 import 'package:projeto_de_sistemas/screens/main_shopper_screen.dart';
-import 'package:projeto_de_sistemas/utils/consts.dart';
 import 'package:provider/provider.dart';
 import 'package:projeto_de_sistemas/controllers/active_delivery_controller.dart';
 import 'package:projeto_de_sistemas/controllers/products_controller.dart';
@@ -54,7 +52,6 @@ class TrazAi extends StatelessWidget {
       routes: {
         "splash_screen": (context) => const SplashScreen(),
         "login_screen": (context) => LoginScreen(),
-        // "register_screen": (context) => RegisterUserScreen(userType: UserTypes.worker,),
         "home_screen": (context) => HomeScreen(),
         "main_screen": (context) => MainScreen(),
         "main_shopper_screen": (context) => MainShopperScreen(),
@@ -66,7 +63,7 @@ class TrazAi extends StatelessWidget {
         "finish_order_screen": (context) => FinishOrderScreen(),
         "product_screen": (context) => ProductScreen(),
       },
-      initialRoute: "main_shopper_screen",
+      initialRoute: "splash_screen",
     );
   }
 }
