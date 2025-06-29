@@ -1,21 +1,33 @@
 import 'package:dio/dio.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order.dart';
+import 'package:projeto_de_sistemas/locator.dart';
 import 'package:projeto_de_sistemas/services/session/order_session.dart';
 import 'package:projeto_de_sistemas/utils/api_configs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderApi {
-  final Dio dio = Dio();
+  final Dio _dio;
+  final SharedPreferences _prefs;
+  final OrderSession _orderSession;
+
+  OrderApi()
+    : _dio = getIt<Dio>(),
+      _prefs = getIt<SharedPreferences>(),
+      _orderSession = getIt<OrderSession>();
+  OrderApi.testable({
+    required Dio dio,
+    required SharedPreferences prefs,
+    required OrderSession orderSession,
+  }) : _dio = dio,
+       _prefs = prefs,
+       _orderSession = orderSession;
 
   Future<int> saveOrder({required Order order}) async {
-    final OrderSession orderSession = OrderSession();
-
     try {
       //Deleta pedido atual
-      await orderSession.deleteOrder();
+      await _orderSession.deleteOrder();
 
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('access_token');
+      final token = _prefs.getString('access_token');
 
       if (token == null) {
         throw Exception('Token não encontrado. Usuário não autenticado.');
@@ -29,10 +41,12 @@ class OrderApi {
         "valor_total": order.valorTotal.toStringAsFixed(2),
         "descricao": order.descricao,
         "data_pagamento": order.dataPagamento?.toIso8601String(),
-        "dados_entrega": [{
-          "tipo_veiculo": order.dadosEntrega?.tipoVeiculo,
-          "endereco_id": order.dadosEntrega?.enderecoId,
-        }],
+        "dados_entrega": [
+          {
+            "tipo_veiculo": order.dadosEntrega?.tipoVeiculo,
+            "endereco_id": order.dadosEntrega?.enderecoId,
+          },
+        ],
         "itens":
             order.itens
                 .map(
@@ -45,7 +59,7 @@ class OrderApi {
                 )
                 .toList(),
       };
-      // print(data);
+      print(data);
 
       // final response = await dio.post(
       //   '$ipHost/pedidos/create',
@@ -59,9 +73,9 @@ class OrderApi {
       //   ),
       // );
 
-      Response response = await dio.post(
+      Response response = await _dio.post(
         '$ipHost/pedidos/create',
-        data: data, 
+        data: data,
         options: Options(
           contentType: Headers.jsonContentType,
           headers: {
@@ -70,19 +84,17 @@ class OrderApi {
           },
         ),
       );
-      // print('Requisição bem-sucedida: ${response.data}');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        await orderSession.saveOrder(order);
+        await _orderSession.saveOrder(order);
       }
 
       return response.statusCode ?? 0;
     } on DioException catch (e) {
       // print('  Status Code: ${e.response?.statusCode}');
-      // print('  Corpo da Resposta do Servidor: ${e.response?.data}');
+      print('  Corpo da Resposta do Servidor: ${e.response?.data}');
       return 0;
     } catch (e) {
-      // print(e);
       return 0;
     }
   }
