@@ -3,7 +3,7 @@ import 'package:projeto_de_sistemas/domain/repository/product_repository.dart';
 import 'package:projeto_de_sistemas/services/api/products_home_api.dart';
 import 'package:flutter/foundation.dart';
 import 'package:diacritic/diacritic.dart';
-import 'package:projeto_de_sistemas/domain/models/market.dart';
+import 'package:projeto_de_sistemas/domain/models/users/market.dart';
 import 'package:projeto_de_sistemas/controllers/market_controller.dart';
 
 class ProductController implements ProductRepository {
@@ -186,8 +186,6 @@ class SearchScreenController with ChangeNotifier {
         return product.description; // Ajuste se 'brand' for outro campo
       case 'category':
         return product.category;
-      case 'market':
-        return product.market;
       default:
         return '';
     }
@@ -205,7 +203,7 @@ class SearchScreenController with ChangeNotifier {
 
     if (newSearchMode != null && _searchMode != newSearchMode) {
       _searchMode = newSearchMode;
-      _searchQuery = ""; // Reseta a busca ao mudar de modo
+      _searchQuery = ""; // Reseta a busca ao mudar de modor
       // Força a busca inicial do novo modo se ainda não foi feita ou se forceRefreshData
       if ((_searchMode == "item" && (!_productsFetched || forceRefreshData)) ||
           (_searchMode == "market" && (!_marketsFetched || forceRefreshData))) {

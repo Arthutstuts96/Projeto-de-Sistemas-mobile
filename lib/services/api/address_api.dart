@@ -5,6 +5,7 @@ import 'package:projeto_de_sistemas/services/session/user_session.dart';
 import 'package:projeto_de_sistemas/utils/api_configs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+//TODO: ids de usuários nos cadastros serem o ID real do usuário, e não 1
 class AddressApi {
   final Dio _dio;
   final SharedPreferences _prefs;
@@ -66,7 +67,8 @@ class AddressApi {
       }
 
       final response = await _dio.get(
-        '$ipHost/users/addresses/get/${user.email}',
+        // '$ipHost/users/addresses/get/${user.email}',
+        '$ipHost/gerenciamento/api/enderecos/',
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',
@@ -98,20 +100,21 @@ class AddressApi {
       if (token == null) {
         throw Exception('Token não encontrado. Usuário não autenticado.');
       }
+
       final body = {
-        'user_email': address.user?.email,
-        'city': address.city,
-        'state': address.state,
-        'street': address.street,
-        'number': address.number,
-        'quadra': address.quadra,
-        'lote': address.lote,
-        'reference': address.reference,
-        'observation': address.observation,
+        // "user": address.user,
+        "user": 1,
+        "zip_code": address.zip_code,
+        "street": address.street,
+        "number": address.number,
+        "complement": address.complement,
+        "neighborhood": address.neighborhood,
+        "city": address.city,
+        "state": address.state,
       };
 
       final response = await _dio.post(
-        '$ipHost/users/addresses/',
+        '$ipHost/gerenciamento/api/enderecos/',
         data: body,
         options: Options(
           headers: {
@@ -120,12 +123,10 @@ class AddressApi {
           },
         ),
       );
-      if (response.statusCode == 201) {
-        return true;
-      } else {
-        return false;
-      }
+
+      return response.statusCode == 201;
     } catch (e) {
+      print('Erro ao salvar endereço: $e');
       return false;
     }
   }

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/domain/models/products/product.dart';
 import 'package:projeto_de_sistemas/screens/components/products/change_quantity_button.dart';
+import 'package:projeto_de_sistemas/utils/functions/format_functions.dart';
 
 class CartProduct extends StatelessWidget {
-  const CartProduct({super.key, required this.product, required this.onDismiss});
+  const CartProduct({
+    super.key,
+    required this.product,
+    required this.onDismiss,
+  });
   final Product product;
   final VoidCallback onDismiss;
 
@@ -37,13 +42,27 @@ class CartProduct extends StatelessWidget {
                         Container(
                           height: 100,
                           width: 140.0,
-                          decoration: const BoxDecoration(
-                            border: Border()
-                          ),
+                          decoration: const BoxDecoration(border: Border()),
                           child: Image.network(
                             product.imageUrl,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
+                            height: 100,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                "assets/images/no-image.jpg",
+                                fit: BoxFit.cover,
+                                height: 100,
+                              );
+                            },
                           ),
+                          // child:
+                          // product.imageUrl.isNotEmpty
+                          //     ? Image.network(
+                          //       product.imageUrl,
+                          //       height: 100,
+                          //       fit: BoxFit.cover,
+                          //     )
+                          //     : Image.asset("assets/images/no-image.jpg"),
                         ),
                         const SizedBox(width: 12),
                         ConstrainedBox(
@@ -57,7 +76,8 @@ class CartProduct extends StatelessWidget {
                               children: [
                                 TextSpan(text: '${product.name}\n'),
                                 TextSpan(
-                                  text: 'R\$${product.unityPrice}',
+                                  text:
+                                      'R\$${formatMonetary(product.unityPrice)}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.green,

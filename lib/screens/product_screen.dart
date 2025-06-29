@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:projeto_de_sistemas/domain/models/products/product.dart';
 import 'package:projeto_de_sistemas/screens/components/buttons/back_button.dart';
+import 'package:projeto_de_sistemas/screens/components/products/product_card.dart';
 import 'package:projeto_de_sistemas/screens/main_screen.dart'; // Para a BottomNavigationBar
 import 'package:projeto_de_sistemas/controllers/cart_controller.dart';
 import 'package:projeto_de_sistemas/services/api/products_home_api.dart';
+import 'package:projeto_de_sistemas/utils/functions/format_functions.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -55,7 +57,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   height: 200,
                   errorBuilder: (context, error, stackTrace) {
                     return Image.asset(
-                      "assets/images/food.png",
+                      "assets/images/no-image.jpg",
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: 200,
@@ -82,22 +84,19 @@ class _ProductScreenState extends State<ProductScreen> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Text(
-                "Disponivel no mercado ${product.market}",
-                style: const TextStyle(fontSize: 16),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 16.0),
+            //   child: Text(
+            //     "Disponivel no mercado ${product.market}",
+            //     style: const TextStyle(fontSize: 16),
+            //   ),
+            // ),
             const SizedBox(height: 4),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, left: 16.0),
+            const Padding(
+              padding: EdgeInsets.only(top: 8.0, left: 16.0),
               child: Text(
                 "Descrição",
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
               ),
             ),
             Padding(
@@ -136,9 +135,9 @@ class _ProductScreenState extends State<ProductScreen> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      const Text(
-                        "R\$ 19,99 ",
-                        style: TextStyle(
+                      Text(
+                        "R\$${formatMonetary(product.unityPrice * 3)}",
+                        style: const TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w200,
                           color: Color(0xFF28C800),
@@ -164,7 +163,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        "R\$ ${product.unityPrice}",
+                        "R\$${formatMonetary(product.unityPrice)}",
                         style: const TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w200,
@@ -265,16 +264,16 @@ class _ProductScreenState extends State<ProductScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
-                "Mais do ${product.market}:",
+                "Mais do mesmo mercado:",
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
                 ),
               ),
             ),
-            
+
             SizedBox(
-              height: 200, // Ajuste a altura conforme a necessidade do seu card
+              height: 240, // Ajuste a altura conforme a necessidade do seu card
               child: FutureBuilder<List<Product>>(
                 future: ProductControllerApi().fetchProducts(),
                 builder: (context, snapshot) {
@@ -296,7 +295,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       snapshot.data!
                           .where(
                             (p) =>
-                                p.market == product.market &&
+                                p.supermarketId == product.supermarketId &&
                                 p.id != product.id,
                           )
                           .toList();
@@ -321,11 +320,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     itemBuilder: (context, index) {
                       final relatedProduct = relatedProducts[index];
                       return Container(
-                        width:
-                            150, // Largura fixa para cada card na lista horizontal
-                        margin: const EdgeInsets.only(
-                          right: 12.0,
-                        ), // Espaçamento entre os cards
+                        margin: const EdgeInsets.only(right: 12.0),
                         child: Card(
                           elevation: 3,
                           shape: RoundedRectangleBorder(
@@ -333,7 +328,6 @@ class _ProductScreenState extends State<ProductScreen> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              // Navega para a tela do produto relacionado
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -344,56 +338,15 @@ class _ProductScreenState extends State<ProductScreen> {
                                 ),
                               );
                             },
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(10),
-                                  ),
-                                  child: Image.network(
-                                    relatedProduct.imageUrl,
-                                    height: 100, // Altura da imagem do card
-                                    width: double.infinity,
-                                    fit: BoxFit.contain,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Image.asset(
-                                        "assets/images/food.png",
-                                        height: 100,
-                                        width: double.infinity,
-                                        fit: BoxFit.cover,
-                                      );
-                                    },
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        relatedProduct.name,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        "R\$ ${relatedProduct.unityPrice.toStringAsFixed(2)}",
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xFFFFAA00),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(10),
+                              ),
+                              child: SizedBox(
+                                width: 160,
+                                height: 160,
+                                child: ProductCard(product: relatedProduct),
+                              ),
                             ),
                           ),
                         ),
@@ -403,7 +356,6 @@ class _ProductScreenState extends State<ProductScreen> {
                 },
               ),
             ),
-            
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(

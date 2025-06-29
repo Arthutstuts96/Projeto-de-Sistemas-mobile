@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/cart_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/products/product.dart';
+import 'package:projeto_de_sistemas/utils/functions/format_functions.dart';
 
 class ProductCard extends StatelessWidget {
   ProductCard({super.key, required this.product});
@@ -30,9 +31,24 @@ class ProductCard extends StatelessWidget {
               child: Center(
                 child: Image.network(
                   product.imageUrl,
+                  fit: BoxFit.contain,
                   height: 100,
-                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      "assets/images/no-image.jpg",
+                      fit: BoxFit.cover,
+                      height: 100,
+                    );
+                  },
                 ),
+                // child:
+                //     product.imageUrl.isNotEmpty
+                //         ? Image.network(
+                //           product.imageUrl,
+                //           height: 100,
+                //           fit: BoxFit.cover,
+                //         )
+                //         : Image.asset("assets/images/no-image.jpg"),
               ),
             ),
             Padding(
@@ -45,7 +61,7 @@ class ProductCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                "R\$${product.unityPrice.toString()}",
+                "R\$${formatMonetary(product.unityPrice)}",
                 style: const TextStyle(color: Colors.green),
               ),
             ),

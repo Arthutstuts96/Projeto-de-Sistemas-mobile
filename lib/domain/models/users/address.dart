@@ -1,89 +1,78 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:projeto_de_sistemas/domain/models/users/user.dart';
-
 class Address {
   int? id;
-  User? user;
+  int user;
+  String zip_code;
+  String street;
   String city;
   String state;
-  String street;
   String number;
-  String quadra;
-  String lote;
-  String reference;
-  String observation;
-
+  String complement;
+  String neighborhood;
+  
   Address({
     this.id,
-    this.user,
+    required this.user,
+    required this.zip_code,
+    required this.street,
     required this.city,
     required this.state,
-    required this.street,
     required this.number,
-    required this.quadra,
-    required this.lote,
-    required this.reference,
-    required this.observation,
+    required this.complement,
+    required this.neighborhood,
   });
 
   Address copyWith({
     int? id,
-    User? user,
+    int? user,
+    String? zip_code,
+    String? street,
     String? city,
     String? state,
-    String? street,
     String? number,
-    String? quadra,
-    String? lote,
-    String? reference,
-    String? observation,
+    String? complement,
+    String? neighborhood,
   }) {
     return Address(
       id: id ?? this.id,
       user: user ?? this.user,
+      zip_code: zip_code ?? this.zip_code,
+      street: street ?? this.street,
       city: city ?? this.city,
       state: state ?? this.state,
-      street: street ?? this.street,
       number: number ?? this.number,
-      quadra: quadra ?? this.quadra,
-      lote: lote ?? this.lote,
-      reference: reference ?? this.reference,
-      observation: observation ?? this.observation,
+      complement: complement ?? this.complement,
+      neighborhood: neighborhood ?? this.neighborhood,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'user': user?.toMap(),
+      'user': user,
+      'zip_code': zip_code,
+      'street': street,
       'city': city,
       'state': state,
-      'street': street,
       'number': number,
-      'quadra': quadra,
-      'lote': lote,
-      'reference': reference,
-      'observation': observation,
+      'complement': complement,
+      'neighborhood': neighborhood,
     };
   }
 
   factory Address.fromMap(Map<String, dynamic> map) {
     return Address(
-      id: map['id'] ?? 0,
-      user:
-          map['user'] != null
-              ? User.fromMap(map['user'] as Map<String, dynamic>)
-              : null,
-      city: map['city'] ?? '',
-      state: map['state'] ?? '',
-      street: map['street'] ?? '',
-      number: map['number'] ?? '',
-      quadra: map['quadra'] ?? '',
-      lote: map['lote'] ?? '',
-      reference: map['reference'] ?? '',
-      observation: map['observation'] ?? '',
+      id: map['id'] != null ? map['id'] as int : null,
+      user: map['user'] as int,
+      zip_code: map['zip_code'] as String,
+      street: map['street'] as String,
+      city: map['city'] as String,
+      state: map['state'] as String,
+      number: map['number'] as String,
+      complement: map['complement'] as String,
+      neighborhood: map['neighborhood'] as String,
     );
   }
 
@@ -94,7 +83,7 @@ class Address {
 
   @override
   String toString() {
-    return 'Address(id: $id, user: $user, city: $city, state: $state, street: $street, number: $number, quadra: $quadra, lote: $lote, reference: $reference, observation: $observation)';
+    return 'Address(id: $id, user: $user, zip_code: $zip_code, street: $street, city: $city, state: $state, number: $number, complement: $complement, neighborhood: $neighborhood)';
   }
 
   @override
@@ -103,27 +92,25 @@ class Address {
 
     return other.id == id &&
         other.user == user &&
+        other.zip_code == zip_code &&
+        other.street == street &&
         other.city == city &&
         other.state == state &&
-        other.street == street &&
         other.number == number &&
-        other.quadra == quadra &&
-        other.lote == lote &&
-        other.reference == reference &&
-        other.observation == observation;
+        other.complement == complement &&
+        other.neighborhood == neighborhood;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
         user.hashCode ^
+        zip_code.hashCode ^
+        street.hashCode ^
         city.hashCode ^
         state.hashCode ^
-        street.hashCode ^
         number.hashCode ^
-        quadra.hashCode ^
-        lote.hashCode ^
-        reference.hashCode ^
-        observation.hashCode;
+        complement.hashCode ^
+        neighborhood.hashCode;
   }
 }

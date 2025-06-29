@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/order_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order.dart';
-import 'package:projeto_de_sistemas/screens/components/register/button.dart';
+import 'package:projeto_de_sistemas/screens/components/button.dart';
 import 'package:projeto_de_sistemas/screens/order-screens/current_order.dart';
 import 'package:projeto_de_sistemas/screens/order-screens/order_history.dart';
 
