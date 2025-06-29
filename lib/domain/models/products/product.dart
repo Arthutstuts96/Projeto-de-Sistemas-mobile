@@ -8,13 +8,13 @@ class Product {
   double unityPrice;
   String category;
   String brand;
-  String market;
   int quantity;
   String barCode;
   int reviews;
   double rating;
   String imageUrl;
   int quantityToBuy;
+  int? supermarketId;
 
   Product({
     required this.id,
@@ -23,44 +23,44 @@ class Product {
     required this.unityPrice,
     required this.category,
     required this.brand,
-    this.market = "",
     required this.quantity,
     required this.barCode,
     required this.reviews,
     required this.rating,
     required this.imageUrl,
-    this.quantityToBuy = 1,
+    required this.quantityToBuy,
+    this.supermarketId,
   });
 
   Product copyWith({
     int? id,
     String? name,
     String? description,
-    double? unitPrice,
+    double? unityPrice,
     String? category,
     String? brand,
-    String? market,
-    int? stockQuantity,
+    int? quantity,
     String? barCode,
     int? reviews,
     double? rating,
     String? imageUrl,
     int? quantityToBuy,
+    int? supermarketId,
   }) {
     return Product(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
-      unityPrice: unitPrice ?? this.unityPrice,
+      unityPrice: unityPrice ?? this.unityPrice,
       category: category ?? this.category,
       brand: brand ?? this.brand,
-      market: market ?? this.market,
-      quantity: stockQuantity ?? this.quantity,
+      quantity: quantity ?? this.quantity,
       barCode: barCode ?? this.barCode,
       reviews: reviews ?? this.reviews,
       rating: rating ?? this.rating,
       imageUrl: imageUrl ?? this.imageUrl,
       quantityToBuy: quantityToBuy ?? this.quantityToBuy,
+      supermarketId: supermarketId ?? this.supermarketId,
     );
   }
 
@@ -69,16 +69,16 @@ class Product {
       'id': id,
       'name': name,
       'description': description,
-      'unitPrice': unityPrice,
+      'unityPrice': unityPrice,
       'category': category,
       'brand': brand,
-      'market': market,
-      'stockQuantity': quantity,
+      'quantity': quantity,
       'barCode': barCode,
       'reviews': reviews,
       'rating': rating,
       'imageUrl': imageUrl,
       'quantityToBuy': quantityToBuy,
+      'supermarketId': supermarketId,
     };
   }
 
@@ -87,17 +87,17 @@ class Product {
       id: map['id'] as int,
       name: map['name'] as String,
       description: map['description'] as String,
-      unityPrice: map['unitPrice'] as double,
+      unityPrice: map['unityPrice'] as double,
       category: map['category'] as String,
       brand: map['brand'] as String,
-      market: map['market'] ?? '',
-      quantity: map['stockQuantity'] as int,
+      quantity: map['quantity'] as int,
       barCode: map['barCode'] as String,
       reviews: map['reviews'] as int,
       rating: map['rating'] as double,
       imageUrl: map['imageUrl'] as String,
       quantityToBuy:
           map['quantityToBuy'] is int ? map['quantityToBuy'] as int : 1,
+      supermarketId: map['supermarketId'] ?? 0
     );
   }
 
@@ -112,19 +112,19 @@ class Product {
           double.tryParse(json['preco_unitario']?.toString() ?? '0.0') ?? 0.0,
       category: json['categoria']?.toString() ?? '',
       brand: json['marca'] ?? '',
-      market: json['market'] ?? '',
       quantity: json['qtd_estoque'] ?? 0,
       barCode: json['codigo_barras'] ?? '',
       reviews: json['qtd_avaliacoes'] ?? 0,
       rating: double.tryParse(json['avaliacao']?.toString() ?? '0.0') ?? 0.0,
       imageUrl: json['imagem'] ?? '',
       quantityToBuy: json['quantityToBuy'] ?? 1,
+      supermarketId: json['supermarketId'] ?? 0
     );
   }
 
   @override
   String toString() {
-    return 'Product(id: $id, name: $name, description: $description, unitPrice: $unityPrice, category: $category, brand: $brand, market: $market, stockQuantity: $quantity, barCode: $barCode, reviews: $reviews, rating: $rating, imageUrl: $imageUrl, quantityToBuy: $quantityToBuy)';
+    return 'Product(id: $id, name: $name, description: $description, unityPrice: $unityPrice, category: $category, brand: $brand, quantity: $quantity, barCode: $barCode, reviews: $reviews, rating: $rating, imageUrl: $imageUrl, quantityToBuy: $quantityToBuy, supermarketId: $supermarketId)';
   }
 
   @override
@@ -137,13 +137,13 @@ class Product {
         other.unityPrice == unityPrice &&
         other.category == category &&
         other.brand == brand &&
-        other.market == market &&
         other.quantity == quantity &&
         other.barCode == barCode &&
         other.reviews == reviews &&
         other.rating == rating &&
         other.imageUrl == imageUrl &&
-        other.quantityToBuy == quantityToBuy;
+        other.quantityToBuy == quantityToBuy &&
+        other.supermarketId == supermarketId;
   }
 
   @override
@@ -154,12 +154,12 @@ class Product {
         unityPrice.hashCode ^
         category.hashCode ^
         brand.hashCode ^
-        market.hashCode ^
         quantity.hashCode ^
         barCode.hashCode ^
         reviews.hashCode ^
         rating.hashCode ^
         imageUrl.hashCode ^
-        quantityToBuy.hashCode;
+        quantityToBuy.hashCode ^
+        supermarketId.hashCode;
   }
 }

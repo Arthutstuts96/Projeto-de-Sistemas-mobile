@@ -186,8 +186,6 @@ class SearchScreenController with ChangeNotifier {
         return product.description; // Ajuste se 'brand' for outro campo
       case 'category':
         return product.category;
-      case 'market':
-        return product.market;
       default:
         return '';
     }
@@ -205,7 +203,7 @@ class SearchScreenController with ChangeNotifier {
 
     if (newSearchMode != null && _searchMode != newSearchMode) {
       _searchMode = newSearchMode;
-      _searchQuery = ""; // Reseta a busca ao mudar de modo
+      _searchQuery = ""; // Reseta a busca ao mudar de modor
       // Força a busca inicial do novo modo se ainda não foi feita ou se forceRefreshData
       if ((_searchMode == "item" && (!_productsFetched || forceRefreshData)) ||
           (_searchMode == "market" && (!_marketsFetched || forceRefreshData))) {

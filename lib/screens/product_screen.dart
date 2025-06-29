@@ -84,13 +84,13 @@ class _ProductScreenState extends State<ProductScreen> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Text(
-                "Disponivel no mercado ${product.market}",
-                style: const TextStyle(fontSize: 16),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 16.0),
+            //   child: Text(
+            //     "Disponivel no mercado ${product.market}",
+            //     style: const TextStyle(fontSize: 16),
+            //   ),
+            // ),
             const SizedBox(height: 4),
             const Padding(
               padding: EdgeInsets.only(top: 8.0, left: 16.0),
@@ -264,7 +264,7 @@ class _ProductScreenState extends State<ProductScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
-                "Mais do ${product.market}:",
+                "Mais do mesmo mercado:",
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
@@ -295,7 +295,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       snapshot.data!
                           .where(
                             (p) =>
-                                p.market == product.market &&
+                                p.supermarketId == product.supermarketId &&
                                 p.id != product.id,
                           )
                           .toList();
