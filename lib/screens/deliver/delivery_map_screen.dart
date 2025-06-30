@@ -2,13 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:projeto_de_sistemas/services/location_service.dart';
 import 'package:provider/provider.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:projeto_de_sistemas/screens/deliver/delivery_map_screen.dart';
 import 'package:projeto_de_sistemas/controllers/active_delivery_controller.dart';
-import 'package:projeto_de_sistemas/domain/models/delivery_task_mock_model.dart';
 import 'package:projeto_de_sistemas/screens/components/new_delivery_popup.dart';
 import 'package:projeto_de_sistemas/screens/components/delivery/top_status_bar.dart';
 import 'package:projeto_de_sistemas/screens/components/delivery/delivery_task_sheet_content.dart';
@@ -26,17 +22,11 @@ class _DeliveryMapScreenState extends State<DeliveryMapScreen> {
       Completer<GoogleMapController>();
   final LocationService locationService = LocationService();
   static const CameraPosition _kInitialPosition = CameraPosition(
-    target: LatLng(-23.560334, 45.634915), // Coordenadas de exemplo
+    target: LatLng(-23.560334, 45.634915), 
     zoom: 10,
   );
 
   CameraPosition _initialCameraPosition = _kInitialPosition;
-
-  // Defina as LocationSettings aqui (se não estiverem no LocationService)
-  final LocationSettings _locationSettings = const LocationSettings(
-    accuracy: LocationAccuracy.high, // Equivalente ao LocationAccuracy.best
-    distanceFilter: 0, // Sem filtro de distância
-  );
 
   @override
   void initState() {
@@ -64,7 +54,7 @@ class _DeliveryMapScreenState extends State<DeliveryMapScreen> {
       }
 
       Position currentPosition = await locationService.getCurrentLocation();
-      if (currentPosition != null && mounted) {
+      if (mounted) {
         setState(() {
           _initialCameraPosition = CameraPosition(
             target: LatLng(currentPosition.latitude, currentPosition.longitude),
@@ -82,9 +72,7 @@ class _DeliveryMapScreenState extends State<DeliveryMapScreen> {
         }
       }
     } catch (e) {
-      print(
-        "Erro ao inicializar câmera do mapa com localização do usuário: $e",
-      );
+      return;
     }
   }
 

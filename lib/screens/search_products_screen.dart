@@ -216,7 +216,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
     if (controller.isLoading) {
       return const Center(child: CircularProgressIndicator());
     } else if (controller.error != null) {
-      return Center(child: Text("Erro: ${controller.error}"));
+      return Center(child: Text("Não foi possível buscar os produtos"));
     } else if (controller.filteredItems.isEmpty) {
       return LayoutBuilder(
         // Para o SingleChildScrollView dentro do RefreshIndicator funcionar

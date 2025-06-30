@@ -1,5 +1,6 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_de_sistemas/controllers/shopper_controller.dart';
 import 'package:projeto_de_sistemas/locator.dart';
 import 'package:projeto_de_sistemas/screens/main_shopper_screen.dart';
 import 'package:provider/provider.dart';
@@ -33,9 +34,8 @@ Future<void> main() async {
               ChangeNotifierProvider(create: (_) => ActiveDeliveryController()),
               ChangeNotifierProvider(create: (_) => HomeProductsController()),
               ChangeNotifierProvider(create: (_) => SearchScreenController()),
-              ChangeNotifierProvider(create: (_) => DeliveryHistoryController(),),
-              // Adicione outros providers/controllers aqui se necessário no futuro
-              // Ex: ChangeNotifierProvider(create: (_) => CartController()), // Se seus controllers forem ChangeNotifiers
+              ChangeNotifierProvider(create: (_) => DeliveryHistoryController()),
+              ChangeNotifierProvider(create: (_) => ShopperController()),
             ],
             child: const TrazAi(),
           ),

@@ -6,7 +6,7 @@ class OrderItem {
   int quantidade;
   double precoUnitario;
   bool disponibilidade;
-  
+
   OrderItem({
     this.produtoId,
     required this.quantidade,
@@ -48,7 +48,8 @@ class OrderItem {
 
   String toJson() => json.encode(toMap());
 
-  factory OrderItem.fromJson(String source) => OrderItem.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory OrderItem.fromJson(String source) =>
+      OrderItem.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
@@ -58,19 +59,18 @@ class OrderItem {
   @override
   bool operator ==(covariant OrderItem other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.produtoId == produtoId &&
-      other.quantidade == quantidade &&
-      other.precoUnitario == precoUnitario &&
-      other.disponibilidade == disponibilidade;
+
+    return other.produtoId == produtoId &&
+        other.quantidade == quantidade &&
+        other.precoUnitario == precoUnitario &&
+        other.disponibilidade == disponibilidade;
   }
 
   @override
   int get hashCode {
     return produtoId.hashCode ^
-      quantidade.hashCode ^
-      precoUnitario.hashCode ^
-      disponibilidade.hashCode;
+        quantidade.hashCode ^
+        precoUnitario.hashCode ^
+        disponibilidade.hashCode;
   }
 }

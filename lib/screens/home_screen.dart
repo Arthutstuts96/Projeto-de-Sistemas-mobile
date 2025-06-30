@@ -150,19 +150,11 @@ class _HomeScreenState extends State<HomeScreen>
                                   itemBuilder: (context, index) {
                                     if (index < 0 ||
                                         index >= controller.categories.length) {
-                                      print(
-                                        'DEBUG ERRO CRÍTICO: ListView builder solicitou Index $index fora dos limites da lista de Length ${controller.categories.length}',
-                                      );
-                                      return const SizedBox.shrink(); // Retorna widget vazio se o index for inválido.
+                                      return const SizedBox.shrink();
                                     }
 
-                                    print(
-                                      'DEBUG: Processando Categoria - Index: $index, ID: ${controller.categories[index].id}, Name: ${controller.categories[index].name}, Ajuda ai Deus',
-                                    );
-
                                     final category =
-                                        controller
-                                            .categories[index]; // LINHA 151
+                                        controller.categories[index];
                                     String imagePath;
                                     String displayName;
 

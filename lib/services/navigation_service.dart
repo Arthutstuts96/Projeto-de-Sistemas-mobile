@@ -41,9 +41,6 @@ class NavigationService {
           await launchUrl(googleMapsUrl, mode: LaunchMode.externalApplication);
           return true;
         } else {
-          print(
-            'Waze e Google Maps apps não encontrados. Tentando abrir Google Maps no navegador.',
-          );
           if (await canLaunchUrl(googleMapsUrl)) {
             await launchUrl(
               googleMapsUrl,
@@ -51,14 +48,12 @@ class NavigationService {
             );
             return true;
           } else {
-            print('Não foi possível abrir o Google Maps no navegador.');
             return false;
           }
         }
       }
       return false;
     } catch (e) {
-      print('Erro ao tentar iniciar navegação: $e');
       return false;
     }
   }

@@ -46,7 +46,6 @@ class TopStatusBar extends StatelessWidget {
         VoidCallback? statusAction =
             !data.isTaskActive
                 ? () {
-                  print("Status 'Disponível' clicado. Verificando pop-up...");
                   checkAndShowNewTaskPopupCallback();
 
                   if (deliveryController.currentTask == null &&

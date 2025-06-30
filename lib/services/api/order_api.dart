@@ -59,7 +59,6 @@ class OrderApi {
                 )
                 .toList(),
       };
-      print(data);
 
       Response response = await _dio.post(
         '$ipHost/pedidos/create',
@@ -78,9 +77,7 @@ class OrderApi {
       }
 
       return response.statusCode ?? 0;
-    } on DioException catch (e) {
-      // print('  Status Code: ${e.response?.statusCode}');
-      print('  Corpo da Resposta do Servidor: ${e.response?.data}');
+    } on DioException {
       return 0;
     } catch (e) {
       return 0;
