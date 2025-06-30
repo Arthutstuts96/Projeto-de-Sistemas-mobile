@@ -1,4 +1,3 @@
-// lib/screens/finish-order-screens/finish_order_screen_four.dart
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/order_controller.dart';
 import 'package:projeto_de_sistemas/screens/components/button.dart';
@@ -26,8 +25,6 @@ class _FinishOrderScreenFourState extends State<FinishOrderScreenFour> {
     widget.order.statusPagamento = "pendente";
     widget.order.statusPedido = "pendente";
     final orderSent = await _orderController.saveOrder(order: widget.order);
-
-    print('Retorno de orderSent: $orderSent');
 
     if (!mounted) return;
 
@@ -64,6 +61,7 @@ class _FinishOrderScreenFourState extends State<FinishOrderScreenFour> {
         mercadoLongitude: widget.order.mercadoLongitude ?? 0.0,
         clientLatitude: widget.order.clientLatitude ?? 0.0,
         clientLongitude: widget.order.clientLongitude ?? 0.0,
+        criadoEm: DateTime.now(),
       );
 
       ScaffoldMessenger.of(context).showSnackBar(

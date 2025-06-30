@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:projeto_de_sistemas/controllers/products_controller.dart'; // Controller novo
+import 'package:projeto_de_sistemas/controllers/products_controller.dart';
 import 'package:projeto_de_sistemas/screens/components/products/product_card.dart';
 import 'package:projeto_de_sistemas/screens/components/home/category_button.dart';
 
@@ -11,19 +11,14 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-// 1. ADICIONAR AutomaticKeepAliveClientMixin
 class _HomeScreenState extends State<HomeScreen>
     with AutomaticKeepAliveClientMixin<HomeScreen> {
-  // 2. MANTER ESTADO VIVO
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
-    // 3. BUSCAR PRODUTOS NA PRIMEIRA VEZ (se não foram buscados ainda)
-    //    OU SE VOCÊ QUISER QUE SEMPRE ATUALIZE AO ENTRAR NA TELA INICIALMENTE
-    //    (MAS O PULL-TO-REFRESH SERÁ A FORMA PRINCIPAL DE ATUALIZAÇÃO APÓS A PRIMEIRA CARGA)
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final controller = Provider.of<HomeProductsController>(
         context,
@@ -36,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen>
     });
   }
 
-  // 4. MÉTODO PARA O RefreshIndicator
   Future<void> _handleRefresh() async {
     await Provider.of<HomeProductsController>(
       context,
@@ -46,13 +40,11 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    // 5. CHAMAR super.build(context)
     super.build(context);
 
     return Scaffold(
       backgroundColor: const Color(0xFFF9F4FA),
       body: Consumer<HomeProductsController>(
-        // 6. USAR CONSUMER PARA REAGIR ÀS MUDANÇAS
         builder: (context, controller, child) {
           Widget productSection;
 
@@ -105,11 +97,9 @@ class _HomeScreenState extends State<HomeScreen>
           }
 
           return RefreshIndicator(
-            // 7. ADICIONAR RefreshIndicator
             onRefresh: _handleRefresh,
             child: SingleChildScrollView(
-              physics:
-                  const AlwaysScrollableScrollPhysics(), // Permite o scroll mesmo com poucos itens para o RefreshIndicator funcionar
+              physics: const AlwaysScrollableScrollPhysics(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -122,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen>
                       children: [
                         SizedBox(height: 25),
                         Text(
-                          "Olá, usuário!",
+                          "Olá, bem-vindo!",
                           style: TextStyle(
                             fontSize: 35,
                             fontWeight: FontWeight.w800,
@@ -141,46 +131,104 @@ class _HomeScreenState extends State<HomeScreen>
                         Transform.translate(
                           offset: const Offset(0, -37.5),
                           child: SizedBox(
-                            height: 75,
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 15,
-                              ),
-                              children: const [
-                                // Seus CategoryButton podem ser const se não mudam
-                                CategoryButton(
-                                  imagePath: 'assets/images/fruta.png',
-                                  label: "Frutas",
-                                  route: '/frutas',
-                                ),
-                                CategoryButton(
-                                  imagePath: 'assets/images/Bebida.png',
-                                  label: "Bebidas",
-                                  route: '/bebidas',
-                                ),
-                                CategoryButton(
-                                  imagePath: 'assets/images/Carne.png',
-                                  label: "Carne",
-                                  route: '/carne',
-                                ),
-                                CategoryButton(
-                                  imagePath: 'assets/images/Limpeza.png',
-                                  label: "Limpeza",
-                                  route: '/limpeza',
-                                ),
-                                CategoryButton(
-                                  imagePath: 'assets/images/fruta.png',
-                                  label: "Padaria",
-                                  route: '/padaria',
-                                ), // Ajuste o imagePath se necessário
-                                CategoryButton(
-                                  imagePath: 'assets/images/fruta.png',
-                                  label: "Pet Shop",
-                                  route: '/petshop',
-                                ), // Ajuste o imagePath se necessário
-                              ],
-                            ),
+                            height: 85,
+                            child: Consumer<HomeProductsController>(
+                              // <--- Consumer aqui
+                              builder: (context, controller, child) {
+                                // Se as categorias ainda não foram carregadas, pode mostrar um Shimmer ou CircularProgressIndicator
+                                if (controller.categories.isEmpty) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  ); // Ou um placeholder
+                                }
+                                return ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 5,
+                                  ),
+                                  itemCount: controller.categories.length,
+                                  itemBuilder: (context, index) {
+                                    if (index < 0 ||
+                                        index >= controller.categories.length) {
+                                      print(
+                                        'DEBUG ERRO CRÍTICO: ListView builder solicitou Index $index fora dos limites da lista de Length ${controller.categories.length}',
+                                      );
+                                      return const SizedBox.shrink(); // Retorna widget vazio se o index for inválido.
+                                    }
+
+                                    print(
+                                      'DEBUG: Processando Categoria - Index: $index, ID: ${controller.categories[index].id}, Name: ${controller.categories[index].name}, Ajuda ai Deus',
+                                    );
+
+                                    final category =
+                                        controller
+                                            .categories[index]; // LINHA 151
+                                    String imagePath;
+                                    String displayName;
+
+                                    switch (category.id) {
+                                      case "all_products_category_id_unique":
+                                        imagePath =
+                                            'assets/images/all_products.png';
+                                        displayName = 'Todos';
+                                        break;
+                                      case "1":
+                                        imagePath = 'assets/images/graos.png';
+                                        displayName = 'Grãos';
+                                        break;
+                                      case "2":
+                                        imagePath = 'assets/images/carnes.png';
+                                        displayName = 'Carnes';
+                                        break;
+                                      case "3":
+                                        imagePath =
+                                            'assets/images/enlatados.png';
+                                        displayName = 'Enlatados';
+                                        break;
+                                      case "4":
+                                        imagePath = 'assets/images/bebidas.png';
+                                        displayName = 'Bebidas';
+                                        break;
+                                      case "5":
+                                        imagePath = 'assets/images/frutas.png';
+                                        displayName = 'Hortifruti';
+                                        break;
+                                      case "6":
+                                        imagePath = 'assets/images/doces.png';
+                                        displayName = 'Doces';
+                                        break;
+                                      case "7":
+                                        imagePath =
+                                            'assets/images/laticinios.png';
+                                        displayName = 'Laticínios';
+                                        break;
+                                      case "8":
+                                        imagePath =
+                                            'assets/images/temperos.png';
+                                        displayName = 'Temperos';
+                                        break;
+                                      default:
+                                        imagePath =
+                                            'assets/images/default_category.png';
+                                        displayName = 'Outros';
+                                        break;
+                                    }
+
+                                    return CategoryButton(
+                                      key: ValueKey(
+                                        category.id,
+                                      ), // <--- Adicione uma Key ÚNICA ao item
+                                      imagePath: imagePath,
+                                      label: displayName,
+                                      onTap:
+                                          () => controller.setSelectedCategory(
+                                            category.name,
+                                          ),
+                                    );
+                                  },
+                                );
+                              },
+                            ), // <--- Fim do Consumer
                           ),
                         ),
                       ],
@@ -199,9 +247,7 @@ class _HomeScreenState extends State<HomeScreen>
                           ),
                         ),
                       ),
-                      // 8. USAR A productSection AQUI
                       productSection,
-                      const SizedBox(height: 20),
                     ],
                   ),
                 ],

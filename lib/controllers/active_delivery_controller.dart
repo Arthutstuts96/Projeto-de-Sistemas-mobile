@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import '../domain/models/delivery_task_mock_model.dart';
 import 'package:projeto_de_sistemas/services/navigation_service.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:projeto_de_sistemas/services/session/delivery_session.dart';
 
 class ActiveDeliveryController with ChangeNotifier {
   DeliveryTaskMock? _currentTask;
   bool _popupForCurrentTaskShown = false;
   final String _simulatedDriverId = "driver_beta_01";
   final NavigationService _navigationService = NavigationService();
+  final DeliveryHistorySession _historySession = DeliveryHistorySession();
 
   DeliveryTaskMock? get currentTask => _currentTask;
 
@@ -28,6 +30,7 @@ class ActiveDeliveryController with ChangeNotifier {
     required double mercadoLongitude,
     required double clientLatitude,
     required double clientLongitude,
+    DateTime? orderCreationDate, required DateTime criadoEm,
   }) {
     if (_currentTask == null ||
         _currentTask!.status == DeliveryTaskStatusMock.entregue) {
@@ -42,6 +45,7 @@ class ActiveDeliveryController with ChangeNotifier {
         mercadoLongitude: mercadoLongitude,
         clientLatitude: clientLatitude,
         clientLongitude: clientLongitude,
+        criadoEm: orderCreationDate ?? DateTime.now(),
       );
       _popupForCurrentTaskShown = false;
       print(
@@ -86,8 +90,12 @@ class ActiveDeliveryController with ChangeNotifier {
   void confirmDelivery() {
     if (_currentTask != null &&
         _currentTask!.status == DeliveryTaskStatusMock.coletadoPeloEntregador) {
-      _currentTask!.status = DeliveryTaskStatusMock.entregue;
+      _currentTask!.status =
+          DeliveryTaskStatusMock.entregue;
       print("TAREFA ENTREGUE: ${_currentTask!.id}");
+      _historySession.saveDeliveryToHistory(
+        _currentTask!,
+      );
       notifyListeners();
     }
   }

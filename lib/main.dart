@@ -16,6 +16,7 @@ import 'package:projeto_de_sistemas/screens/home_screen.dart';
 import 'package:projeto_de_sistemas/screens/main_screen.dart';
 import 'package:projeto_de_sistemas/screens/profile_screen.dart';
 import 'package:projeto_de_sistemas/screens/deliveryhome_screen.dart';
+import 'package:projeto_de_sistemas/controllers/delivery_history_controller.dart';
 
 Future<void> main() async {
   // Busca todas as dependências ANTES de iniciar a aplicação
@@ -32,6 +33,7 @@ Future<void> main() async {
               ChangeNotifierProvider(create: (_) => ActiveDeliveryController()),
               ChangeNotifierProvider(create: (_) => HomeProductsController()),
               ChangeNotifierProvider(create: (_) => SearchScreenController()),
+              ChangeNotifierProvider(create: (_) => DeliveryHistoryController(),),
               // Adicione outros providers/controllers aqui se necessário no futuro
               // Ex: ChangeNotifierProvider(create: (_) => CartController()), // Se seus controllers forem ChangeNotifiers
             ],

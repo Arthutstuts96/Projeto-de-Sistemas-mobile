@@ -1,3 +1,4 @@
+import 'package:projeto_de_sistemas/domain/models/products/category_model.dart';
 import 'package:projeto_de_sistemas/domain/models/products/product.dart';
 import 'package:projeto_de_sistemas/domain/repository/product_repository.dart';
 import 'package:projeto_de_sistemas/services/api/products_home_api.dart';
@@ -34,44 +35,182 @@ class ProductController implements ProductRepository {
 }
 
 class HomeProductsController with ChangeNotifier {
-  List<Product> _products = [];
+  final ProductControllerApi _productApi = ProductControllerApi();
+
+  List<Product> _allProducts = []; // Lista completa de produtos
+  List<Product> _filteredProducts =
+      []; // Lista de produtos exibidos (com filtro)
+  List<CategoryModel> _categories = []; // Lista de categorias extraídas
   bool _isLoading = false;
   String? _error;
   bool _hasFetchedOnce = false;
 
-  List<Product> get products => _products;
+  String?
+  _selectedCategory; // Armazena o nome da categoria selecionada para filtro
+
+  // Getters para expor os dados para a UI
+  List<Product> get products => _filteredProducts;
+  List<CategoryModel> get categories => _categories;
   bool get isLoading => _isLoading;
   String? get error => _error;
   bool get hasFetchedOnce => _hasFetchedOnce;
+  String? get selectedCategory => _selectedCategory;
 
-  Future<void> fetchProducts({bool forceRefresh = false}) async {
-    if (_hasFetchedOnce && _products.isNotEmpty && !forceRefresh) {
-      // Dados já carregados e não é uma atualização forçada, não faz nada.
-      return;
+  HomeProductsController() {
+    _initLoad(); // Chamada inicial para buscar tudo de forma assíncrona
+  }
+
+  // Método de inicialização assíncrona para carregar dados iniciais
+  Future<void> _initLoad() async {
+    _isLoading = true;
+    _error = null; // Limpa erros anteriores
+    notifyListeners(); // Notifica para mostrar loading inicial na UI
+
+    try {
+      // Força a primeira busca de produtos e categorias
+      await _performFetchAndFilter(forceRefresh: true);
+    } catch (e) {
+      // O erro já é tratado em _performFetchAndFilter, mas aqui para capturar erros fatais de inicialização.
+      print("HomeProductsController: Erro fatal na inicialização: $e");
+    } finally {
+      _isLoading = false;
+      notifyListeners(); // Notifica que a inicialização terminou (com ou sem dados)
     }
+  }
+
+  // Método privado para executar a lógica de busca e filtro
+  Future<void> _performFetchAndFilter({
+    bool forceRefresh = false,
+    String? category,
+  }) async {
+    // APENAS busca da API se _allProducts está vazio OU se for forçar refresh
+    if (_allProducts.isEmpty || forceRefresh || !_hasFetchedOnce) {
+      final List<Product> fetchedProducts = await _productApi.fetchProducts();
+      _allProducts = List.unmodifiable(
+        fetchedProducts,
+      ); // Torna a lista de todos os produtos imutável
+      _hasFetchedOnce = true;
+      _error = null;
+
+      _extractUniqueCategories(); // Extrai categorias APÓS produtos serem carregados
+    }
+
+    // Aplica o filtro. Se uma 'category' foi passada, usa essa.
+    // Senão, usa a _selectedCategory atual (se houver uma).
+    _applyFilter(category ?? _selectedCategory);
+  }
+
+  /// Busca os produtos da API.
+  /// [forceRefresh]: Se true, força a busca da API novamente.
+  /// [category]: Se fornecido, filtra os produtos após a busca (ou na lista cacheada).
+  Future<void> fetchProducts({
+    bool forceRefresh = false,
+    String? category,
+  }) async {
+    if (_isLoading && !forceRefresh) return;
 
     _isLoading = true;
     _error = null;
-    if (forceRefresh) { // Se for refresh, notifica para mostrar o indicador de loading do RefreshIndicator
-      notifyListeners();
-    } else if (!_hasFetchedOnce) { // Só mostra loading na primeira vez
-        notifyListeners();
-    }
-
+    // Remova notifyListeners() aqui! Será chamado no _initLoad ou no finally.
+    // notifyListeners(); // Certifique-se de que ESTA LINHA está REMOVIDA para evitar race condition
 
     try {
-      _products = await ProductControllerApi().fetchProducts();
-      _hasFetchedOnce = true;
+      await _performFetchAndFilter(
+        forceRefresh: forceRefresh,
+        category: category,
+      );
     } catch (e) {
       _error = e.toString();
-      _products = []; // Limpa produtos em caso de erro
+      _allProducts = [];
+      _filteredProducts = [];
+      _categories = []; // Limpa categorias em caso de erro na busca de produtos
+      print('HomeProductsController: Erro ao buscar/filtrar produtos: $_error');
     } finally {
       _isLoading = false;
-      notifyListeners();
+      notifyListeners(); // Este é o notifyListeners() que deve estar AQUI
     }
   }
-}
 
+  // Extrai as categorias únicas da lista de _allProducts
+  void _extractUniqueCategories() {
+    final Set<String> uniqueCategoryNamesFromProducts = {};
+    for (var product in _allProducts) {
+      if (product.category != null && product.category.isNotEmpty) {
+        uniqueCategoryNamesFromProducts.add(product.category);
+      }
+    }
+
+    // Constrói a lista final de CategoryModel
+    List<CategoryModel> tempCategories = [];
+
+    // Adiciona a categoria "Todos" explicitamente no início com um ID único
+    tempCategories.add(
+      CategoryModel(id: 'all_products_category_id_unique', name: 'Todos'),
+    );
+
+    // Adiciona as categorias únicas extraídas dos produtos
+    for (String name in uniqueCategoryNamesFromProducts) {
+      if (name.toLowerCase() != 'todos') {
+        // Evita adicionar "Todos" de novo se um produto já tiver essa categoria
+        tempCategories.add(CategoryModel(id: name.toLowerCase(), name: name));
+      }
+    }
+
+    // Ordena a lista de categorias
+    tempCategories.sort((a, b) {
+      if (a.id == 'all_products_category_id_unique')
+        return -1; // "Todos" fica sempre primeiro
+      if (b.id == 'all_products_category_id_unique') return 1;
+      return a.name.compareTo(b.name);
+    });
+
+    _categories = List.unmodifiable(
+      tempCategories,
+    ); // Atribui e torna a lista imutável
+    print(
+      'HomeProductsController: Categorias extraídas (imutáveis): ${_categories.map((c) => c.name).toList()}, Length: ${_categories.length}',
+    );
+  }
+
+  /// Define a categoria selecionada e aplica o filtro aos produtos.
+  void setSelectedCategory(String? category) {
+    // Apenas atualiza se a categoria for diferente
+    // ou se a lista de produtos completa não foi carregada e precisa de filtro
+    if (_selectedCategory == category &&
+        _allProducts.isNotEmpty &&
+        _filteredProducts.isNotEmpty &&
+        !isLoading) {
+      return;
+    }
+
+    _selectedCategory = category; // Atualiza a categoria selecionada
+    _applyFilter(category); // Aplica o filtro na lista _allProducts
+    notifyListeners(); // Notifica a UI para mostrar os produtos filtrados
+    print('HomeProductsController: Categoria selecionada: $_selectedCategory');
+  }
+
+  // Aplica o filtro à lista _allProducts e atualiza _filteredProducts.
+  void _applyFilter(String? category) {
+    if (category == null ||
+        category == "Todos" ||
+        category == "all" ||
+        category == "all_products_category_id_unique") {
+      _filteredProducts = List.from(
+        _allProducts,
+      ); // Retorna uma cópia da lista completa
+    } else {
+      _filteredProducts =
+          _allProducts.where((product) {
+            // Garante que product.category não é nulo antes de comparar
+            return product.category?.toLowerCase() ==
+                category.toLowerCase(); // Use '?' se category é nullable
+          }).toList();
+    }
+    print(
+      'HomeProductsController: Produtos filtrados: ${_filteredProducts.length} itens.',
+    );
+  }
+}
 class SearchScreenController with ChangeNotifier {
   List<Product> _allProducts = [];
   List<Market> _allMarkets = [];
