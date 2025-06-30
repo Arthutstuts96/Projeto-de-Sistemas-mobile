@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:projeto_de_sistemas/domain/models/market.dart';
+import 'package:projeto_de_sistemas/domain/models/users/market.dart';
 import 'package:projeto_de_sistemas/locator.dart';
 import 'package:projeto_de_sistemas/services/session/user_session.dart';
 import 'package:shared_preferences/shared_preferences.dart';

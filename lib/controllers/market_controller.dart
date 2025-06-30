@@ -1,4 +1,4 @@
-import 'package:projeto_de_sistemas/domain/models/market.dart';
+import 'package:projeto_de_sistemas/domain/models/users/market.dart';
 import 'package:projeto_de_sistemas/services/api/market_api.dart';
 
 class MarketController {

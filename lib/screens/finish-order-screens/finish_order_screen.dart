@@ -4,7 +4,7 @@ import 'package:projeto_de_sistemas/domain/models/order/deliver_data.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order_item.dart';
 import 'package:projeto_de_sistemas/domain/models/products/cart.dart';
-import 'package:projeto_de_sistemas/screens/components/register/button.dart';
+import 'package:projeto_de_sistemas/screens/components/button.dart';
 import 'package:projeto_de_sistemas/screens/finish-order-screens/finish_order_screen_four.dart';
 import 'package:projeto_de_sistemas/screens/finish-order-screens/finish_order_screen_one.dart';
 import 'package:projeto_de_sistemas/screens/finish-order-screens/finish_order_screen_three.dart';

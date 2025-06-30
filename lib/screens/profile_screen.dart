@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/login_controller.dart';
-import 'package:projeto_de_sistemas/controllers/user_controller.dart';
+import 'package:projeto_de_sistemas/controllers/user_session_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/users/user.dart';
 import 'package:projeto_de_sistemas/screens/components/profile/options_buttons.dart';
-import 'package:projeto_de_sistemas/screens/components/register/button.dart';
+import 'package:projeto_de_sistemas/screens/components/button.dart';
 import 'package:projeto_de_sistemas/screens/profile_screens/address_screen.dart';
 import 'package:projeto_de_sistemas/screens/profile_screens/help_screen.dart';
 import 'package:projeto_de_sistemas/screens/profile_screens/my_account_screen.dart';
@@ -139,9 +139,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(width: 12),
                 GestureDetector(
                   onLongPress: () {
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(const SnackBar(content: Text("data")));
+                    showDialog(
+                      context: context,
+                      barrierDismissible: true,
+                      builder:
+                          (context) => GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: Dialog(
+                              backgroundColor: Colors.transparent,
+                              child: Center(
+                                child: Container(
+                                  width: 380,
+                                  height: 380,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                        "assets/images/choose_screen_background.jpg",
+                                      ),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                    );
                   },
                   child: const CircleAvatar(
                     backgroundImage: AssetImage(
@@ -267,16 +290,15 @@ class _VerifyAccountBannerState extends State<VerifyAccountBanner> {
     }
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
+      margin: const EdgeInsets.only(bottom: 20, left: 12, right: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
           begin: Alignment.topLeft,
-          end: Alignment(0.8, 1),
-          colors: <Color>[
-            Color.fromARGB(255, 207, 53, 79),
-            Color.fromARGB(255, 228, 168, 198),
-          ],
+          end: Alignment.bottomRight,
+          colors: [Color(0xFFD44F6E), Color(0xFFF0B5D3)],
         ),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Stack(
         children: [
@@ -285,21 +307,31 @@ class _VerifyAccountBannerState extends State<VerifyAccountBanner> {
             children: [
               Image.asset(
                 "assets/images/girl/girl_verify_account.png",
-                width: 100,
+                width: 80,
               ),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 20),
                     Text(
-                      "${widget.currentUser.firstName}, Deixe sua conta mais segura verificando ela por aqui",
+                      "${widget.currentUser.firstName},",
                       style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w200,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      "Deixe sua conta mais segura verificando ela por aqui.",
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w300,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
                     GestureDetector(
                       onTap: () {
                         launchUrl(Uri.parse(ipHost));
@@ -307,9 +339,10 @@ class _VerifyAccountBannerState extends State<VerifyAccountBanner> {
                       child: const Text(
                         "Verificar conta",
                         style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w200,
-                          color: Color(0xFF0000FF),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                          decoration: TextDecoration.underline,
                         ),
                       ),
                     ),
@@ -319,15 +352,22 @@ class _VerifyAccountBannerState extends State<VerifyAccountBanner> {
             ],
           ),
           Positioned(
-            top: -8,
-            right: -8,
-            child: IconButton(
-              icon: const Icon(Icons.close, color: Colors.white),
-              onPressed: () {
+            top: 0,
+            right: 0,
+            child: GestureDetector(
+              onTap: () {
                 setState(() {
                   showBanner = false;
                 });
               },
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.black.withOpacity(0.3),
+                ),
+                padding: const EdgeInsets.all(4),
+                child: const Icon(Icons.close, color: Colors.white, size: 18),
+              ),
             ),
           ),
         ],

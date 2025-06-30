@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_de_sistemas/screens/components/register/button.dart';
+import 'package:projeto_de_sistemas/screens/components/button.dart';
 
 class AcceptOrderScreen extends StatelessWidget {
   const AcceptOrderScreen({super.key});
@@ -54,15 +54,15 @@ class AcceptOrderScreen extends StatelessWidget {
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text("Pedido aceito!"),
-                          backgroundColor: Colors.green,
+                          content: Text("O pedido não pôde ser aceito. Tente novamente outra hora"),
+                          backgroundColor: const Color.fromARGB(255, 155, 140, 12),
                         ),
                       );
                       Navigator.pop(context);
                     },
                     text: "Aceitar pedido",
                     color: Colors.green,
-                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
                 ),
               ],

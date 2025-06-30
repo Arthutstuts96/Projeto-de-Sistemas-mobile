@@ -36,8 +36,8 @@ String? validateCep(String? value) {
 }
 
 String? validatePassword(String? value) {
-  if (value == null || value.length < 6) {
-    return "A senha deve ter pelo menos 6 dígitos";
+  if (value == null || value.length < 8) {
+    return "A senha deve ter pelo menos 8 dígitos";
   }
   return null;
 }

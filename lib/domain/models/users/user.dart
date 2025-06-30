@@ -1,6 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class User {
+  int? id;
   String email;
   String firstName;
   String lastName;
@@ -13,7 +15,9 @@ class User {
   bool isStaff;
   DateTime lastLogin;
   DateTime dateJoined;
+
   User({
+    this.id,
     required this.email,
     required this.firstName,
     required this.lastName,
@@ -28,9 +32,8 @@ class User {
     required this.dateJoined,
   });
 
-  
-
   User copyWith({
+    int? id,
     String? email,
     String? firstName,
     String? lastName,
@@ -45,6 +48,7 @@ class User {
     DateTime? dateJoined,
   }) {
     return User(
+      id: id ?? this.id,
       email: email ?? this.email,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
@@ -62,6 +66,7 @@ class User {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'email': email,
       'firstName': firstName,
       'lastName': lastName,
@@ -79,6 +84,7 @@ class User {
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
+      id: map['id'] != null ? map['id'] as int : null,
       email: map['email'] as String,
       firstName: map['firstName'] as String,
       lastName: map['lastName'] as String,
@@ -96,45 +102,47 @@ class User {
 
   String toJson() => json.encode(toMap());
 
-  factory User.fromJson(String source) => User.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory User.fromJson(String source) =>
+      User.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'User(email: $email, firstName: $firstName, lastName: $lastName, completeName: $completeName, cpf: $cpf, phone: $phone, password: $password, isSuperuser: $isSuperuser, isActive: $isActive, isStaff: $isStaff, lastLogin: $lastLogin, dateJoined: $dateJoined)';
+    return 'User(id: $id, email: $email, firstName: $firstName, lastName: $lastName, completeName: $completeName, cpf: $cpf, phone: $phone, password: $password, isSuperuser: $isSuperuser, isActive: $isActive, isStaff: $isStaff, lastLogin: $lastLogin, dateJoined: $dateJoined)';
   }
 
   @override
   bool operator ==(covariant User other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.email == email &&
-      other.firstName == firstName &&
-      other.lastName == lastName &&
-      other.completeName == completeName &&
-      other.cpf == cpf &&
-      other.phone == phone &&
-      other.password == password &&
-      other.isSuperuser == isSuperuser &&
-      other.isActive == isActive &&
-      other.isStaff == isStaff &&
-      other.lastLogin == lastLogin &&
-      other.dateJoined == dateJoined;
+
+    return other.id == id &&
+        other.email == email &&
+        other.firstName == firstName &&
+        other.lastName == lastName &&
+        other.completeName == completeName &&
+        other.cpf == cpf &&
+        other.phone == phone &&
+        other.password == password &&
+        other.isSuperuser == isSuperuser &&
+        other.isActive == isActive &&
+        other.isStaff == isStaff &&
+        other.lastLogin == lastLogin &&
+        other.dateJoined == dateJoined;
   }
 
   @override
   int get hashCode {
-    return email.hashCode ^
-      firstName.hashCode ^
-      lastName.hashCode ^
-      completeName.hashCode ^
-      cpf.hashCode ^
-      phone.hashCode ^
-      password.hashCode ^
-      isSuperuser.hashCode ^
-      isActive.hashCode ^
-      isStaff.hashCode ^
-      lastLogin.hashCode ^
-      dateJoined.hashCode;
+    return id.hashCode ^
+        email.hashCode ^
+        firstName.hashCode ^
+        lastName.hashCode ^
+        completeName.hashCode ^
+        cpf.hashCode ^
+        phone.hashCode ^
+        password.hashCode ^
+        isSuperuser.hashCode ^
+        isActive.hashCode ^
+        isStaff.hashCode ^
+        lastLogin.hashCode ^
+        dateJoined.hashCode;
   }
 }

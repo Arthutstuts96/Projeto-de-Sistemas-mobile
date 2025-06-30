@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/order_controller.dart';
-import 'package:projeto_de_sistemas/screens/components/register/button.dart';
+import 'package:projeto_de_sistemas/screens/components/button.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order.dart';
 import 'package:projeto_de_sistemas/screens/order-screens/order_success_screen.dart';
 import 'package:provider/provider.dart';

@@ -2,7 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/register_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/users/user.dart';
-import 'package:projeto_de_sistemas/screens/components/register/button.dart';
+import 'package:projeto_de_sistemas/screens/components/button.dart';
 import 'package:projeto_de_sistemas/screens/components/register/form_input.dart';
 import 'package:projeto_de_sistemas/screens/components/register/register_form.dart';
 import 'package:projeto_de_sistemas/screens/components/register/register_top_style.dart';
@@ -21,7 +21,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
     with SingleTickerProviderStateMixin {
   int index = 1;
   List<PlatformFile> files = List.generate(
-    3,
+    2,
     (_) => PlatformFile(name: "", size: 0),
   );
 
@@ -35,7 +35,6 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
     'street': TextEditingController(),
     'city': TextEditingController(),
     'state': TextEditingController(),
-    'usuario': TextEditingController(),
     'password': TextEditingController(),
     'confirmPassword': TextEditingController(),
     'titular': TextEditingController(),
@@ -106,7 +105,6 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
       bottomNavigationBar: Container(
         color: const Color(0xFFfff8d9),
         child: Padding(
-          
           padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 48),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -115,8 +113,8 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
                 Button(
                   onPressed: () {
                     setState(() {
-                      if (widget.userType == UserTypes.client && index == 7) {
-                        index = 3;
+                      if (widget.userType == UserTypes.client && index == 6) {
+                        index = 2;
                       } else {
                         index--;
                       }
@@ -127,10 +125,10 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
                   text: "Voltar",
                   color: Colors.deepOrange,
                 ),
-              if (index <= 6)
+              if (index <= 5)
                 Button(
                   onPressed: () {
-                    if (index == 6) {
+                    if (index == 5) {
                       if (files.any(
                             (file) => file.size == 0 || file.name.isEmpty,
                           ) &&
@@ -147,8 +145,8 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
                     }
                     if (_validationKey.currentState!.validate()) {
                       setState(() {
-                        if (widget.userType == UserTypes.client && index == 3) {
-                          index = 7;
+                        if (widget.userType == UserTypes.client && index == 2) {
+                          index = 6;
                         } else {
                           index++;
                         }
@@ -236,50 +234,9 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
         );
       case 2:
         return RegisterForm(
-          title: "Endereço",
-          icon: Icons.house,
-          fields: [
-            FormInput(
-              label: "CEP",
-              controller: controllers['cep']!,
-              placeholder: "00000-000",
-              type: TextInputType.number,
-              validator: (value) => validateCep(value),
-            ),
-            FormInput(
-              label: "Rua",
-              controller: controllers['street']!,
-              placeholder: "Nome da rua",
-            ),
-            FormInput(
-              label: "Cidade",
-              controller: controllers['city']!,
-              placeholder: "Palmas",
-            ),
-            DropdownButtonFormField<String>(
-              value: "TO",
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                label: Text("Estado"),
-                hintText: "Selecione o estado",
-              ),
-              items: selectEstadoItens,
-              onChanged: (value) {
-                controllers['state']?.text = value ?? "";
-              },
-            ),
-          ],
-        );
-      case 3:
-        return RegisterForm(
           title: "Dados de login e segurança",
           icon: Icons.password,
           fields: [
-            FormInput(
-              label: "Usuário (apelido)",
-              controller: controllers['usuario']!,
-              placeholder: "João Silva",
-            ),
             FormInput(
               label: "Senha",
               controller: controllers['password']!,
@@ -300,7 +257,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
             ),
           ],
         );
-      case 4:
+      case 3:
         if (widget.userType == UserTypes.worker) {
           return RegisterForm(
             title: "Dados bancários",
@@ -342,7 +299,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
           );
         }
         break;
-      case 5:
+      case 4:
         if (widget.userType == UserTypes.worker) {
           return RegisterForm(
             title: "Informações do veículo",
@@ -370,7 +327,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
           );
         }
         break;
-      case 6:
+      case 5:
         if (widget.userType == UserTypes.worker) {
           return RegisterForm(
             title: "Documentação",
@@ -393,16 +350,16 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
                 text: "Selecione um arquivo",
               ),
               Text(files[1].name),
-              const SizedBox(height: 12),
-              const Text(
-                "Foto segurando o documento",
-                style: TextStyle(fontSize: 16),
-              ),
-              Button(
-                onPressed: () async => pickFile(2),
-                text: "Selecione um arquivo",
-              ),
-              Text(files[2].name),
+              // const SizedBox(height: 12),
+              // const Text(
+              //   "Foto segurando o documento",
+              //   style: TextStyle(fontSize: 16),
+              // ),
+              // Button(
+              //   onPressed: () async => pickFile(2),
+              //   text: "Selecione um arquivo",
+              // ),
+              // Text(files[2].name),
             ],
           );
         }
@@ -433,11 +390,22 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
           ),
           Button(
             onPressed: () async {
+              final user = mapFormDataToUser();
+              print(user);
               final success = await registerController.saveClientUser(
-                user: mapFormDataToUser(),
+                user: user,
               );
               if (success) {
                 Navigator.pushReplacementNamed(context, "login_screen");
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      "Algo deu errado! Verifique suas informações e tente novamente",
+                    ),
+                    backgroundColor: Colors.redAccent,
+                  ),
+                );
               }
             },
             text: "Concluir cadastro",

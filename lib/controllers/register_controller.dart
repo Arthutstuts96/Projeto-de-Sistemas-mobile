@@ -7,8 +7,28 @@ class RegisterController implements RegisterUserRepository {
 
   @override
   Future<bool> saveClientUser({required User user}) async {
-    final bool success = await _registerUserApi.saveUser(user: user);
+    final bool success = await _registerUserApi.saveUser(
+      user: user,
+      postUrl: 'clients/',
+    );
+    return success;
+  }
+
+  @override
+  Future<bool> saveDeliveryUser({required User user}) async {
+    final bool success = await _registerUserApi.saveUser(
+      user: user,
+      postUrl: 'delivery-users/',
+    );
+    return success;
+  }
+
+  @override
+  Future<bool> saveShopperUser({required User user}) async {
+    final bool success = await _registerUserApi.saveUser(
+      user: user,
+      postUrl: 'separater-users/',
+    );
     return success;
   }
 }
- 

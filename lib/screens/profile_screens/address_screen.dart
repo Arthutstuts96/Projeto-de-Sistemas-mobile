@@ -61,7 +61,7 @@ class _AdressScreenState extends State<AddressScreen> {
                   final address = addresses[index];
                   return ListTile(
                     title: Text(
-                      "Quadra ${address.quadra}, Lote ${address.lote}",
+                      "Quadra ${address.neighborhood}, Lote ${address.street}",
                     ),
                     subtitle: Text(
                       '${address.city} - ${address.state}\n${address.street}',

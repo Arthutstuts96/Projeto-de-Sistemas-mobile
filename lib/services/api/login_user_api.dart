@@ -1,18 +1,21 @@
 import 'package:dio/dio.dart';
+import 'package:projeto_de_sistemas/locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:projeto_de_sistemas/utils/api_configs.dart';
 
 class LoginUserApi {
-  final Dio _dio = Dio();
+  final Dio _dio;
+
+  LoginUserApi() : _dio = getIt<Dio>();
 
   Future<Map<String, dynamic>> loginUser({
     required String email,
     required String password,
+    required String loginUrl,
   }) async {
     try {
-      // Fazer requisição para a API
       final response = await _dio.post(
-        '$ipHost/api/token/', // Rota do Django REST JWT
+        '$ipHost/$loginUrl',
         data: {'email': email, 'password': password},
         options: Options(
           contentType: Headers.jsonContentType,
@@ -20,11 +23,8 @@ class LoginUserApi {
         ),
       );
 
-      // Processar resposta
       if (response.statusCode == 200) {
         final tokens = response.data;
-
-        // 3. Armazenar tokens localmente
         await _storeTokens(tokens['access'], tokens['refresh']);
 
         return {'success': true, 'tokens': tokens};
@@ -35,8 +35,7 @@ class LoginUserApi {
         'error': 'Credenciais inválidas ou servidor indisponível',
       };
     } on DioException catch (e) {
-      // Tratamento específico para erros de rede/Dio
-      String errorMessage = 'Erro na conexão(Dio)';
+      String errorMessage = 'Erro na conexão: você está conectado à internet?';
       if (e.response?.statusCode == 401) {
         errorMessage = 'Email ou senha incorretos';
       } else if (e.type == DioExceptionType.connectionTimeout) {

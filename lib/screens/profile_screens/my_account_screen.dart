@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/domain/models/users/user.dart';
+import 'package:projeto_de_sistemas/screens/components/button.dart';
 
 class MyAccountScreen extends StatelessWidget {
   const MyAccountScreen({super.key, required this.title, this.user});
@@ -33,7 +34,43 @@ class MyAccountScreen extends StatelessWidget {
         'title': 'Deletar conta',
         'description': 'Apagar sua conta.',
         'onTap': () {
-          // Navigator.pushNamed(context, '/security');
+          showDialog(
+            context: context,
+            builder:
+                (context) => AlertDialog(
+                  title: const Text("Confirmar exclusão"),
+                  content: const Text(
+                    "Você tem certeza que deseja deletar sua conta?",
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("Cancelar"),
+                    ),
+                    Button(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            backgroundColor: Color.fromARGB(255, 155, 140, 12),
+                            content: Text(
+                              'A permissão de administrador é necessária para deletar a conta',
+                            ),
+                          ),
+                        );
+                      },
+                      text: "Confirmar",
+                      color: Colors.red,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 16,
+                      ),
+                    ),
+                  ],
+                ),
+          );
         },
       },
     ];

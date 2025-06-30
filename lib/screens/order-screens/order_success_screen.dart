@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/cart_controller.dart';
-import 'package:projeto_de_sistemas/screens/components/register/button.dart';
+import 'package:projeto_de_sistemas/screens/components/button.dart';
 
 class OrderSuccessScreen extends StatelessWidget {
   OrderSuccessScreen({super.key});

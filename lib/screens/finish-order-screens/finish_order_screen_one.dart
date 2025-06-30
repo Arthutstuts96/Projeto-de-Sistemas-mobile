@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/address_controller.dart';
-import 'package:projeto_de_sistemas/controllers/user_controller.dart';
+import 'package:projeto_de_sistemas/controllers/user_session_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/order/deliver_data.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order.dart';
 import 'package:projeto_de_sistemas/domain/models/users/address.dart';
 import 'package:projeto_de_sistemas/domain/models/users/user.dart';
-import 'package:projeto_de_sistemas/screens/components/register/button.dart';
+import 'package:projeto_de_sistemas/screens/components/button.dart';
 import 'package:projeto_de_sistemas/utils/widgets/address_dialog.dart';
 import 'package:projeto_de_sistemas/utils/widgets/select_time.dart';
 
@@ -70,7 +70,7 @@ class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
             const SizedBox(width: 4),
             Expanded(
               child: Text(
-                "Quadra ${_address?.quadra ?? "não especificada"}",
+                "Quadra ${_address?.neighborhood ?? "não especificada"}",
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -260,7 +260,7 @@ class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
                 final address = addresses[index];
                 return ListTile(
                   leading: const Icon(Icons.home),
-                  title: Text("Quadra ${address.quadra}"),
+                  title: Text("Quadra ${address.neighborhood}"),
                   subtitle: Text("${address.street}, ${address.city}"),
                   onTap: () {
                     Navigator.pop(context, address);
@@ -280,7 +280,7 @@ class _FinishOrderScreenOneState extends State<FinishOrderScreenOne> {
         tipoVeiculo: "",
         enderecoId: 0,
       );
-      widget.order.dadosEntrega!.enderecoId = selectedAddress!.id!;
+      widget.order.dadosEntrega!.enderecoId = selectedAddress?.id ?? 1;
     });
   }
 }

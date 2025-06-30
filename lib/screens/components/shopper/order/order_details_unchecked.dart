@@ -8,45 +8,94 @@ class OrderDetailsUnchecked extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (order == null || order!.itens.isEmpty) {
-      return const Center(child: Text('Não há mais nenhum item a separar'));
+      return const Center(
+        child: Text(
+          'Não há mais nenhum item a separar',
+          style: TextStyle(fontSize: 16, color: Colors.black54),
+        ),
+      );
     }
 
     return Container(
-      color: const Color.fromARGB(255, 219, 206, 165),
+      decoration: const BoxDecoration(
+        color: Color(0xFFFFF8DC), // cor tipo "folha amarelada"
+      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Detalhes do Pedido:", 
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          const Padding(
+            padding: EdgeInsets.all(12.0),
+            child: Text(
+              "Detalhes do Pedido",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
           ),
-          const SizedBox(height: 8), 
+          const Divider(thickness: 1.5),
           Expanded(
-            child: ListView.builder(
+            child: ListView.separated(
               itemCount: order!.itens.length,
+              separatorBuilder:
+                  (_, __) => const Divider(
+                    thickness: 1,
+                    color: Color.fromARGB(255, 184, 149, 136),
+                    indent: 16,
+                    endIndent: 16,
+                  ),
               itemBuilder: (context, index) {
                 final item = order!.itens[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(
-                    vertical: 4.0,
-                    horizontal: 8.0,
+                    vertical: 6.0,
+                    horizontal: 16.0,
                   ),
-                  child: Card(
-                    elevation: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.6),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 6,
+                          offset: Offset(6, 6),
+                        ),
+                      ],
+                    ),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.all(12),
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.brown.shade100,
+                        child: Text(
+                          '${index + 1}',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      title: Text(
+                        'Produto: ${item.produtoId}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          fontFamily: 'PatrickHand',
+                        ),
+                      ),
+                      subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Produto ID: ${item.produtoId}',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                            'Quantidade: ${item.quantidade}',
+                            style: const TextStyle(fontFamily: 'PatrickHand'),
                           ),
-                          Text('Quantidade: ${item.quantidade}'),
                           Text(
                             'Preço Unitário: R\$ ${item.precoUnitario.toStringAsFixed(2)}',
+                            style: const TextStyle(fontFamily: 'PatrickHand'),
                           ),
                           Text(
-                            'Disponibilidade: ${item.disponibilidade ? "Disponível" : "Indisponível"}',
+                            'Disponível: ${item.disponibilidade ? "Sim" : "Não"}',
+                            style: TextStyle(
+                              color:
+                                  item.disponibilidade
+                                      ? Colors.green
+                                      : Colors.red,
+                            ),
                           ),
                         ],
                       ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:projeto_de_sistemas/controllers/products_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/products/product.dart';
-import 'package:projeto_de_sistemas/domain/models/market.dart';
+import 'package:projeto_de_sistemas/domain/models/users/market.dart';
 import 'package:projeto_de_sistemas/screens/components/products/product_card.dart';
 import 'package:projeto_de_sistemas/screens/components/market/card_market.dart';
 
@@ -26,8 +26,6 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Carrega os dados iniciais (produtos ou mercados, dependendo do modo padrão)
-      // e aplica o filtro inicial (query vazia).
       final controller = Provider.of<SearchScreenController>(
         context,
         listen: false,
@@ -312,12 +310,6 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
                   _buildRadioOption(
                     "Por marca",
                     "brand",
-                    tempFilter,
-                    (newValue) => setModalState(() => tempFilter = newValue),
-                  ),
-                  _buildRadioOption(
-                    "Por mercado",
-                    "market",
                     tempFilter,
                     (newValue) => setModalState(() => tempFilter = newValue),
                   ),
