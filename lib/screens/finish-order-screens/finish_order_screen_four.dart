@@ -61,6 +61,7 @@ class _FinishOrderScreenFourState extends State<FinishOrderScreenFour> {
         mercadoLongitude: widget.order.mercadoLongitude ?? 0.0,
         clientLatitude: widget.order.clientLatitude ?? 0.0,
         clientLongitude: widget.order.clientLongitude ?? 0.0,
+        criadoEm: DateTime.now(),
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
