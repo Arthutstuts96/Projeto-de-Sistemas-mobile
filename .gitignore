@@ -43,3 +43,32 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Dados sensíveis para comunicação com api
+/lib/utils/api_configs.dart
+
+# Builds e caches
+/build/
+.dart_tool/
+.pub/
+.pub-cache/
+ios/Flutter/.last_build_id
+
+# Dependências baixadas
+/pubspec.lock
+/ios/Pods/
+/ios/.symlinks/
+
+# Configurações locais e IDEs
+.idea/
+*.iml
+.vscode/
+
+# Arquivos temporários e de sistema
+*.log
+*.pyc
+*.swp
+.DS_Store
+
+# Dados sensíveis para comunicação com api
+/lib/utils/api_configs.dart

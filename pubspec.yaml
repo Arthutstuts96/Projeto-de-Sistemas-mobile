@@ -9,11 +9,44 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  file_picker: ^10.1.2
+  url_launcher: ^6.3.1
+  dio: ^5.8.0+1
+  shared_preferences: ^2.5.3
+  flutter_svg: ^2.0.10
+  device_preview: ^1.2.0
+  universal_stepper: ^1.0.0+1
+  step_progress_indicator: ^1.0.2
+  pix_flutter: ^2.2.0
+  diacritic: ^0.1.6
+  provider: ^6.0.0
+  google_maps_flutter: ^2.12.2
+  geolocator: ^14.0.1
+  permission_handler: ^12.0.0+1
+  get_it: ^8.0.3
+  fl_chart: ^1.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mocktail: ^1.0.0
   flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/images/girl/
+    - assets/images/GPS.png
+    - assets/images/delivery.png
+    - assets/images/choose_screen_background.jpg
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins/poppins-regular.ttf
+        - asset: assets/fonts/Poppins/poppins-italic.ttf
+        - asset: assets/fonts/Poppins/poppins-bold.ttf
+    - family: Leckerli One
+      fonts:
+        - asset: assets/fonts/Leckerli_One/LeckerliOne-Regular.ttf
+          weight: 700
