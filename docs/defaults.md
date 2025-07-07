@@ -30,9 +30,9 @@
   ```bash
   fix/descricao-da-branch
   ```
-  #### Melhorias de código
+  #### Testes 
   ```bash
-  refr/descricao-da-branch
+  test/descricao-da-branch
   ```
   #### Documentação
   ```bash
@@ -47,15 +47,15 @@
   Dentro das branchs, além de sua função principal, é possilvel que outras ativiades como alguma correção ou melhoria sejam necessárias, com isso abaixo temos a convenção de nomeção de commits:
   #### Nova funcionalidade
   ```brash
-  feat: descricao-da-branch
+  feat: descricao-da-funcionalidade 
   ```
   #### Correções de bugs
   ```brash
-  fix: descricao-do-commit
+  fix: descricao-do-bug-corrigido
   ```
-  #### Melhorias de código
+  #### Teste
   ```brash
-  refr: descricao-do-commit
+  test: descricao-da-classe-testada
   ```
   #### Documentação
   ```brash
@@ -63,5 +63,5 @@
   ```
   #### Configuração
   ```brash
-  config: descricao-do-commit
+  config: descricao-da-configuração
   ```

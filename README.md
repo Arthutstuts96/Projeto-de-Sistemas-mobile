@@ -1,6 +1,6 @@
 <h1 align="center"> Projeto-de-Sistemas | Mobile</h1>
         <td>As informações principais do projeto estão <a href="https://github.com/MellloJ/Projeto-de-Sistemas">nesse repositório</a></td>
-
+        <hr>
 <table align="center">
     <tr>
         <td>Home</td>
@@ -19,14 +19,19 @@
 
 <hr>
 
+## Landing Page
+
+<a href="https://jessilver.github.io/trazai-landing-page/">Ir para landing page do Traz Aí</a>
+
 ## Sobre
 
-Esse repositório diz respeito à versão mobile do Traz Aí, o aplicativo de entregas especializado para compras grandes
+Esse repositório diz respeito à versão mobile do Traz Aí, o aplicativo de entregas especializado para compras de supermercado
 
-<!-- ## Objetivos
+<img src="docs/images/logo.png" alt="Logo principal do Traz Aí, uma garota em amarelo segurando um carrinho de compras com uma sacola dentro" width=400 style="margin-bottom: -50px; margin-top: -80px"/>
 
-- Em
-- Breve -->
+Procure os itens nos mercados mais perto de você, escolha com cuidado o que deseja e ainda consiga uma renda extra! Com o Traz Aí, você tem tudo isso! Com uma interface limpa e sem complicações, é possível fazer suas compras do mês no conforto da sua casa, sem se preocupar com sacola e filas enormes, por um preço que cabe no bolso
+
+E mais: Para quem deseja uma renda extra e uma oportunidade de profissão, nossos cargos de separadores e entregadores estão abertos! Basta se cadastrar no aplicativo com os dados necessários e já pode começar os serviços, sem burocracia!
 
 ## Tecnologias Utilizadas
 
@@ -35,14 +40,14 @@ Esse repositório diz respeito à versão mobile do Traz Aí, o aplicativo de en
 - Linguagens Utilizadas:
 <p>
   <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=python,dart,js,css,html" />
+    <img src="https://skillicons.dev/icons?i=dart" />
   </a>
 </p>
 
 - Frameworks:
 <p>
   <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=django,flutter,tailwind" />
+    <img src="https://skillicons.dev/icons?i=flutter" />
   </a>
 </p>
 

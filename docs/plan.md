@@ -68,5 +68,7 @@ Para essa etapa, configuramos um dispositivo android, para facilidade com a comp
     ```bash
     ALLOWED_HOSTS="localhost,<endereço_aqui>"
     ```
-- Depois, criar, na pasta <code>utils</code> do projeto Flutter, um arquivo <code>api_configs.dart</code>, que tenha as variáveis necessárias para realizar a comunicação com o back-end
+- Depois, criar, na pasta <code>utils</code> do projeto Flutter, um arquivo <code>api_configs.dart</code>, que tenha as variáveis necessárias para realizar a comunicação com o back-end, nesse estilo:
+<code>const ipHost = <ip_do_seu_dispositivo>;</code>
 - Após isso, enquanto estiver rodando o servidor Django, ele deve aceitar requisições vindas do Flutter 
+
