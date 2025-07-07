@@ -23,7 +23,6 @@ class MarketApi {
        _userSession = userSession;
 
   Future<List<Market>> getAllMarkets() async {
-    //TODO: buscar mercados pela api
-    return [Market("AssandoAí Atacadista"), Market("Supermercado Pague Bem")];
+    return [Market("AssandoAí Atacadista")];
   }
 }

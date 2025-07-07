@@ -63,10 +63,16 @@ class _CartScreenState extends State<CartScreen> {
             fullPrice: fullPrice,
             onPressed: () {
               if (fullPrice != 0) {
-                Navigator.push(context, navigateUsingTransitionFromBelow(const FinishOrderScreen()));
+                Navigator.push(
+                  context,
+                  navigateUsingTransitionFromBelow(const FinishOrderScreen()),
+                );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Não tem nenhum item no carrinho!'), backgroundColor: Colors.redAccent,),
+                  const SnackBar(
+                    content: Text('Não tem nenhum item no carrinho!'),
+                    backgroundColor: Colors.redAccent,
+                  ),
                 );
               }
             },
@@ -122,7 +128,12 @@ class _CartScreenState extends State<CartScreen> {
             return RefreshIndicator(
               onRefresh: refreshCart,
               child: ListView.builder(
-                padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 80),
+                padding: const EdgeInsets.only(
+                  top: 8,
+                  left: 8,
+                  right: 8,
+                  bottom: 80,
+                ),
                 itemCount: cart.cartItems.length,
                 itemBuilder: (context, index) {
                   final product = cart.cartItems[index];

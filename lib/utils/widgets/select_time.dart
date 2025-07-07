@@ -27,18 +27,17 @@ Future<void> selectTime(
         context: context,
         builder:
             (_) => AlertDialog(
-              title: Text('Horário inválido'),
-              content: Text('Escolha um horário entre 08:00 e 21:00.'),
+              title: const Text('Horário inválido'),
+              content: const Text('Escolha um horário entre 08:00 e 21:00.'),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text('Ok'),
+                  child: const Text('Ok'),
                 ),
               ],
             ),
       );
       return;
     }
-    print('Horário escolhido: ${horarioSelecionado.format(context)}');
   }
 }

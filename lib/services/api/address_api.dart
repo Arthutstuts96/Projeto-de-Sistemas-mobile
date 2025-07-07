@@ -5,7 +5,6 @@ import 'package:projeto_de_sistemas/services/session/user_session.dart';
 import 'package:projeto_de_sistemas/utils/api_configs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-//TODO: ids de usuários nos cadastros serem o ID real do usuário, e não 1
 class AddressApi {
   final Dio _dio;
   final SharedPreferences _prefs;
@@ -126,7 +125,6 @@ class AddressApi {
 
       return response.statusCode == 201;
     } catch (e) {
-      print('Erro ao salvar endereço: $e');
       return false;
     }
   }

@@ -18,14 +18,12 @@ class RegisterUserApi {
         },
         options: Options(contentType: Headers.jsonContentType),
       );
-      print(response);
       if (response.statusCode == 201) {
         return true;
       } else {
         return false;
       }
     } catch (e) {
-      print(e);
       return false;
     }
   }

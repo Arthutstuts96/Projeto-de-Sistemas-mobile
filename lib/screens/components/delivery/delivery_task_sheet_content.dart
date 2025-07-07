@@ -190,8 +190,8 @@ class DeliveryTaskSheetContent extends StatelessWidget {
                     title: 'Seus ganhos',
                     details: [
                       'Ganhos do dia',
-                      'R\$ 100,00 (mock)',
-                      'Saldo total: R\$ 1000,00 (mock)',
+                      'R\$ 100,00',
+                      'Saldo total: R\$ 1000,00',
                     ],
                   ),
                 ),
@@ -200,9 +200,9 @@ class DeliveryTaskSheetContent extends StatelessWidget {
                   child: DeliveryInfoCard(
                     title: 'Rotas',
                     details: [
-                      'Rotas aceitas: 15 (mock)',
-                      'Finalizadas: 12 (mock)',
-                      'Recusadas: 3 (mock)',
+                      'Rotas aceitas: 15',
+                      'Finalizadas: 12',
+                      'Recusadas: 3',
                     ],
                   ),
                 ),

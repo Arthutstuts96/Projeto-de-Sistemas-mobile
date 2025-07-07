@@ -48,7 +48,6 @@ class _DeliveryHomeScreenState extends State<DeliveryHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
-        // O corpo do Scaffold agora é um PageView
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(), // Remove o swipe manual
         children: _screens, // As telas são os filhos do PageView

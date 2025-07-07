@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../domain/models/delivery_task_mock_model.dart';
 import 'package:projeto_de_sistemas/services/navigation_service.dart';
@@ -30,12 +29,13 @@ class ActiveDeliveryController with ChangeNotifier {
     required double mercadoLongitude,
     required double clientLatitude,
     required double clientLongitude,
-    DateTime? orderCreationDate, required DateTime criadoEm,
+    DateTime? orderCreationDate,
+    required DateTime criadoEm,
   }) {
     if (_currentTask == null ||
         _currentTask!.status == DeliveryTaskStatusMock.entregue) {
       _currentTask = DeliveryTaskMock(
-        id: "TASK_FROM_${orderId}_${DateTime.now().millisecondsSinceEpoch}", // Cria um ID de tarefa baseado no pedido
+        id: "TASK_FROM_${orderId}_${DateTime.now().millisecondsSinceEpoch}", 
         nomeCliente: customerName,
         enderecoEntrega: deliveryAddress,
         itensResumo: itemsSummary,
@@ -48,14 +48,9 @@ class ActiveDeliveryController with ChangeNotifier {
         criadoEm: orderCreationDate ?? DateTime.now(),
       );
       _popupForCurrentTaskShown = false;
-      print(
-        "NOVA TAREFA DE ENTREGA (DO PEDIDO REAL $orderId): ${_currentTask!.id}",
-      );
       notifyListeners();
     } else {
-      print(
-        "Ainda há uma tarefa ativa (${_currentTask!.id}), nova tarefa (do pedido $orderId) não gerada.",
-      );
+      return;
     }
   }
 
@@ -63,9 +58,6 @@ class ActiveDeliveryController with ChangeNotifier {
     if (_currentTask != null) {
       _currentTask!.status = DeliveryTaskStatusMock.aceitoPeloEntregador;
       _currentTask!.idEntregadorAtribuido = _simulatedDriverId;
-      print(
-        "TAREFA ACEITA: ${_currentTask!.id} pelo entregador $_simulatedDriverId",
-      );
       _popupForCurrentTaskShown = true;
       notifyListeners();
     }
@@ -73,7 +65,6 @@ class ActiveDeliveryController with ChangeNotifier {
 
   void declineTask() {
     if (_currentTask != null) {
-      print("TAREFA RECUSADA: ${_currentTask!.id}");
       _clearCurrentTask();
     }
   }
@@ -82,7 +73,6 @@ class ActiveDeliveryController with ChangeNotifier {
     if (_currentTask != null &&
         _currentTask!.status == DeliveryTaskStatusMock.aceitoPeloEntregador) {
       _currentTask!.status = DeliveryTaskStatusMock.coletadoPeloEntregador;
-      print("TAREFA COLETADA: ${_currentTask!.id}");
       notifyListeners();
     }
   }
@@ -90,12 +80,8 @@ class ActiveDeliveryController with ChangeNotifier {
   void confirmDelivery() {
     if (_currentTask != null &&
         _currentTask!.status == DeliveryTaskStatusMock.coletadoPeloEntregador) {
-      _currentTask!.status =
-          DeliveryTaskStatusMock.entregue;
-      print("TAREFA ENTREGUE: ${_currentTask!.id}");
-      _historySession.saveDeliveryToHistory(
-        _currentTask!,
-      );
+      _currentTask!.status = DeliveryTaskStatusMock.entregue;
+      _historySession.saveDeliveryToHistory(_currentTask!);
       notifyListeners();
     }
   }
@@ -128,18 +114,10 @@ class ActiveDeliveryController with ChangeNotifier {
         desiredAccuracy: LocationAccuracy.high,
       );
     } catch (e) {
-      print("Erro ao obter localização do motoboy: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Não foi possível obter sua localização atual."),
         ),
-      );
-      return;
-    }
-
-    if (motoboyLocation == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Localização do motoboy não disponível.")),
       );
       return;
     }
@@ -168,6 +146,7 @@ class ActiveDeliveryController with ChangeNotifier {
       );
     }
   }
+
   Future<void> startNavigationToClient(BuildContext context) async {
     if (currentTask == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -178,15 +157,12 @@ class ActiveDeliveryController with ChangeNotifier {
       return;
     }
 
-    // 1. Obter a localização atual do motoboy (origem da rota)
-    // Mesmo que o ideal seja do mercado, para o teste MVP, usamos a do motoboy
     Position? motoboyLocation;
     try {
       motoboyLocation = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
     } catch (e) {
-      print("Erro ao obter localização do motoboy para cliente: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -197,30 +173,17 @@ class ActiveDeliveryController with ChangeNotifier {
       return;
     }
 
-    if (motoboyLocation == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Localização do motoboy não disponível para navegar até o cliente.",
-          ),
-        ),
-      );
-      return;
-    }
-
-    // 2. Coordenadas do cliente (destino da rota)
     final double clientLat =
-        currentTask!.clientLatitude!; // Use ! pois já garantiu que não é null
-    final double clientLng = currentTask!.clientLongitude!; //
+        currentTask!.clientLatitude; 
+    final double clientLng = currentTask!.clientLongitude; 
 
-    // 3. Chamar o serviço de navegação
     final bool launched = await _navigationService.navigateTo(
       startLatitude: motoboyLocation.latitude,
       startLongitude: motoboyLocation.longitude,
       endLatitude: clientLat,
       endLongitude: clientLng,
       isToMercado:
-          false, // <--- Indica que NÃO é para o mercado (é para o cliente)
+          false, 
     );
 
     if (launched) {

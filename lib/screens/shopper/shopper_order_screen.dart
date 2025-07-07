@@ -1,44 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_de_sistemas/domain/models/order/deliver_data.dart';
-import 'package:projeto_de_sistemas/domain/models/order/order.dart';
-import 'package:projeto_de_sistemas/domain/models/order/order_item.dart';
+import 'package:intl/intl.dart'; // Ótimo para formatar datas
+import 'package:projeto_de_sistemas/controllers/shopper_controller.dart';
 import 'package:projeto_de_sistemas/screens/components/icon_row.dart';
+import 'package:projeto_de_sistemas/screens/components/shopper/order/finalize_separation_fab.dart';
 import 'package:projeto_de_sistemas/screens/components/shopper/order/order_details_unchecked.dart';
+import 'package:provider/provider.dart';
 
-class ShopperOrderScreen extends StatefulWidget {
+// MUDANÇA: Convertido para StatelessWidget, pois o estado é gerenciado pelo Provider
+class ShopperOrderScreen extends StatelessWidget {
   const ShopperOrderScreen({super.key});
 
   @override
-  State<ShopperOrderScreen> createState() => _ShopperOrderScreenState();
-}
-
-class _ShopperOrderScreenState extends State<ShopperOrderScreen> {
-  //TODO: pegar uma ordem real
-  Order? order = Order(
-    numeroPedido: "ORDER_342343414",
-    statusPagamento: "pendente",
-    statusPedido: "pendente",
-    valorTotal: 213.32,
-    criadoEm: DateTime.now(),
-    descricao: "Quero as bananas verdes!",
-    itens: [
-      OrderItem(quantidade: 1, precoUnitario: 10.00, disponibilidade: true),
-      OrderItem(quantidade: 1, precoUnitario: 5.00, disponibilidade: true),
-      OrderItem(quantidade: 1, precoUnitario: 10.00, disponibilidade: false),
-    ],
-    dadosEntrega: DeliverData(pedidoId: 0, tipoVeiculo: "", enderecoId: 0),
-  );
-
-  @override
   Widget build(BuildContext context) {
+    // MUDANÇA: Ouvindo o ShopperController para obter a tarefa ativa
+    final shopperController = context.watch<ShopperController>();
+    final activeTask = shopperController.activeTask;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 228, 35, 35),
         foregroundColor: Colors.white,
-        title: const Text(
-          "Pedido atual",
-          style: TextStyle(fontSize: 24),
-        ),
+        title: const Text("Pedido atual", style: TextStyle(fontSize: 24)),
         actions: [
           IconButton(
             icon: const Icon(Icons.history_outlined, size: 28),
@@ -47,8 +29,9 @@ class _ShopperOrderScreenState extends State<ShopperOrderScreen> {
           ),
         ],
       ),
+      // MUDANÇA: A lógica agora verifica se 'activeTask' é nulo
       body:
-          order == null
+          activeTask == null
               ? const Center(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24.0),
@@ -89,21 +72,21 @@ class _ShopperOrderScreenState extends State<ShopperOrderScreen> {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          "Separando o pedido #${order!.numeroPedido}",
+                          "Separando o pedido #${activeTask.orderId}",
                           style: const TextStyle(
                             fontSize: 16,
                             color: Colors.black87,
                           ),
                         ),
                         const SizedBox(height: 12),
-                        const IconRow(
-                          title: "Cliente: Null",
-                          icon: Icon(Icons.person_outline, size: 20),
+                        IconRow(
+                          title: "Cliente: ${activeTask.customerName}",
+                          icon: const Icon(Icons.person_outline, size: 20),
                         ),
                         const SizedBox(height: 6),
                         IconRow(
                           title:
-                              "Ativo desde: ${order!.criadoEm.toLocal().toString()}",
+                              "Ativo desde: ${DateFormat('dd/MM/yy HH:mm').format(activeTask.criadoEm.toLocal())}",
                           icon: const Icon(Icons.timer_outlined, size: 20),
                         ),
                         const SizedBox(height: 6),
@@ -120,7 +103,7 @@ class _ShopperOrderScreenState extends State<ShopperOrderScreen> {
                             color: const Color.fromARGB(255, 232, 239, 255),
                           ),
                           child: Text(
-                            order?.descricao ?? "Sem descrição",
+                            activeTask.description ?? "Sem comentários.",
                             maxLines: 4,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(fontSize: 14),
@@ -144,12 +127,16 @@ class _ShopperOrderScreenState extends State<ShopperOrderScreen> {
                           ),
                         ],
                       ),
-                      child: OrderDetailsUnchecked(order: order),
+                      child: OrderDetailsUnchecked(items: activeTask.items),
                     ),
                   ),
                   const SizedBox(height: 12),
                 ],
               ),
+      bottomNavigationBar: const Padding(
+        padding: EdgeInsets.all(8.0),
+        child: FinalizeSeparationFAB(),
+      ),
     );
   }
 }

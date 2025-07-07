@@ -14,41 +14,20 @@ class ProductController implements ProductRepository {
   Future<List<Product>> fetchProducts() async {
     return await _productApi.fetchProducts();
   }
-
-  @override
-  Future<List<Product>> getAllProducts() {
-    // TODO: implement getAllProducts
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Product> getProductById() {
-    // TODO: implement getProductById
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<Product>> getProductsByCategory() {
-    // TODO: implement getProductsByCategory
-    throw UnimplementedError();
-  }
 }
 
 class HomeProductsController with ChangeNotifier {
   final ProductControllerApi _productApi = ProductControllerApi();
 
-  List<Product> _allProducts = []; // Lista completa de produtos
-  List<Product> _filteredProducts =
-      []; // Lista de produtos exibidos (com filtro)
-  List<CategoryModel> _categories = []; // Lista de categorias extraídas
+  List<Product> _allProducts = [];
+  List<Product> _filteredProducts = [];
+  List<CategoryModel> _categories = [];
   bool _isLoading = false;
   String? _error;
   bool _hasFetchedOnce = false;
 
-  String?
-  _selectedCategory; // Armazena o nome da categoria selecionada para filtro
+  String? _selectedCategory;
 
-  // Getters para expor os dados para a UI
   List<Product> get products => _filteredProducts;
   List<CategoryModel> get categories => _categories;
   bool get isLoading => _isLoading;
@@ -57,52 +36,40 @@ class HomeProductsController with ChangeNotifier {
   String? get selectedCategory => _selectedCategory;
 
   HomeProductsController() {
-    _initLoad(); // Chamada inicial para buscar tudo de forma assíncrona
+    _initLoad();
   }
 
-  // Método de inicialização assíncrona para carregar dados iniciais
   Future<void> _initLoad() async {
     _isLoading = true;
-    _error = null; // Limpa erros anteriores
-    notifyListeners(); // Notifica para mostrar loading inicial na UI
+    _error = null;
+    notifyListeners();
 
     try {
-      // Força a primeira busca de produtos e categorias
       await _performFetchAndFilter(forceRefresh: true);
     } catch (e) {
-      // O erro já é tratado em _performFetchAndFilter, mas aqui para capturar erros fatais de inicialização.
-      print("HomeProductsController: Erro fatal na inicialização: $e");
+      return;
     } finally {
       _isLoading = false;
-      notifyListeners(); // Notifica que a inicialização terminou (com ou sem dados)
+      notifyListeners();
     }
   }
 
-  // Método privado para executar a lógica de busca e filtro
   Future<void> _performFetchAndFilter({
     bool forceRefresh = false,
     String? category,
   }) async {
-    // APENAS busca da API se _allProducts está vazio OU se for forçar refresh
     if (_allProducts.isEmpty || forceRefresh || !_hasFetchedOnce) {
       final List<Product> fetchedProducts = await _productApi.fetchProducts();
-      _allProducts = List.unmodifiable(
-        fetchedProducts,
-      ); // Torna a lista de todos os produtos imutável
+      _allProducts = List.unmodifiable(fetchedProducts);
       _hasFetchedOnce = true;
       _error = null;
 
-      _extractUniqueCategories(); // Extrai categorias APÓS produtos serem carregados
+      _extractUniqueCategories();
     }
 
-    // Aplica o filtro. Se uma 'category' foi passada, usa essa.
-    // Senão, usa a _selectedCategory atual (se houver uma).
     _applyFilter(category ?? _selectedCategory);
   }
 
-  /// Busca os produtos da API.
-  /// [forceRefresh]: Se true, força a busca da API novamente.
-  /// [category]: Se fornecido, filtra os produtos após a busca (ou na lista cacheada).
   Future<void> fetchProducts({
     bool forceRefresh = false,
     String? category,
@@ -111,8 +78,6 @@ class HomeProductsController with ChangeNotifier {
 
     _isLoading = true;
     _error = null;
-    // Remova notifyListeners() aqui! Será chamado no _initLoad ou no finally.
-    // notifyListeners(); // Certifique-se de que ESTA LINHA está REMOVIDA para evitar race condition
 
     try {
       await _performFetchAndFilter(
@@ -123,27 +88,23 @@ class HomeProductsController with ChangeNotifier {
       _error = e.toString();
       _allProducts = [];
       _filteredProducts = [];
-      _categories = []; // Limpa categorias em caso de erro na busca de produtos
-      print('HomeProductsController: Erro ao buscar/filtrar produtos: $_error');
+      _categories = [];
     } finally {
       _isLoading = false;
-      notifyListeners(); // Este é o notifyListeners() que deve estar AQUI
+      notifyListeners();
     }
   }
 
-  // Extrai as categorias únicas da lista de _allProducts
   void _extractUniqueCategories() {
     final Set<String> uniqueCategoryNamesFromProducts = {};
     for (var product in _allProducts) {
-      if (product.category != null && product.category.isNotEmpty) {
+      if (product.category.isNotEmpty) {
         uniqueCategoryNamesFromProducts.add(product.category);
       }
     }
 
-    // Constrói a lista final de CategoryModel
     List<CategoryModel> tempCategories = [];
 
-    // Adiciona a categoria "Todos" explicitamente no início com um ID único
     tempCategories.add(
       CategoryModel(id: 'all_products_category_id_unique', name: 'Todos'),
     );
@@ -151,31 +112,23 @@ class HomeProductsController with ChangeNotifier {
     // Adiciona as categorias únicas extraídas dos produtos
     for (String name in uniqueCategoryNamesFromProducts) {
       if (name.toLowerCase() != 'todos') {
-        // Evita adicionar "Todos" de novo se um produto já tiver essa categoria
         tempCategories.add(CategoryModel(id: name.toLowerCase(), name: name));
       }
     }
 
     // Ordena a lista de categorias
     tempCategories.sort((a, b) {
-      if (a.id == 'all_products_category_id_unique')
-        return -1; // "Todos" fica sempre primeiro
+      if (a.id == 'all_products_category_id_unique') {
+        return -1;
+      }
       if (b.id == 'all_products_category_id_unique') return 1;
       return a.name.compareTo(b.name);
     });
 
-    _categories = List.unmodifiable(
-      tempCategories,
-    ); // Atribui e torna a lista imutável
-    print(
-      'HomeProductsController: Categorias extraídas (imutáveis): ${_categories.map((c) => c.name).toList()}, Length: ${_categories.length}',
-    );
+    _categories = List.unmodifiable(tempCategories);
   }
 
-  /// Define a categoria selecionada e aplica o filtro aos produtos.
   void setSelectedCategory(String? category) {
-    // Apenas atualiza se a categoria for diferente
-    // ou se a lista de produtos completa não foi carregada e precisa de filtro
     if (_selectedCategory == category &&
         _allProducts.isNotEmpty &&
         _filteredProducts.isNotEmpty &&
@@ -183,34 +136,26 @@ class HomeProductsController with ChangeNotifier {
       return;
     }
 
-    _selectedCategory = category; // Atualiza a categoria selecionada
-    _applyFilter(category); // Aplica o filtro na lista _allProducts
-    notifyListeners(); // Notifica a UI para mostrar os produtos filtrados
-    print('HomeProductsController: Categoria selecionada: $_selectedCategory');
+    _selectedCategory = category;
+    _applyFilter(category);
+    notifyListeners();
   }
 
-  // Aplica o filtro à lista _allProducts e atualiza _filteredProducts.
   void _applyFilter(String? category) {
     if (category == null ||
         category == "Todos" ||
         category == "all" ||
         category == "all_products_category_id_unique") {
-      _filteredProducts = List.from(
-        _allProducts,
-      ); // Retorna uma cópia da lista completa
+      _filteredProducts = List.from(_allProducts);
     } else {
       _filteredProducts =
           _allProducts.where((product) {
-            // Garante que product.category não é nulo antes de comparar
-            return product.category?.toLowerCase() ==
-                category.toLowerCase(); // Use '?' se category é nullable
+            return product.category.toLowerCase() == category.toLowerCase();
           }).toList();
     }
-    print(
-      'HomeProductsController: Produtos filtrados: ${_filteredProducts.length} itens.',
-    );
   }
 }
+
 class SearchScreenController with ChangeNotifier {
   List<Product> _allProducts = [];
   List<Market> _allMarkets = [];
@@ -322,7 +267,7 @@ class SearchScreenController with ChangeNotifier {
       case 'name':
         return product.name;
       case 'brand':
-        return product.description; // Ajuste se 'brand' for outro campo
+        return product.description;
       case 'category':
         return product.category;
       default:
@@ -336,18 +281,15 @@ class SearchScreenController with ChangeNotifier {
     String? newSearchMode,
     bool forceRefreshData = false,
   }) async {
-    _isInitialLoading =
-        true; // Mostrar loading durante o refresh dos dados base
+    _isInitialLoading = true;
     notifyListeners();
 
     if (newSearchMode != null && _searchMode != newSearchMode) {
       _searchMode = newSearchMode;
-      _searchQuery = ""; // Reseta a busca ao mudar de modor
-      // Força a busca inicial do novo modo se ainda não foi feita ou se forceRefreshData
+      _searchQuery = "";
       if ((_searchMode == "item" && (!_productsFetched || forceRefreshData)) ||
-          (_searchMode == "market" && (!_marketsFetched || forceRefreshData))) {
-        // Não precisamos de await aqui, pois o initialLoad fará notifyListeners
-      }
+          (_searchMode == "market" &&
+              (!_marketsFetched || forceRefreshData))) {}
     }
     if (newQuery != null) {
       _searchQuery = newQuery;
@@ -364,13 +306,14 @@ class SearchScreenController with ChangeNotifier {
       }
     }
 
-    // Garante que os dados base para o modo atual estejam carregados antes de filtrar
-    if (_searchMode == "item" && !_productsFetched)
+    if (_searchMode == "item" && !_productsFetched) {
       await _fetchInitialProducts();
-    if (_searchMode == "market" && !_marketsFetched)
+    }
+    if (_searchMode == "market" && !_marketsFetched) {
       await _fetchInitialMarkets();
+    }
 
-    _isInitialLoading = false; // Terminou o loading dos dados base
-    _applyFilters(); // Aplica filtros com os dados atualizados ou novos parâmetros
+    _isInitialLoading = false;
+    _applyFilters();
   }
 }

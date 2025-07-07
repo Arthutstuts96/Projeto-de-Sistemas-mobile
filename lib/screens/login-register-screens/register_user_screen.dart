@@ -391,7 +391,6 @@ class _RegisterUserScreenState extends State<RegisterUserScreen>
           Button(
             onPressed: () async {
               final user = mapFormDataToUser();
-              print(user);
               final success = await registerController.saveClientUser(
                 user: user,
               );
