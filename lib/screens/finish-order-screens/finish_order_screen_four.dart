@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/order_controller.dart';
 import 'package:projeto_de_sistemas/controllers/shopper_controller.dart';
+import 'package:projeto_de_sistemas/domain/models/order/order_item.dart';
 import 'package:projeto_de_sistemas/screens/components/button.dart';
 import 'package:projeto_de_sistemas/domain/models/order/order.dart';
 import 'package:projeto_de_sistemas/screens/order-screens/order_success_screen.dart';
@@ -18,6 +19,46 @@ class FinishOrderScreenFour extends StatefulWidget {
 class _FinishOrderScreenFourState extends State<FinishOrderScreenFour> {
   final TextEditingController _controller = TextEditingController();
   final OrderController _orderController = OrderController();
+
+  void sendOrderProvider() {
+    Provider.of<ShopperController>(context, listen: false).addNewSeparationTask(
+      orderId: "ORDER_743284523",
+      customerName: "John Doe",
+      deliveryAddress: "Rua azul",
+      items: [
+        OrderItem(
+          produtoId: 1,
+          quantidade: 12,
+          precoUnitario: 35,
+          disponibilidade: true,
+        ),
+        OrderItem(
+          produtoId: 2,
+          quantidade: 1,
+          precoUnitario: 78,
+          disponibilidade: true,
+        ),
+        OrderItem(
+          produtoId: 3,
+          quantidade: 76,
+          precoUnitario: 45,
+          disponibilidade: false,
+        ),
+      ],
+      mercadoLatitude: -10.178542485637115,
+      mercadoLongitude: -48.33290926223811,
+      clientLatitude: -10.232807,
+      clientLongitude: -48.322240,
+      criadoEm: DateTime.now(),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Pedido enviado! O separador já foi notificado.'),
+        backgroundColor: Colors.green,
+      ),
+    );
+  }
 
   void sendOrder() async {
     widget.order.descricao = _controller.text;
@@ -104,7 +145,7 @@ class _FinishOrderScreenFourState extends State<FinishOrderScreenFour> {
           alignment: Alignment.centerRight,
           child: Button(
             onPressed: () {
-              sendOrder();
+              sendOrderProvider();
             },
             text: "Enviar pedido",
           ),

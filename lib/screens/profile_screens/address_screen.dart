@@ -48,7 +48,7 @@ class _AdressScreenState extends State<AddressScreen> {
                 child: CircularProgressIndicator(color: Color(0xFFFFAA00)),
               );
             } else if (snapshot.hasError) {
-              return Center(child: Text('Erro: ${snapshot.error}'));
+              return const Center(child: Text('Não foi possível buscar os endereços. Tente novamente mais tarde'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Center(child: Text('Nenhum endereço encontrado.'));
             } else {

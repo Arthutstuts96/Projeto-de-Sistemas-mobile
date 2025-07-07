@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/cart_controller.dart';
-import 'package:projeto_de_sistemas/controllers/shopper_controller.dart';
-import 'package:projeto_de_sistemas/domain/models/order/order_item.dart';
 import 'package:projeto_de_sistemas/domain/models/products/cart.dart';
 import 'package:projeto_de_sistemas/screens/components/modals/bottom_modal.dart';
 import 'package:projeto_de_sistemas/screens/components/page_screen_transition.dart';
 import 'package:projeto_de_sistemas/screens/components/products/cart_product.dart';
 import 'package:projeto_de_sistemas/screens/finish-order-screens/finish_order_screen.dart';
-import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -81,52 +78,6 @@ class _CartScreenState extends State<CartScreen> {
             },
           ),
         ],
-      ),
-      // BOTÃO DE SIMULAR TASK, SOMENTE PARA FINS DE DEBUG!!!!!!!
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Provider.of<ShopperController>(
-            context,
-            listen: false,
-          ).addNewSeparationTask(
-            orderId: "ORDER_743284523",
-            customerName: "John Doe",
-            deliveryAddress: "Rua azul",
-            items: [
-              OrderItem(
-                produtoId: 1,
-                quantidade: 12,
-                precoUnitario: 35,
-                disponibilidade: true,
-              ),
-              OrderItem(
-                produtoId: 2,
-                quantidade: 1,
-                precoUnitario: 78,
-                disponibilidade: true,
-              ),
-              OrderItem(
-                produtoId: 3,
-                quantidade: 76,
-                precoUnitario: 45,
-                disponibilidade: false,
-              ),
-            ],
-            mercadoLatitude: -10.178542485637115,
-            mercadoLongitude: -48.33290926223811,
-            clientLatitude: -10.232807,
-            clientLongitude: -48.322240,
-            criadoEm: DateTime.now(),
-          );
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Pedido enviado! O separador já foi notificado.'),
-              backgroundColor: Colors.green,
-            ),
-          );
-        },
-        child: const Icon(Icons.join_right),
       ),
     );
   }

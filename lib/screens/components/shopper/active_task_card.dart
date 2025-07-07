@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:projeto_de_sistemas/controllers/shopper_controller.dart';
-import 'package:projeto_de_sistemas/screens/shopper/shopper_order_screen.dart'; // Tela de detalhes do pedido
+import 'package:projeto_de_sistemas/screens/shopper/shopper_order_screen.dart'; 
 
 class ActiveTaskCard extends StatelessWidget {
   final SeparationTask task;
@@ -10,7 +10,6 @@ class ActiveTaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Calcula o total de unidades para exibir no card
     final int totalUnits = task.items.fold(0, (sum, item) => sum + item.quantidade);
 
     return Center(
@@ -22,10 +21,9 @@ class ActiveTaskCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
-              mainAxisSize: MainAxisSize.min, // Faz o card ter o tamanho do conteúdo
+              mainAxisSize: MainAxisSize.min, 
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // --- Cabeçalho ---
                 const Row(
                   children: [
                     Icon(Icons.assignment_turned_in_outlined, color: Colors.green, size: 28),
@@ -42,8 +40,6 @@ class ActiveTaskCard extends StatelessWidget {
                 _buildInfoRow(
                   icon: Icons.store_mall_directory_outlined,
                   label: "Supermercado:",
-                  // NOTA: O nome do mercado não está no seu modelo. Usando um placeholder.
-                  // Idealmente, você adicionaria `marketName` ao `SeparationTask`.
                   value: "Supermercado Brasil",
                 ),
                 const SizedBox(height: 12),
@@ -66,12 +62,10 @@ class ActiveTaskCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 
-                // --- Botão de Ação Principal ---
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: () {
-                      // Leva o usuário para a tela de detalhes para ver a lista de itens
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => const ShopperOrderScreen()),
@@ -98,7 +92,6 @@ class ActiveTaskCard extends StatelessWidget {
     );
   }
 
-  // Widget auxiliar para criar as linhas de informação e manter o código limpo
   Widget _buildInfoRow({required IconData icon, required String label, required String value}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,

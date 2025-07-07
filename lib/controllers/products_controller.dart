@@ -14,24 +14,6 @@ class ProductController implements ProductRepository {
   Future<List<Product>> fetchProducts() async {
     return await _productApi.fetchProducts();
   }
-
-  @override
-  Future<List<Product>> getAllProducts() {
-    // TODO: implement getAllProducts
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Product> getProductById() {
-    // TODO: implement getProductById
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<Product>> getProductsByCategory() {
-    // TODO: implement getProductsByCategory
-    throw UnimplementedError();
-  }
 }
 
 class HomeProductsController with ChangeNotifier {

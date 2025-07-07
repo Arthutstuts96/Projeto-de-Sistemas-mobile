@@ -124,7 +124,7 @@ class _OrderDetailsUncheckedState extends State<OrderDetailsUnchecked> {
                               ),
                     ),
                     title: Text(
-                      'Produto ID: ${item.produtoId ?? "N/A"}',
+                      'Produto: ${item.produtoId ?? "N/A"}',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
