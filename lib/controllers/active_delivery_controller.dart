@@ -1,12 +1,15 @@
-// lib/controllers/active_delivery_controller.dart
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import '../domain/models/delivery_task_mock_model.dart';
-// Remova o import de 'delivery_task_mocks.dart' se 'obterNovoDeliveryTaskMock' não for mais usado aqui
+import 'package:projeto_de_sistemas/services/navigation_service.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:projeto_de_sistemas/services/session/delivery_session.dart';
 
 class ActiveDeliveryController with ChangeNotifier {
   DeliveryTaskMock? _currentTask;
   bool _popupForCurrentTaskShown = false;
   final String _simulatedDriverId = "driver_beta_01";
+  final NavigationService _navigationService = NavigationService();
+  final DeliveryHistorySession _historySession = DeliveryHistorySession();
 
   DeliveryTaskMock? get currentTask => _currentTask;
 
@@ -16,43 +19,45 @@ class ActiveDeliveryController with ChangeNotifier {
           DeliveryTaskStatusMock.aguardandoAceiteEntregador &&
       !_popupForCurrentTaskShown;
 
-  // MÉTODO MODIFICADO para aceitar dados do pedido
   void simulateNewTaskAvailable({
-    required String orderId, // ID do pedido original do cliente
-    required String
-    customerName, // Nome do cliente (pode ser mockado se não tiver)
-    required String deliveryAddress, // Endereço de entrega
-    required String itemsSummary, // Um resumo dos itens
+    required String orderId,
+    required String customerName,
+    required String deliveryAddress,
+    required String itemsSummary,
+
+    required double mercadoLatitude,
+    required double mercadoLongitude,
+    required double clientLatitude,
+    required double clientLongitude,
+    DateTime? orderCreationDate,
+    required DateTime criadoEm,
   }) {
     if (_currentTask == null ||
         _currentTask!.status == DeliveryTaskStatusMock.entregue) {
       _currentTask = DeliveryTaskMock(
-        id: "TASK_FROM_${orderId}_${DateTime.now().millisecondsSinceEpoch}", // Cria um ID de tarefa baseado no pedido
+        id: "TASK_FROM_${orderId}_${DateTime.now().millisecondsSinceEpoch}", 
         nomeCliente: customerName,
         enderecoEntrega: deliveryAddress,
         itensResumo: itemsSummary,
         status: DeliveryTaskStatusMock.aguardandoAceiteEntregador,
+
+        mercadoLatitude: mercadoLatitude,
+        mercadoLongitude: mercadoLongitude,
+        clientLatitude: clientLatitude,
+        clientLongitude: clientLongitude,
+        criadoEm: orderCreationDate ?? DateTime.now(),
       );
       _popupForCurrentTaskShown = false;
-      print(
-        "NOVA TAREFA DE ENTREGA (DO PEDIDO REAL $orderId): ${_currentTask!.id}",
-      );
       notifyListeners();
     } else {
-      print(
-        "Ainda há uma tarefa ativa (${_currentTask!.id}), nova tarefa (do pedido $orderId) não gerada.",
-      );
+      return;
     }
   }
 
-  // ... resto dos métodos (acceptTask, declineTask, etc. permanecem os mesmos) ...
   void acceptTask() {
     if (_currentTask != null) {
       _currentTask!.status = DeliveryTaskStatusMock.aceitoPeloEntregador;
       _currentTask!.idEntregadorAtribuido = _simulatedDriverId;
-      print(
-        "TAREFA ACEITA: ${_currentTask!.id} pelo entregador $_simulatedDriverId",
-      );
       _popupForCurrentTaskShown = true;
       notifyListeners();
     }
@@ -60,7 +65,6 @@ class ActiveDeliveryController with ChangeNotifier {
 
   void declineTask() {
     if (_currentTask != null) {
-      print("TAREFA RECUSADA: ${_currentTask!.id}");
       _clearCurrentTask();
     }
   }
@@ -69,7 +73,6 @@ class ActiveDeliveryController with ChangeNotifier {
     if (_currentTask != null &&
         _currentTask!.status == DeliveryTaskStatusMock.aceitoPeloEntregador) {
       _currentTask!.status = DeliveryTaskStatusMock.coletadoPeloEntregador;
-      print("TAREFA COLETADA: ${_currentTask!.id}");
       notifyListeners();
     }
   }
@@ -78,7 +81,7 @@ class ActiveDeliveryController with ChangeNotifier {
     if (_currentTask != null &&
         _currentTask!.status == DeliveryTaskStatusMock.coletadoPeloEntregador) {
       _currentTask!.status = DeliveryTaskStatusMock.entregue;
-      print("TAREFA ENTREGUE: ${_currentTask!.id}");
+      _historySession.saveDeliveryToHistory(_currentTask!);
       notifyListeners();
     }
   }
@@ -95,5 +98,106 @@ class ActiveDeliveryController with ChangeNotifier {
     _currentTask = null;
     _popupForCurrentTaskShown = false;
     notifyListeners();
+  }
+
+  Future<void> startNavigationToMercado(BuildContext context) async {
+    if (currentTask == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Nenhuma tarefa ativa para navegar.")),
+      );
+      return;
+    }
+
+    Position? motoboyLocation;
+    try {
+      motoboyLocation = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Não foi possível obter sua localização atual."),
+        ),
+      );
+      return;
+    }
+    final double mercadoLat = currentTask!.mercadoLatitude;
+    final double mercadoLng = currentTask!.mercadoLongitude;
+
+    final bool launched = await _navigationService.navigateTo(
+      startLatitude: motoboyLocation.latitude,
+      startLongitude: motoboyLocation.longitude,
+      endLatitude: mercadoLat,
+      endLongitude: mercadoLng,
+      isToMercado: true,
+    );
+
+    if (launched) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Iniciando navegação para o mercado...")),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Falha ao iniciar navegação. Verifique se Waze ou Google Maps estão instalados.",
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> startNavigationToClient(BuildContext context) async {
+    if (currentTask == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Nenhuma tarefa ativa para navegar até o cliente."),
+        ),
+      );
+      return;
+    }
+
+    Position? motoboyLocation;
+    try {
+      motoboyLocation = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Não foi possível obter sua localização atual para navegar até o cliente.",
+          ),
+        ),
+      );
+      return;
+    }
+
+    final double clientLat =
+        currentTask!.clientLatitude; 
+    final double clientLng = currentTask!.clientLongitude; 
+
+    final bool launched = await _navigationService.navigateTo(
+      startLatitude: motoboyLocation.latitude,
+      startLongitude: motoboyLocation.longitude,
+      endLatitude: clientLat,
+      endLongitude: clientLng,
+      isToMercado:
+          false, 
+    );
+
+    if (launched) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Iniciando navegação para o cliente...")),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Falha ao iniciar navegação. Verifique se Waze ou Google Maps estão instalados.",
+          ),
+        ),
+      );
+    }
   }
 }

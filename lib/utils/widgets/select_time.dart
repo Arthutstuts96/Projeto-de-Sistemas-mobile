@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
-Future<void> selectTime(BuildContext context, int initialTime, int finalTime) async {
+Future<void> selectTime(
+  BuildContext context,
+  int initialTime,
+  int finalTime,
+) async {
   final TimeOfDay? horarioSelecionado = await showTimePicker(
     context: context,
     initialTime: TimeOfDay.now(),
@@ -13,26 +17,27 @@ Future<void> selectTime(BuildContext context, int initialTime, int finalTime) as
   );
 
   if (horarioSelecionado != null) {
-    final int minutos = horarioSelecionado.hour * 60 + horarioSelecionado.minute;
-    int inicioPermitido = initialTime * 60;   
-    int fimPermitido = finalTime * 60;     
+    final int minutos =
+        horarioSelecionado.hour * 60 + horarioSelecionado.minute;
+    int inicioPermitido = initialTime * 60;
+    int fimPermitido = finalTime * 60;
 
     if (minutos < inicioPermitido || minutos > fimPermitido) {
       showDialog(
         context: context,
-        builder: (_) => AlertDialog(
-          title: Text('Horário inválido'),
-          content: Text('Escolha um horário entre 08:00 e 21:00.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Ok'),
+        builder:
+            (_) => AlertDialog(
+              title: const Text('Horário inválido'),
+              content: const Text('Escolha um horário entre 08:00 e 21:00.'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Ok'),
+                ),
+              ],
             ),
-          ],
-        ),
       );
       return;
     }
-    print('Horário escolhido: ${horarioSelecionado.format(context)}');
   }
 }

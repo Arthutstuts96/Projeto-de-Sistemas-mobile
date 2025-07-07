@@ -3,76 +3,48 @@ import 'package:flutter/material.dart';
 class CategoryButton extends StatelessWidget {
   final String imagePath;
   final String label;
-  final String route;
+  final VoidCallback? onTap;
 
   const CategoryButton({
     super.key,
     required this.imagePath,
     required this.label,
-    required this.route,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 12),
+    return InkWell(
+
+      onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        clipBehavior: Clip.none,
-        width: 80,
-        height: 100,
+        margin: const EdgeInsets.symmetric(
+          horizontal: 5,
+        ), // Espaço entre botões
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              offset: const Offset(0, 6), // Sombra apenas na parte inferior
-              blurRadius: 6,
-              spreadRadius: 0,
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: const Offset(0, 2),
             ),
-         ],
+          ],
         ),
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, route);
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(imagePath, width: 40, height: 40, fit: BoxFit.contain),
+            const SizedBox(height: 2),
+            Text(
+              label,
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
-            elevation: 5, // Desativa a sombra padrão do ElevatedButton
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                imagePath,
-                height: 30,
-                width: 30,
-                fit: BoxFit.contain,
-              ),
-              const SizedBox(height: 6),
-
-              SizedBox(
-                width: double.infinity,
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    label,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF3C3C3C),
-                    ),
-                    textAlign: TextAlign.center,
-                      softWrap: true,
-                    maxLines: 2,
-                  ),
-                ),
-              ),
-            ],
-          ),
+          ],
         ),
       ),
     );

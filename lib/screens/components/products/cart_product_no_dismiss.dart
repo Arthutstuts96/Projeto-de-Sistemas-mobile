@@ -22,7 +22,14 @@ class CartProductNoDismiss extends StatelessWidget {
                     height: 100,
                     width: 140.0,
                     decoration: const BoxDecoration(border: Border()),
-                    child: Image.network(product.imageUrl, fit: BoxFit.cover),
+                    child:
+                        product.imageUrl.isNotEmpty
+                            ? Image.network(
+                              product.imageUrl,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            )
+                            : Image.asset("assets/images/no-image.jpg"),
                   ),
                   const SizedBox(width: 12),
                   ConstrainedBox(

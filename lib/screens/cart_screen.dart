@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/cart_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/products/cart.dart';
 import 'package:projeto_de_sistemas/screens/components/modals/bottom_modal.dart';
+import 'package:projeto_de_sistemas/screens/components/page_screen_transition.dart';
 import 'package:projeto_de_sistemas/screens/components/products/cart_product.dart';
-import 'package:projeto_de_sistemas/screens/order-screens/finish_order_screen.dart';
+import 'package:projeto_de_sistemas/screens/finish-order-screens/finish_order_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -54,12 +55,6 @@ class _CartScreenState extends State<CartScreen> {
             fontSize: 24,
           ),
         ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.credit_card, size: 36, color: Colors.black),
-          ),
-        ],
       ),
       body: Stack(
         children: [
@@ -68,10 +63,16 @@ class _CartScreenState extends State<CartScreen> {
             fullPrice: fullPrice,
             onPressed: () {
               if (fullPrice != 0) {
-                Navigator.push(context, _createRoute(const FinishOrderScreen()));
+                Navigator.push(
+                  context,
+                  navigateUsingTransitionFromBelow(const FinishOrderScreen()),
+                );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Não tem nenhum item no carrinho!'), backgroundColor: Colors.redAccent,),
+                  const SnackBar(
+                    content: Text('Não tem nenhum item no carrinho!'),
+                    backgroundColor: Colors.redAccent,
+                  ),
                 );
               }
             },
@@ -105,7 +106,7 @@ class _CartScreenState extends State<CartScreen> {
                       Opacity(
                         opacity: 0.5,
                         child: Image.asset(
-                          "assets/images/no_itens_in_bag.png",
+                          "assets/images/girl/no_itens_in_bag.png",
                           width: 250,
                         ),
                       ),
@@ -127,7 +128,12 @@ class _CartScreenState extends State<CartScreen> {
             return RefreshIndicator(
               onRefresh: refreshCart,
               child: ListView.builder(
-                padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 80),
+                padding: const EdgeInsets.only(
+                  top: 8,
+                  left: 8,
+                  right: 8,
+                  bottom: 80,
+                ),
                 itemCount: cart.cartItems.length,
                 itemBuilder: (context, index) {
                   final product = cart.cartItems[index];
@@ -145,19 +151,4 @@ class _CartScreenState extends State<CartScreen> {
       },
     );
   }
-}
-
-Route _createRoute(Widget page) {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => page,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(0.0, 1.0);
-      const end = Offset.zero;
-      const curve = Curves.ease;
-
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-      return SlideTransition(position: animation.drive(tween), child: child);
-    },
-  );
 }

@@ -1,9 +1,10 @@
+import 'package:projeto_de_sistemas/domain/models/products/category_model.dart';
 import 'package:projeto_de_sistemas/domain/models/products/product.dart';
 import 'package:projeto_de_sistemas/domain/repository/product_repository.dart';
-import 'package:projeto_de_sistemas/services/api/products_home.dart';
+import 'package:projeto_de_sistemas/services/api/products_home_api.dart';
 import 'package:flutter/foundation.dart';
 import 'package:diacritic/diacritic.dart';
-import 'package:projeto_de_sistemas/domain/models/market.dart';
+import 'package:projeto_de_sistemas/domain/models/users/market.dart';
 import 'package:projeto_de_sistemas/controllers/market_controller.dart';
 
 class ProductController implements ProductRepository {
@@ -13,61 +14,144 @@ class ProductController implements ProductRepository {
   Future<List<Product>> fetchProducts() async {
     return await _productApi.fetchProducts();
   }
-
-  @override
-  Future<List<Product>> getAllProducts() {
-    // TODO: implement getAllProducts
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Product> getProductById() {
-    // TODO: implement getProductById
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<Product>> getProductsByCategory() {
-    // TODO: implement getProductsByCategory
-    throw UnimplementedError();
-  }
 }
 
 class HomeProductsController with ChangeNotifier {
-  List<Product> _products = [];
+  final ProductControllerApi _productApi = ProductControllerApi();
+
+  List<Product> _allProducts = [];
+  List<Product> _filteredProducts = [];
+  List<CategoryModel> _categories = [];
   bool _isLoading = false;
   String? _error;
   bool _hasFetchedOnce = false;
 
-  List<Product> get products => _products;
+  String? _selectedCategory;
+
+  List<Product> get products => _filteredProducts;
+  List<CategoryModel> get categories => _categories;
   bool get isLoading => _isLoading;
   String? get error => _error;
   bool get hasFetchedOnce => _hasFetchedOnce;
+  String? get selectedCategory => _selectedCategory;
 
-  Future<void> fetchProducts({bool forceRefresh = false}) async {
-    if (_hasFetchedOnce && _products.isNotEmpty && !forceRefresh) {
-      // Dados já carregados e não é uma atualização forçada, não faz nada.
-      return;
-    }
+  HomeProductsController() {
+    _initLoad();
+  }
 
+  Future<void> _initLoad() async {
     _isLoading = true;
     _error = null;
-    if (forceRefresh) { // Se for refresh, notifica para mostrar o indicador de loading do RefreshIndicator
-      notifyListeners();
-    } else if (!_hasFetchedOnce) { // Só mostra loading na primeira vez
-        notifyListeners();
-    }
-
+    notifyListeners();
 
     try {
-      _products = await ProductControllerApi().fetchProducts();
-      _hasFetchedOnce = true;
+      await _performFetchAndFilter(forceRefresh: true);
     } catch (e) {
-      _error = e.toString();
-      _products = []; // Limpa produtos em caso de erro
+      return;
     } finally {
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<void> _performFetchAndFilter({
+    bool forceRefresh = false,
+    String? category,
+  }) async {
+    if (_allProducts.isEmpty || forceRefresh || !_hasFetchedOnce) {
+      final List<Product> fetchedProducts = await _productApi.fetchProducts();
+      _allProducts = List.unmodifiable(fetchedProducts);
+      _hasFetchedOnce = true;
+      _error = null;
+
+      _extractUniqueCategories();
+    }
+
+    _applyFilter(category ?? _selectedCategory);
+  }
+
+  Future<void> fetchProducts({
+    bool forceRefresh = false,
+    String? category,
+  }) async {
+    if (_isLoading && !forceRefresh) return;
+
+    _isLoading = true;
+    _error = null;
+
+    try {
+      await _performFetchAndFilter(
+        forceRefresh: forceRefresh,
+        category: category,
+      );
+    } catch (e) {
+      _error = e.toString();
+      _allProducts = [];
+      _filteredProducts = [];
+      _categories = [];
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  void _extractUniqueCategories() {
+    final Set<String> uniqueCategoryNamesFromProducts = {};
+    for (var product in _allProducts) {
+      if (product.category.isNotEmpty) {
+        uniqueCategoryNamesFromProducts.add(product.category);
+      }
+    }
+
+    List<CategoryModel> tempCategories = [];
+
+    tempCategories.add(
+      CategoryModel(id: 'all_products_category_id_unique', name: 'Todos'),
+    );
+
+    // Adiciona as categorias únicas extraídas dos produtos
+    for (String name in uniqueCategoryNamesFromProducts) {
+      if (name.toLowerCase() != 'todos') {
+        tempCategories.add(CategoryModel(id: name.toLowerCase(), name: name));
+      }
+    }
+
+    // Ordena a lista de categorias
+    tempCategories.sort((a, b) {
+      if (a.id == 'all_products_category_id_unique') {
+        return -1;
+      }
+      if (b.id == 'all_products_category_id_unique') return 1;
+      return a.name.compareTo(b.name);
+    });
+
+    _categories = List.unmodifiable(tempCategories);
+  }
+
+  void setSelectedCategory(String? category) {
+    if (_selectedCategory == category &&
+        _allProducts.isNotEmpty &&
+        _filteredProducts.isNotEmpty &&
+        !isLoading) {
+      return;
+    }
+
+    _selectedCategory = category;
+    _applyFilter(category);
+    notifyListeners();
+  }
+
+  void _applyFilter(String? category) {
+    if (category == null ||
+        category == "Todos" ||
+        category == "all" ||
+        category == "all_products_category_id_unique") {
+      _filteredProducts = List.from(_allProducts);
+    } else {
+      _filteredProducts =
+          _allProducts.where((product) {
+            return product.category.toLowerCase() == category.toLowerCase();
+          }).toList();
     }
   }
 }
@@ -183,11 +267,9 @@ class SearchScreenController with ChangeNotifier {
       case 'name':
         return product.name;
       case 'brand':
-        return product.description; // Ajuste se 'brand' for outro campo
+        return product.description;
       case 'category':
         return product.category;
-      case 'market':
-        return product.market;
       default:
         return '';
     }
@@ -199,18 +281,15 @@ class SearchScreenController with ChangeNotifier {
     String? newSearchMode,
     bool forceRefreshData = false,
   }) async {
-    _isInitialLoading =
-        true; // Mostrar loading durante o refresh dos dados base
+    _isInitialLoading = true;
     notifyListeners();
 
     if (newSearchMode != null && _searchMode != newSearchMode) {
       _searchMode = newSearchMode;
-      _searchQuery = ""; // Reseta a busca ao mudar de modo
-      // Força a busca inicial do novo modo se ainda não foi feita ou se forceRefreshData
+      _searchQuery = "";
       if ((_searchMode == "item" && (!_productsFetched || forceRefreshData)) ||
-          (_searchMode == "market" && (!_marketsFetched || forceRefreshData))) {
-        // Não precisamos de await aqui, pois o initialLoad fará notifyListeners
-      }
+          (_searchMode == "market" &&
+              (!_marketsFetched || forceRefreshData))) {}
     }
     if (newQuery != null) {
       _searchQuery = newQuery;
@@ -227,13 +306,14 @@ class SearchScreenController with ChangeNotifier {
       }
     }
 
-    // Garante que os dados base para o modo atual estejam carregados antes de filtrar
-    if (_searchMode == "item" && !_productsFetched)
+    if (_searchMode == "item" && !_productsFetched) {
       await _fetchInitialProducts();
-    if (_searchMode == "market" && !_marketsFetched)
+    }
+    if (_searchMode == "market" && !_marketsFetched) {
       await _fetchInitialMarkets();
+    }
 
-    _isInitialLoading = false; // Terminou o loading dos dados base
-    _applyFilters(); // Aplica filtros com os dados atualizados ou novos parâmetros
+    _isInitialLoading = false;
+    _applyFilters();
   }
 }

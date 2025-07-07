@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           spacing: 12,
           children: [
-            Image.asset("assets/images/logo.png", width: 280),
+            Image.asset("assets/images/girl/logo.png", width: 280),
             CircularProgressIndicator(color: Colors.orange),
             Text(
               "Preparando o melhor para você",

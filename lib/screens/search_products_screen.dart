@@ -1,9 +1,8 @@
-import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:projeto_de_sistemas/controllers/products_controller.dart';
 import 'package:projeto_de_sistemas/domain/models/products/product.dart';
-import 'package:projeto_de_sistemas/domain/models/market.dart';
+import 'package:projeto_de_sistemas/domain/models/users/market.dart';
 import 'package:projeto_de_sistemas/screens/components/products/product_card.dart';
 import 'package:projeto_de_sistemas/screens/components/market/card_market.dart';
 
@@ -27,8 +26,6 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Carrega os dados iniciais (produtos ou mercados, dependendo do modo padrão)
-      // e aplica o filtro inicial (query vazia).
       final controller = Provider.of<SearchScreenController>(
         context,
         listen: false,
@@ -219,7 +216,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
     if (controller.isLoading) {
       return const Center(child: CircularProgressIndicator());
     } else if (controller.error != null) {
-      return Center(child: Text("Erro: ${controller.error}"));
+      return Center(child: Text("Não foi possível buscar os produtos"));
     } else if (controller.filteredItems.isEmpty) {
       return LayoutBuilder(
         // Para o SingleChildScrollView dentro do RefreshIndicator funcionar
@@ -236,7 +233,7 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
                     Opacity(
                       opacity: 0.5,
                       child: Image.asset(
-                        "assets/images/no_itens_in_bag.png",
+                        "assets/images/girl/no_itens_in_bag.png",
                         width: 250,
                       ),
                     ),
@@ -263,18 +260,12 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: GridView.count(
         crossAxisCount: controller.searchMode == "market" ? 1 : 2,
-        childAspectRatio:
-            controller.searchMode == "market"
-                ? (MediaQuery.of(context).size.width / (150))
-                : 0.72, // Ajuste para card de mercado
-        shrinkWrap: false, // Deixe o GridView scrollar
-        physics:
-            const AlwaysScrollableScrollPhysics(), // Para funcionar com RefreshIndicator
+        childAspectRatio: controller.searchMode == "market" ? 1.2 : 0.72,
+        shrinkWrap: false,
+        physics: const AlwaysScrollableScrollPhysics(),
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-        padding: const EdgeInsets.only(
-          bottom: 16,
-        ), // Espaço para não colar no final
+        padding: const EdgeInsets.only(bottom: 16),
         children:
             items.map((item) {
               if (controller.searchMode == "item" && item is Product) {
@@ -291,11 +282,6 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
 
   void _showFilterDialog(BuildContext context, String currentFilter) {
     String tempFilter = currentFilter;
-    final searchController = Provider.of<SearchScreenController>(
-      context,
-      listen: false,
-    );
-
     showDialog(
       context: context,
       builder: (dialogContext) {
@@ -324,12 +310,6 @@ class _SearchProductsScreenState extends State<SearchProductsScreen> {
                   _buildRadioOption(
                     "Por marca",
                     "brand",
-                    tempFilter,
-                    (newValue) => setModalState(() => tempFilter = newValue),
-                  ),
-                  _buildRadioOption(
-                    "Por mercado",
-                    "market",
                     tempFilter,
                     (newValue) => setModalState(() => tempFilter = newValue),
                   ),

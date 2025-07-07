@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/cart_controller.dart';
-import 'package:projeto_de_sistemas/screens/components/register/button.dart';
+import 'package:projeto_de_sistemas/screens/components/button.dart';
 
 class OrderSuccessScreen extends StatelessWidget {
   OrderSuccessScreen({super.key});
@@ -15,7 +15,7 @@ class OrderSuccessScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           spacing: 12,
           children: [
-            Image.asset("assets/images/girl_success_jumping.png", width: 160),
+            Image.asset("assets/images/girl/girl_success_jumping.png", width: 160),
             const Text(
               "Sucesso!",
               style: TextStyle(

@@ -1,7 +1,7 @@
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_de_sistemas/controllers/products_controller.dart';
-import 'package:projeto_de_sistemas/domain/models/market.dart';
+import 'package:projeto_de_sistemas/domain/models/users/market.dart';
 import 'package:projeto_de_sistemas/domain/models/products/product.dart';
 import 'package:projeto_de_sistemas/screens/components/products/product_card.dart';
 
@@ -64,6 +64,7 @@ class _MarketScreenState extends State<MarketScreen> {
                 spacing: 8,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Image.asset("assets/images/market_image_placeholder.jpg"),
                   Text(
                     widget.market.name!,
                     style: const TextStyle(
@@ -96,7 +97,6 @@ class _MarketScreenState extends State<MarketScreen> {
                 ],
               ),
             ),
-            Image.asset("assets/images/market_image_placeholder.jpg"),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Column(
@@ -176,7 +176,7 @@ class _MarketScreenState extends State<MarketScreen> {
                         Opacity(
                           opacity: 0.5,
                           child: Image.asset(
-                            "assets/images/no_itens_in_bag.png",
+                            "assets/images/girl/no_itens_in_bag.png",
                             width: 250,
                           ),
                         ),
@@ -206,7 +206,11 @@ class _MarketScreenState extends State<MarketScreen> {
                       separatorBuilder: (_, __) => const SizedBox(width: 12),
                       itemBuilder: (context, index) {
                         final product = items[index];
-                        return ProductCard(product: product);
+                        return SizedBox(
+                          width: 160,
+                          height: 160,
+                          child: ProductCard(product: product),
+                        );
                       },
                     ),
                   ),
